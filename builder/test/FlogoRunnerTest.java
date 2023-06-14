@@ -29,7 +29,10 @@ public class FlogoRunnerTest {
 		try {
 			File file = new File(filepath);
 			String home = System.getProperty("user.home");
-			String text = Files.readString(file.toPath()).replace("$WORKSPACE", home + File.separator + "workspace").replace("$HOME", home);
+			String projectDirectory = projectDirectory();
+			String text = Files.readString(file.toPath())
+					.replace("$PROJECT_DIRECTORY", projectDirectory)
+					.replace("$HOME", home);
 			Path temporalFile = Files.createTempFile(file.getName(), ".txt");
 			Files.writeString(temporalFile, text, StandardOpenOption.TRUNCATE_EXISTING);
 			temporalFile.toFile().deleteOnExit();
@@ -37,6 +40,10 @@ public class FlogoRunnerTest {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+
+	private static String projectDirectory() {
+		return null;//TODO
 	}
 
 
