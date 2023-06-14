@@ -43,7 +43,7 @@ public class FlogoRunnerTest {
 	}
 
 	private static String projectDirectory() {
-		return null;//TODO
+		return new File("./").getParentFile().getAbsolutePath();//TODO
 	}
 
 
