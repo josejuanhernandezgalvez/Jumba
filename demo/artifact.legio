@@ -1,0 +1,13 @@
+dsl Legio
+
+Artifact(groupId = "io.flogo", version = "1.0.0") demo as Solution
+	Model("Blatt", "1.0.0", "4.2.3")
+		exclude = ExcludeFrameworkCode
+	Imports
+		Test(groupId = "junit", artifactId = "junit", version = "4.13")
+	Package(mode = ModulesAndLibrariesLinkedByManifest)
+
+Repository(identifier = "intino-maven")
+	Release("https://artifactory.intino.io/artifactory/releases")
+
+RunConfiguration local

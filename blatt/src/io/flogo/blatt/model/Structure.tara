@@ -1,0 +1,48 @@
+dsl Proteo
+
+Concept NeuralNetwork
+	has:{1..*} Section
+
+Concept Section is component
+	sub ConvolutionalSection
+		Concept:{1..1} Input
+			var integer x
+			var integer y
+			var integer z
+		Concept:{1..*} Block
+			Concept:{1..*} Layer
+				sub Relu
+
+
+	sub:CheckLinearLayers LinearSection
+		Concept:{1..1} Input > var integer x
+		Concept:{1..*} Block
+			Concept:{1..*} Layer
+				Concept:{1..1} Output > var integer x
+				sub Linear
+				sub Relu
+
+
+
+
+
+
+//
+//STRUCTURE
+//	ConvolutionalSection
+//		Input(225,225,3)
+//		Block
+//			Convolutional > Input(222,222,20)
+//			Convolutional > Input(220,220,40)
+//			ReLU
+//			Pool > Input(160,160,40)
+//	Flatten
+//	LinearSetion
+//		Input(3000)
+//		Block
+//			Linear > Input(2000)
+//			Relu
+//		Block
+//			Linear > Input(10)
+//			Relu
+//	Softmax

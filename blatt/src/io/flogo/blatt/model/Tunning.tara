@@ -1,0 +1,7 @@
+dsl Proteo
+
+use Structure
+
+Concept Tuning
+	Concept Optimization
+		var NeuralNetwork[] neuralNetworks
