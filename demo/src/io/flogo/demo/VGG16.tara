@@ -1,0 +1,49 @@
+dsl Blatt
+
+
+
+NeuralNetwork VGG16
+	ConvolutionalSection
+		Input(x=224,y=224,z=3)
+		Block
+			Convolutional > Output(x=224, y=224, z=64)
+			ReLU
+		Block
+        	Pool > Output(x=112, y=112)
+			Convolutional > Output(x=112, y=112, z=96)
+			ReLU
+			Convolutional > Output(x=112, y=112, z=128)
+            ReLU
+        Block
+        	Pool > Output(x=56, y=56)
+            Convolutional > Output(x=56, y=56, z=192)
+            ReLU
+            Convolutional > Output(x=112, y=112, z=256)
+            ReLU
+            Convolutional > Output(x=112, y=112, z=256)
+            ReLU
+        Block
+        	Pool > Output(x=14, y=14)
+        	Convolutional > Output(x=14, y=14, z=384)
+			ReLU
+			Convolutional > Output(x=14, y=14, z=512)
+			ReLU
+			Convolutional > Output(x=14, y=14, z=512)
+			ReLU
+		Block
+			Pool > Output(x=7, y=7)
+
+	FlattenSection
+
+	LinearSection
+		Block
+			Linear > Output(x=4096)
+			ReLU
+		Block
+			Linear > Output(x=2000)
+			ReLU
+		Block
+			Linear > Output(x=100)
+			ReLU
+
+	SoftmaxSection

@@ -1,0 +1,20 @@
+dsl Blatt
+
+
+
+NeuralNetwork ClassificationLinearNeuralNetwork
+	RecurrentSection
+    	Input(x=1000)
+    	Output(x=100)
+    	Type("LSTM")
+
+	LinearSection
+		Input(x=100)
+		Block
+			Linear > Output(x=5000)
+			ReLU
+		Block
+			Linear > Output(x=10)
+			ReLU
+
+	SoftmaxSection

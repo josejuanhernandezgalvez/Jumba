@@ -1,0 +1,25 @@
+dsl Blatt
+
+
+
+NeuralNetwork LinearRegressionNeuralNetwork
+	LinearSection
+		Input(x=10000)
+		Block
+			Linear > Output(x=5000)
+			ReLU
+		Block
+			Linear > Output(x=2000)
+			ReLU
+		Block
+			Linear > Output(x=800)
+			ReLU
+		Block
+			Linear > Output(x=200)
+			ReLU
+		Block
+			Linear > Output(x=10)
+			ReLU
+		Block
+			Linear > Output(x=1)
+			ReLU

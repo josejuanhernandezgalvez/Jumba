@@ -1,0 +1,24 @@
+dsl Blatt
+
+
+
+NeuralNetwork ClassificationLinearNeuralNetwork
+	LinearSection
+		Input(x=10000)
+		Block
+			Linear > Output(x=5000)
+			ReLU
+		Block
+			Linear > Output(x=2000)
+			ReLU
+		Block
+			Linear > Output(x=800)
+			ReLU
+		Block
+			Linear > Output(x=200)
+			ReLU
+		Block
+			Linear > Output(x=10)
+			ReLU
+
+	SoftmaxSection

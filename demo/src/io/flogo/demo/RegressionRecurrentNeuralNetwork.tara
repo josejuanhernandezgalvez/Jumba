@@ -1,0 +1,10 @@
+dsl Blatt
+
+
+
+
+NeuralNetwork RecurrentNeuralNetwork
+	RecurrentSection
+		Input(x=1000)
+		Output(x=10)
+		Type("LSTM")
