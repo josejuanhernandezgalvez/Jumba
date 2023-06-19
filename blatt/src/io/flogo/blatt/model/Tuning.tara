@@ -3,5 +3,18 @@ dsl Proteo
 use Structure
 
 Concept Tuning
-	Concept Optimization
+	Concept: {1..1} Optimize
 		var NeuralNetwork[] neuralNetworks
+	Concept: {1..*} BestOptimizer
+		var NeuralNetwork neuralNetwork
+	Concept: {1..*} BestLossFunction
+		var NeuralNetwork neuralNetwork
+
+Concept ModulesManagement
+	sub Load
+		var string path
+	sub Save
+		var string path
+		var Section section
+	sub Freeze
+		var Section section
