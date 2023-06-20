@@ -22,18 +22,18 @@ public class FlogoRunnerTest {
 
 	@Test
 	public void exampleM1() {
-		main(new String[]{temp(home + "sandbox/confFiles/example/m1.txt")});
+		main(new String[]{temp(home + File.separator + "m1.txt")});
 	}
 
 	private static String temp(String filepath) {
 		try {
-			File file = new File(filepath);
+			File argsFile = new File(filepath);
 			String home = System.getProperty("user.home");
 			String projectDirectory = projectDirectory();
-			String text = Files.readString(file.toPath())
+			String text = Files.readString(argsFile.toPath())
 					.replace("$PROJECT_DIRECTORY", projectDirectory)
 					.replace("$HOME", home);
-			Path temporalFile = Files.createTempFile(file.getName(), ".txt");
+			Path temporalFile = Files.createTempFile(argsFile.getName(), ".txt");
 			Files.writeString(temporalFile, text, StandardOpenOption.TRUNCATE_EXISTING);
 			temporalFile.toFile().deleteOnExit();
 			return temporalFile.toFile().getAbsolutePath();
@@ -42,8 +42,8 @@ public class FlogoRunnerTest {
 		}
 	}
 
-	private static String projectDirectory() {
-		return new File("./").getParentFile().getAbsolutePath();//TODO
+	private static String projectDirectory() throws IOException {
+		return new File("..").getCanonicalFile().getAbsolutePath();
 	}
 
 
