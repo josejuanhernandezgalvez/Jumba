@@ -2,14 +2,20 @@
 def type(ConvolutionalNetwork)
 	$name
 
-	$section+getter...[$NL]
+	$section...[$NL]
 
 	$section+setter...[$NL]
 	
 end
 
 
-def type(LinearSection) trigger(getter)
+def type(LinearSection) trigger(section)
+
+
+end
+
+
+def type(LinearSection) trigger(setter)
 
 
 end

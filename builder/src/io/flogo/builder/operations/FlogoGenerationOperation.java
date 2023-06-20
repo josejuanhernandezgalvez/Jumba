@@ -22,14 +22,13 @@ public class FlogoGenerationOperation extends ModelOperation {
 	@Override
 	public void call(Model model) throws CompilationFailedException {
 		FrameBuilder builder = new FrameBuilder();
-		for (Node component : model.components()) {
+		for (Node component : model.components())
 			builder.add(component.type())
 					.add("name", component.name())
 					.add("section", component.components().stream()
 							.filter(c -> c.types().contains("Section"))
 							.map(this::sectionFrameOf)
 							.toArray(Frame[]::new));
-		}
 		Frame frame = builder.toFrame();
 		String render = new ConvolutionalNetworkTemplate().render(frame);
 		try {
