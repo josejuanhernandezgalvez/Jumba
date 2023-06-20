@@ -1,7 +1,7 @@
 dsl Proteo
 
 Concept NeuralNetwork
-	has:{1..*} Section
+	has:{1..*}:CheckFirstInput Section
 
 Concept Section is component
 	sub LinkSection

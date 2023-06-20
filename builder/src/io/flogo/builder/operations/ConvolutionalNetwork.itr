@@ -1,0 +1,15 @@
+
+def type(ConvolutionalNetwork)
+	$name
+
+	$section+getter...[$NL]
+
+	$section+setter...[$NL]
+	
+end
+
+
+def type(LinearSection) trigger(getter)
+
+
+end
