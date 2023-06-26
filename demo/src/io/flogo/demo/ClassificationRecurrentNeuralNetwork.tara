@@ -9,7 +9,6 @@ NeuralNetwork ClassificationLinearNeuralNetwork
     	Type("LSTM")
 
 	LinearSection
-		Input(x=100)
 		Block
 			Linear > Output(x=5000)
 			ReLU

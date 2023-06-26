@@ -1,6 +1,8 @@
 
 def type(ConvolutionalNetwork)
-	$name
+	class $name(ConvolutionalSection):[$NL]
+	    def __init__(self, section):
+	        self.section = section
 
 	$section...[$NL]
 
