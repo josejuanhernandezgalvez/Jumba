@@ -1,23 +1,11 @@
 package io.flogo.builder.model.structure.layers.processing.convolutional.pools;
 
-import io.flogo.builder.model.structure.Output;
-import io.flogo.builder.model.structure.layers.input.ThreeDimensionsInputSize;
-import io.flogo.builder.model.structure.layers.processing.convolutional.ConvolutionalParameters;
+import io.flogo.builder.model.structure.layers.output.ThreeDimensionsOutput;
+import io.flogo.builder.model.structure.layers.processing.convolutional.Convolutional;
 
-public class MaxPool implements Pool {
-
-    @Override
-    public Output output() {
-        return null;
+public class MaxPool extends Convolutional {
+    public MaxPool(ThreeDimensionsOutput previous, ThreeDimensionsOutput output) {
+        super(previous, output);
     }
 
-    @Override
-    public ConvolutionalParameters parameters() {
-        return null;
-    }
-
-    @Override
-    public ConvolutionalParameters parameters(ThreeDimensionsInputSize threeDimensionsInputSize) {
-        return null;
-    }
 }

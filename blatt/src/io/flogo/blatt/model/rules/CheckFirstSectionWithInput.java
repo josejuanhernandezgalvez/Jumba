@@ -7,6 +7,6 @@ public class CheckFirstSectionWithInput implements NodeRule {
 
     @Override
     public boolean accept(Node node) {
-        return false;
+        return true;
     }
 }
