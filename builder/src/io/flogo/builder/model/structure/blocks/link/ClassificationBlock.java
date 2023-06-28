@@ -13,7 +13,6 @@ public class ClassificationBlock implements Block {
         this.layer = layer;
     }
 
-    @Override
     public List<Layer> layers() {
         return List.of(layer);
     }

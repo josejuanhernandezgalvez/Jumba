@@ -6,5 +6,8 @@ import io.flogo.builder.model.structure.Layer;
 import java.util.List;
 
 public record ConvolutionalBlock(List<Layer> layers) implements Block {
+    public List<Layer> layers() {
+        return this.layers;
+    }
 }
 

@@ -6,7 +6,7 @@ import io.flogo.builder.model.structure.Section;
 import java.util.List;
 
 public class ResidualSection implements Section {
-    private final List<Block> blocks;
+    public final List<Block> blocks;
 
     public ResidualSection(List<Block> blocks) {
         this.blocks = blocks;
