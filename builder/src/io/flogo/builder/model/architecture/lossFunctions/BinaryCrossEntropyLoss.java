@@ -1,6 +1,6 @@
 package io.flogo.builder.model.architecture.lossFunctions;
 
-import io.flogo.builder.model.architecture.Loss;
+import io.flogo.builder.model.architecture.LossFunction;
 
-public class BinaryCrossEntropyLoss implements Loss {
+public class BinaryCrossEntropyLoss implements LossFunction {
 }

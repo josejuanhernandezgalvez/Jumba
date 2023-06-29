@@ -1,8 +1,39 @@
 dsl Proteo
 
+Concept Training
+	Concept Optimization
+		Concept Optimizer
+			var double lr=0.001
+			sub Adadelta
+				var double  rho=0.9
+				var double eps=1e-6
+		    sub Adagrad
+		    sub Adam
+		    sub RMSProp
+		    sub ASGD
+		    	var double alpha=0.75
+		    sub SGD
+		    	var double momentum=0
+
+		Concept EarlyStopping
+			var integer patience=5
+			sub GrowthEarlyStopper
+				var double threshold
+		    sub PrecisionEarlyStopper
+		    	var integer threshold
+
+	Concept LossFunction
+		sub BinaryCrossEntropyLoss
+	    sub CrossEntropyLoss
+	    sub MAELoss
+	    sub MSELoss
+
 Concept NeuralNetwork
 	has:{1..*}:CheckSectionsWithNoInput:CheckSectionsWithNoInput Section
 
+Concept Module is component
+	var string path
+	var integer section
 
 Concept Section is component
 	sub LinkSection
@@ -66,17 +97,29 @@ Concept Section is component
             			sub Dropout
 		sub ResidualSection
 			Concept:{0..1} Input
-            	var integer x
-            	var integer y
             	var integer z
         	Concept:{1..*} Block
         		Concept Output
-                	var integer x
-                	var integer y
                 	var integer z
+                Concept ActivationLayer
+                	sub ReLU
+                    sub ELU > var integer alpha=1
+                    sub SELU
+                    sub GELU
+                    sub SiLU
+                    sub GLU
+                    sub LeakyReLU > var integer alpha=1
+                    sub LogSigmoid
+                    sub Sigmoid
+                    sub Tanh
+                    sub Mish
         		var integer repeat=1
         sub RecurrentSection
         	Concept:{0..1} Input
         		var integer x
         	Concept Output > var integer x
         	Concept Type > var string type="LSTM"
+
+Concept Save
+	var string path
+	var integer section=-1

@@ -1,6 +1,6 @@
 package io.flogo.builder.model.architecture.lossFunctions;
 
-import io.flogo.builder.model.architecture.Loss;
+import io.flogo.builder.model.architecture.LossFunction;
 
-public class MSELoss implements Loss {
+public class MSELoss implements LossFunction {
 }

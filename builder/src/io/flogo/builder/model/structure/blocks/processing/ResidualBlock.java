@@ -2,20 +2,18 @@ package io.flogo.builder.model.structure.blocks.processing;
 
 import io.flogo.builder.model.structure.Block;
 import io.flogo.builder.model.structure.layers.activations.Activation;
-import io.flogo.builder.model.structure.layers.output.ThreeDimensionsOutput;
+import io.flogo.builder.model.structure.layers.output.OneDimensionOutput;
 
 public class ResidualBlock implements Block {
-    public final int inChannels;
-    public final int outChannels;
-    public final ThreeDimensionsOutput output;
+    public final int inputChannels;
+    public final int outputChannels;
     public final Activation activation;
     public final int repetitions;
 
 
-    public ResidualBlock(int inChannels, int outChannels, ThreeDimensionsOutput output, Activation activation, int repetitions) {
-        this.inChannels = inChannels;
-        this.outChannels = outChannels;
-        this.output = output;
+    public ResidualBlock(OneDimensionOutput previous, OneDimensionOutput output, Activation activation, int repetitions) {
+        this.inputChannels = previous.x();
+        this.outputChannels = output.x();
         this.activation = activation;
         this.repetitions = repetitions;
     }
