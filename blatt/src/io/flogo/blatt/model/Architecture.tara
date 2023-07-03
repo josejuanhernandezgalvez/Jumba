@@ -1,32 +1,41 @@
 dsl Proteo
 
 Concept Training
-	Concept Optimization
-		Concept Optimizer
-			var double lr=0.001
-			sub Adadelta
-				var double  rho=0.9
-				var double eps=1e-6
-		    sub Adagrad
-		    sub Adam
-		    sub RMSProp
-		    sub ASGD
-		    	var double alpha=0.75
-		    sub SGD
-		    	var double momentum=0
+	has:{1..1} Optimizer
+	has:{1..1} EarlyStopping
+	has:{1..1} LossFunction
 
-		Concept EarlyStopping
-			var integer patience=5
-			sub GrowthEarlyStopper
-				var double threshold
-		    sub PrecisionEarlyStopper
-		    	var integer threshold
+Concept Optimizer is component
+	sub Adadelta
+		var double lr=0.001
+		var double  rho=0.9
+		var double eps=1e-6
+    sub Adagrad
+    	var double lr=0.001
+    sub Adam
+    	var double lr=0.001
+    sub RMSProp
+    	var double lr=0.001
+    sub ASGD
+    	var double lr=0.001
+    	var double alpha=0.75
+    sub SGD
+    	var double lr=0.001
+    	var double momentum=0
 
-	Concept LossFunction
-		sub BinaryCrossEntropyLoss
-	    sub CrossEntropyLoss
-	    sub MAELoss
-	    sub MSELoss
+Concept EarlyStopping is component
+	sub GrowthEarlyStopper
+		var integer patience=5
+		var double threshold=1
+    sub PrecisionEarlyStopper
+		var integer patience=5
+    	var integer threshold=95
+
+Concept LossFunction is component
+	sub BinaryCrossEntropyLoss
+    sub CrossEntropyLoss
+    sub MAELoss
+    sub MSELoss
 
 Concept NeuralNetwork
 	has:{1..*}:CheckSectionsWithNoInput:CheckSectionsWithNoInput Section

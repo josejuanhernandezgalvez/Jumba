@@ -1,6 +1,9 @@
 dsl Blatt
 
-
+Training
+	Adam
+	MAELoss
+	GrowthEarlyStopper
 
 NeuralNetwork ClassificationLinearNeuralNetwork
 	LinearSection

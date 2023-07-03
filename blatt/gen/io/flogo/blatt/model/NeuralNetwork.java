@@ -75,18 +75,6 @@ public class NeuralNetwork  extends io.intino.magritte.framework.Layer implement
 		}
 
 
-		public io.flogo.blatt.model.RecurrentSection recurrentSection() {
-			io.flogo.blatt.model.RecurrentSection newElement = core$().graph().concept(io.flogo.blatt.model.RecurrentSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.RecurrentSection.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.SoftmaxSection softmaxSection() {
-			io.flogo.blatt.model.SoftmaxSection newElement = core$().graph().concept(io.flogo.blatt.model.SoftmaxSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.SoftmaxSection.class);
-
-			return newElement;
-		}
-
 		public io.flogo.blatt.model.LinearSection linearSection() {
 			io.flogo.blatt.model.LinearSection newElement = core$().graph().concept(io.flogo.blatt.model.LinearSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.LinearSection.class);
 
@@ -99,14 +87,26 @@ public class NeuralNetwork  extends io.intino.magritte.framework.Layer implement
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.FlattenSection flattenSection() {
-			io.flogo.blatt.model.FlattenSection newElement = core$().graph().concept(io.flogo.blatt.model.FlattenSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.FlattenSection.class);
+		public io.flogo.blatt.model.ResidualSection residualSection() {
+			io.flogo.blatt.model.ResidualSection newElement = core$().graph().concept(io.flogo.blatt.model.ResidualSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ResidualSection.class);
 
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.ResidualSection residualSection() {
-			io.flogo.blatt.model.ResidualSection newElement = core$().graph().concept(io.flogo.blatt.model.ResidualSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ResidualSection.class);
+		public io.flogo.blatt.model.RecurrentSection recurrentSection() {
+			io.flogo.blatt.model.RecurrentSection newElement = core$().graph().concept(io.flogo.blatt.model.RecurrentSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.RecurrentSection.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.SoftmaxSection softmaxSection() {
+			io.flogo.blatt.model.SoftmaxSection newElement = core$().graph().concept(io.flogo.blatt.model.SoftmaxSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.SoftmaxSection.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.FlattenSection flattenSection() {
+			io.flogo.blatt.model.FlattenSection newElement = core$().graph().concept(io.flogo.blatt.model.FlattenSection.class).createNode(this.name, core$()).as(io.flogo.blatt.model.FlattenSection.class);
 
 			return newElement;
 		}

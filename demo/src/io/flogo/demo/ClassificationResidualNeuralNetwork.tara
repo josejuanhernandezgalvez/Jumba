@@ -1,18 +1,21 @@
 dsl Blatt
 
-
+Training
+	Adam
+	MAELoss
+	GrowthEarlyStopper
 
 NeuralNetwork ResidualNeuralNetwork
 	ResidualSection
-		Input(x=224, y=224, z=3)
+		Input(z=3)
 		Block
-			Output(x=112, y=112, z=10)
+			Output(z=10)
 			repeat = 4
 		Block
-        	Output(x=56, y=56, z=16)
+        	Output(z=16)
         	repeat = 3
 		Block
-        	Output(x=28, y=28, z=24)
+        	Output(z=24)
         	repeat = 4
 
     FlattenSection
