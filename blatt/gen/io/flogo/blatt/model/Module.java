@@ -5,6 +5,10 @@ import io.flogo.blatt.model.*;
 public class Module  extends io.intino.magritte.framework.Layer implements io.intino.magritte.framework.tags.Component, io.intino.magritte.framework.tags.Terminal {
 	protected java.lang.String path;
 	protected int section;
+	protected int from;
+	protected int to;
+	protected java.lang.String sectionName;
+	protected boolean trainable;
 
 	public Module(io.intino.magritte.framework.Node node) {
 		super(node);
@@ -18,6 +22,22 @@ public class Module  extends io.intino.magritte.framework.Layer implements io.in
 		return section;
 	}
 
+	public int from() {
+		return from;
+	}
+
+	public int to() {
+		return to;
+	}
+
+	public java.lang.String sectionName() {
+		return sectionName;
+	}
+
+	public boolean trainable() {
+		return trainable;
+	}
+
 	public Module path(java.lang.String value) {
 		this.path = value;
 		return (Module) this;
@@ -28,11 +48,35 @@ public class Module  extends io.intino.magritte.framework.Layer implements io.in
 		return (Module) this;
 	}
 
+	public Module from(int value) {
+		this.from = value;
+		return (Module) this;
+	}
+
+	public Module to(int value) {
+		this.to = value;
+		return (Module) this;
+	}
+
+	public Module sectionName(java.lang.String value) {
+		this.sectionName = value;
+		return (Module) this;
+	}
+
+	public Module trainable(boolean value) {
+		this.trainable = value;
+		return (Module) this;
+	}
+
 	@Override
 	protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
 		java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>();
 		map.put("path", new java.util.ArrayList(java.util.Collections.singletonList(this.path)));
 		map.put("section", new java.util.ArrayList(java.util.Collections.singletonList(this.section)));
+		map.put("from", new java.util.ArrayList(java.util.Collections.singletonList(this.from)));
+		map.put("to", new java.util.ArrayList(java.util.Collections.singletonList(this.to)));
+		map.put("sectionName", new java.util.ArrayList(java.util.Collections.singletonList(this.sectionName)));
+		map.put("trainable", new java.util.ArrayList(java.util.Collections.singletonList(this.trainable)));
 		return map;
 	}
 
@@ -41,6 +85,10 @@ public class Module  extends io.intino.magritte.framework.Layer implements io.in
 		super.load$(name, values);
 		if (name.equalsIgnoreCase("path")) this.path = io.intino.magritte.framework.loaders.StringLoader.load(values, this).get(0);
 		else if (name.equalsIgnoreCase("section")) this.section = io.intino.magritte.framework.loaders.IntegerLoader.load(values, this).get(0);
+		else if (name.equalsIgnoreCase("from")) this.from = io.intino.magritte.framework.loaders.IntegerLoader.load(values, this).get(0);
+		else if (name.equalsIgnoreCase("to")) this.to = io.intino.magritte.framework.loaders.IntegerLoader.load(values, this).get(0);
+		else if (name.equalsIgnoreCase("sectionName")) this.sectionName = io.intino.magritte.framework.loaders.StringLoader.load(values, this).get(0);
+		else if (name.equalsIgnoreCase("trainable")) this.trainable = io.intino.magritte.framework.loaders.BooleanLoader.load(values, this).get(0);
 	}
 
 	@Override
@@ -48,6 +96,10 @@ public class Module  extends io.intino.magritte.framework.Layer implements io.in
 		super.set$(name, values);
 		if (name.equalsIgnoreCase("path")) this.path = (java.lang.String) values.get(0);
 		else if (name.equalsIgnoreCase("section")) this.section = (java.lang.Integer) values.get(0);
+		else if (name.equalsIgnoreCase("from")) this.from = (java.lang.Integer) values.get(0);
+		else if (name.equalsIgnoreCase("to")) this.to = (java.lang.Integer) values.get(0);
+		else if (name.equalsIgnoreCase("sectionName")) this.sectionName = (java.lang.String) values.get(0);
+		else if (name.equalsIgnoreCase("trainable")) this.trainable = (java.lang.Boolean) values.get(0);
 	}
 
 	public io.flogo.blatt.model.BlattGraph graph() {

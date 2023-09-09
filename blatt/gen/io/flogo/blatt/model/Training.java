@@ -79,14 +79,8 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 		}
 
 
-		public io.flogo.blatt.model.Adam adam() {
-			io.flogo.blatt.model.Adam newElement = core$().graph().concept(io.flogo.blatt.model.Adam.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adam.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.SGD sGD() {
-			io.flogo.blatt.model.SGD newElement = core$().graph().concept(io.flogo.blatt.model.SGD.class).createNode(this.name, core$()).as(io.flogo.blatt.model.SGD.class);
+		public io.flogo.blatt.model.Adadelta adadelta() {
+			io.flogo.blatt.model.Adadelta newElement = core$().graph().concept(io.flogo.blatt.model.Adadelta.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adadelta.class);
 
 			return newElement;
 		}
@@ -97,14 +91,8 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.Adadelta adadelta() {
-			io.flogo.blatt.model.Adadelta newElement = core$().graph().concept(io.flogo.blatt.model.Adadelta.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adadelta.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.ASGD aSGD() {
-			io.flogo.blatt.model.ASGD newElement = core$().graph().concept(io.flogo.blatt.model.ASGD.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ASGD.class);
+		public io.flogo.blatt.model.Adam adam() {
+			io.flogo.blatt.model.Adam newElement = core$().graph().concept(io.flogo.blatt.model.Adam.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adam.class);
 
 			return newElement;
 		}
@@ -115,15 +103,33 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.GrowthEarlyStopper growthEarlyStopper(double threshold) {
-			io.flogo.blatt.model.GrowthEarlyStopper newElement = core$().graph().concept(io.flogo.blatt.model.GrowthEarlyStopper.class).createNode(this.name, core$()).as(io.flogo.blatt.model.GrowthEarlyStopper.class);
-			newElement.core$().set(newElement, "threshold", java.util.Collections.singletonList(threshold));
+		public io.flogo.blatt.model.SGD sGD() {
+			io.flogo.blatt.model.SGD newElement = core$().graph().concept(io.flogo.blatt.model.SGD.class).createNode(this.name, core$()).as(io.flogo.blatt.model.SGD.class);
+
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.PrecisionEarlyStopper precisionEarlyStopper(int threshold) {
+		public io.flogo.blatt.model.ASGD aSGD() {
+			io.flogo.blatt.model.ASGD newElement = core$().graph().concept(io.flogo.blatt.model.ASGD.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ASGD.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.GrowthEarlyStopper growthEarlyStopper() {
+			io.flogo.blatt.model.GrowthEarlyStopper newElement = core$().graph().concept(io.flogo.blatt.model.GrowthEarlyStopper.class).createNode(this.name, core$()).as(io.flogo.blatt.model.GrowthEarlyStopper.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.PrecisionEarlyStopper precisionEarlyStopper() {
 			io.flogo.blatt.model.PrecisionEarlyStopper newElement = core$().graph().concept(io.flogo.blatt.model.PrecisionEarlyStopper.class).createNode(this.name, core$()).as(io.flogo.blatt.model.PrecisionEarlyStopper.class);
-			newElement.core$().set(newElement, "threshold", java.util.Collections.singletonList(threshold));
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.MSELoss mSELoss() {
+			io.flogo.blatt.model.MSELoss newElement = core$().graph().concept(io.flogo.blatt.model.MSELoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.MSELoss.class);
+
 			return newElement;
 		}
 
@@ -135,12 +141,6 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 
 		public io.flogo.blatt.model.BinaryCrossEntropyLoss binaryCrossEntropyLoss() {
 			io.flogo.blatt.model.BinaryCrossEntropyLoss newElement = core$().graph().concept(io.flogo.blatt.model.BinaryCrossEntropyLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.BinaryCrossEntropyLoss.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.MSELoss mSELoss() {
-			io.flogo.blatt.model.MSELoss newElement = core$().graph().concept(io.flogo.blatt.model.MSELoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.MSELoss.class);
 
 			return newElement;
 		}

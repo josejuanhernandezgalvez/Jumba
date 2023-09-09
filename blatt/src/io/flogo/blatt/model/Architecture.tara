@@ -8,7 +8,7 @@ Concept Training
 Concept Optimizer is component
 	sub Adadelta
 		var double lr=0.001
-		var double  rho=0.9
+		var double rho=0.9
 		var double eps=1e-6
     sub Adagrad
     	var double lr=0.001
@@ -43,6 +43,10 @@ Concept NeuralNetwork
 Concept Module is component
 	var string path
 	var integer section
+	var integer from
+	var integer to
+	var string sectionName = ""
+	var boolean trainable
 
 Concept Section is component
 	sub LinkSection
@@ -74,13 +78,16 @@ Concept Section is component
                         		var integer x
                         		var integer y
                         		var integer z
-						sub Pool > var string type="Max"
-							Concept:{1..1} Output
-                        		var integer x
-                        		var integer y
+						sub Pool
+							sub MaxPool
+								Concept:{1..1} Output
+                        			var integer x
+                        			var integer y
+                        	sub AvgPool
+                            	Concept:{1..1} Output
+                                	var integer x
+									var integer y
 						sub Normalization
-							Concept:{1..1} Output
-                             	var integer z
 							var double eps = 0.00001
 							var double momentum = 0.1
 		sub LinearSection
@@ -129,6 +136,9 @@ Concept Section is component
         	Concept Output > var integer x
         	Concept Type > var string type="LSTM"
 
-Concept Save
+Concept SaveModule
 	var string path
-	var integer section=-1
+	var integer section
+	var integer from
+	var integer to
+	var string name = ""

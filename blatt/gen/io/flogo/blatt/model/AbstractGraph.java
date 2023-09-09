@@ -7,7 +7,7 @@ public class AbstractGraph extends io.intino.magritte.framework.GraphWrapper {
 	protected io.intino.magritte.framework.Graph graph;
 	private java.util.List<io.flogo.blatt.model.Training> trainingList = new java.util.ArrayList<>();
 	private java.util.List<io.flogo.blatt.model.NeuralNetwork> neuralNetworkList = new java.util.ArrayList<>();
-	private java.util.List<io.flogo.blatt.model.Save> saveList = new java.util.ArrayList<>();
+	private java.util.List<io.flogo.blatt.model.SaveModule> saveModuleList = new java.util.ArrayList<>();
 
 	private java.util.Map<String, Indexer> _index = _fillIndex();
 
@@ -21,7 +21,7 @@ public class AbstractGraph extends io.intino.magritte.framework.GraphWrapper {
 		this.graph.i18n().register("blatt");
 		this.trainingList = new java.util.ArrayList<>(wrapper.trainingList);
 		this.neuralNetworkList = new java.util.ArrayList<>(wrapper.neuralNetworkList);
-		this.saveList = new java.util.ArrayList<>(wrapper.saveList);
+		this.saveModuleList = new java.util.ArrayList<>(wrapper.saveModuleList);
 	}
 
 	public <T extends io.intino.magritte.framework.GraphWrapper> T a$(Class<T> t) {
@@ -58,8 +58,8 @@ public class AbstractGraph extends io.intino.magritte.framework.GraphWrapper {
 		return neuralNetworkList;
 	}
 
-	public java.util.List<io.flogo.blatt.model.Save> saveList() {
-		return saveList;
+	public java.util.List<io.flogo.blatt.model.SaveModule> saveModuleList() {
+		return saveModuleList;
 	}
 
 	public java.util.stream.Stream<io.flogo.blatt.model.Training> trainingList(java.util.function.Predicate<io.flogo.blatt.model.Training> filter) {
@@ -78,12 +78,12 @@ public class AbstractGraph extends io.intino.magritte.framework.GraphWrapper {
 		return neuralNetworkList.get(index);
 	}
 
-	public java.util.stream.Stream<io.flogo.blatt.model.Save> saveList(java.util.function.Predicate<io.flogo.blatt.model.Save> filter) {
-		return saveList.stream().filter(filter);
+	public java.util.stream.Stream<io.flogo.blatt.model.SaveModule> saveModuleList(java.util.function.Predicate<io.flogo.blatt.model.SaveModule> filter) {
+		return saveModuleList.stream().filter(filter);
 	}
 
-	public io.flogo.blatt.model.Save save(int index) {
-		return saveList.get(index);
+	public io.flogo.blatt.model.SaveModule saveModule(int index) {
+		return saveModuleList.get(index);
 	}
 
 	public io.intino.magritte.framework.Graph core$() {
@@ -129,9 +129,12 @@ public class AbstractGraph extends io.intino.magritte.framework.GraphWrapper {
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.Save save(java.lang.String path) {
-			io.flogo.blatt.model.Save newElement = AbstractGraph.this.graph.createRoot(io.flogo.blatt.model.Save.class, stash, this.name).a$(io.flogo.blatt.model.Save.class);
+		public io.flogo.blatt.model.SaveModule saveModule(java.lang.String path, int section, int from, int to) {
+			io.flogo.blatt.model.SaveModule newElement = AbstractGraph.this.graph.createRoot(io.flogo.blatt.model.SaveModule.class, stash, this.name).a$(io.flogo.blatt.model.SaveModule.class);
 			newElement.core$().set(newElement, "path", java.util.Collections.singletonList(path));
+			newElement.core$().set(newElement, "section", java.util.Collections.singletonList(section));
+			newElement.core$().set(newElement, "from", java.util.Collections.singletonList(from));
+			newElement.core$().set(newElement, "to", java.util.Collections.singletonList(to));
 			return newElement;
 		}
 	}
@@ -145,8 +148,8 @@ public class AbstractGraph extends io.intino.magritte.framework.GraphWrapper {
 	    	new java.util.ArrayList<>(AbstractGraph.this.neuralNetworkList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
 	    }
 
-	    public void save(java.util.function.Predicate<io.flogo.blatt.model.Save> filter) {
-	    	new java.util.ArrayList<>(AbstractGraph.this.saveList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
+	    public void saveModule(java.util.function.Predicate<io.flogo.blatt.model.SaveModule> filter) {
+	    	new java.util.ArrayList<>(AbstractGraph.this.saveModuleList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
 	    }
 	}
 
@@ -155,7 +158,7 @@ public class AbstractGraph extends io.intino.magritte.framework.GraphWrapper {
 		java.util.HashMap<String, Indexer> map = new java.util.HashMap<>();
 		map.put("Training", new Indexer(node -> trainingList.add(node.as(io.flogo.blatt.model.Training.class)), node -> trainingList.remove(node.as(io.flogo.blatt.model.Training.class)), () -> trainingList.clear()));
 		map.put("NeuralNetwork", new Indexer(node -> neuralNetworkList.add(node.as(io.flogo.blatt.model.NeuralNetwork.class)), node -> neuralNetworkList.remove(node.as(io.flogo.blatt.model.NeuralNetwork.class)), () -> neuralNetworkList.clear()));
-		map.put("Save", new Indexer(node -> saveList.add(node.as(io.flogo.blatt.model.Save.class)), node -> saveList.remove(node.as(io.flogo.blatt.model.Save.class)), () -> saveList.clear()));
+		map.put("SaveModule", new Indexer(node -> saveModuleList.add(node.as(io.flogo.blatt.model.SaveModule.class)), node -> saveModuleList.remove(node.as(io.flogo.blatt.model.SaveModule.class)), () -> saveModuleList.clear()));
 		return map;
 	}
 

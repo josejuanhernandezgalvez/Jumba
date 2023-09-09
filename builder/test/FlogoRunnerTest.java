@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import static io.flogo.builder.FlogocRunner.main;
+import static io.flogo.builder.BlattcRunner.main;
 
 
 @Ignore

@@ -13,7 +13,7 @@ NeuralNetwork ClassificationLinearNeuralNetwork
 			ReLU
 		Block
 			Linear > Output(x=2000)
-			ReLU
+			ELU > alpha = 1
 		Block
 			Linear > Output(x=800)
 			ReLU

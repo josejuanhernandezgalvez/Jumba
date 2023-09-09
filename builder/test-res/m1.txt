@@ -2,7 +2,7 @@ def.file
 $PROJECT_DIRECTORY/demo/src/io/flogo/demo/ConvolutionalNeuralNetwork.tara#true
 
 project
-dsl-flogo
+dsl-blatt
 module
 demo
 semantic.lib

@@ -191,6 +191,8 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer> processingLayerList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional> convolutionalList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Pool> poolList = new java.util.ArrayList<>();
+		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool> maxPoolList = new java.util.ArrayList<>();
+		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool> avgPoolList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization> normalizationList = new java.util.ArrayList<>();
 
 		public Block(io.intino.magritte.framework.Node node) {
@@ -453,6 +455,38 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			return poolList().stream().filter(predicate).findFirst().orElse(null);
 		}
 
+		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool> maxPoolList() {
+			return java.util.Collections.unmodifiableList(maxPoolList);
+		}
+
+		public io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool maxPool(int index) {
+			return maxPoolList.get(index);
+		}
+
+		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool> maxPoolList(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool> predicate) {
+			return maxPoolList().stream().filter(predicate).collect(java.util.stream.Collectors.toList());
+		}
+
+		public io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool maxPool(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool> predicate) {
+			return maxPoolList().stream().filter(predicate).findFirst().orElse(null);
+		}
+
+		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool> avgPoolList() {
+			return java.util.Collections.unmodifiableList(avgPoolList);
+		}
+
+		public io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool avgPool(int index) {
+			return avgPoolList.get(index);
+		}
+
+		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool> avgPoolList(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool> predicate) {
+			return avgPoolList().stream().filter(predicate).collect(java.util.stream.Collectors.toList());
+		}
+
+		public io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool avgPool(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool> predicate) {
+			return avgPoolList().stream().filter(predicate).findFirst().orElse(null);
+		}
+
 		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization> normalizationList() {
 			return java.util.Collections.unmodifiableList(normalizationList);
 		}
@@ -487,6 +521,8 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			new java.util.ArrayList<>(processingLayerList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(convolutionalList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(poolList).forEach(c -> components.add(c.core$()));
+			new java.util.ArrayList<>(maxPoolList).forEach(c -> components.add(c.core$()));
+			new java.util.ArrayList<>(avgPoolList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(normalizationList).forEach(c -> components.add(c.core$()));
 			return new java.util.ArrayList<>(components);
 		}
@@ -516,6 +552,8 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			if (node.is("ConvolutionalSection$Block$ProcessingLayer")) this.processingLayerList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer.class));
 			if (node.is("ConvolutionalSection$Block$Convolutional")) this.convolutionalList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional.class));
 			if (node.is("ConvolutionalSection$Block$Pool")) this.poolList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.class));
+			if (node.is("ConvolutionalSection$Block$MaxPool")) this.maxPoolList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.class));
+			if (node.is("ConvolutionalSection$Block$AvgPool")) this.avgPoolList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.class));
 			if (node.is("ConvolutionalSection$Block$Normalization")) this.normalizationList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.class));
 		}
 
@@ -538,6 +576,8 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			if (node.is("ConvolutionalSection$Block$ProcessingLayer")) this.processingLayerList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer.class));
 			if (node.is("ConvolutionalSection$Block$Convolutional")) this.convolutionalList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional.class));
 			if (node.is("ConvolutionalSection$Block$Pool")) this.poolList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.class));
+			if (node.is("ConvolutionalSection$Block$MaxPool")) this.maxPoolList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.class));
+			if (node.is("ConvolutionalSection$Block$AvgPool")) this.avgPoolList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.class));
 			if (node.is("ConvolutionalSection$Block$Normalization")) this.normalizationList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.class));
 		}
 
@@ -638,8 +678,14 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				return newElement;
 			}
 
-			public io.flogo.blatt.model.ConvolutionalSection.Block.Pool pool() {
-				io.flogo.blatt.model.ConvolutionalSection.Block.Pool newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.class);
+			public io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool maxPool() {
+				io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.class);
+
+				return newElement;
+			}
+
+			public io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool avgPool() {
+				io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.class);
 
 				return newElement;
 			}
@@ -705,8 +751,12 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				new java.util.ArrayList<>(convolutionalList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
 			}
 
-			public void pool(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Pool> filter) {
-				new java.util.ArrayList<>(poolList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
+			public void maxPool(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool> filter) {
+				new java.util.ArrayList<>(maxPoolList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
+			}
+
+			public void avgPool(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool> filter) {
+				new java.util.ArrayList<>(avgPoolList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
 			}
 
 			public void normalization(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization> filter) {
@@ -1279,24 +1329,41 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			}
 		}
 
-		public static class Pool extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
-			protected java.lang.String type;
-			protected io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Output output;
+		public static abstract class Pool extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
 
 			public Pool(io.intino.magritte.framework.Node node) {
 				super(node);
 			}
 
-			public java.lang.String type() {
-				return type;
+			@Override
+			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
+				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
+				return map;
 			}
 
-			public Pool type(java.lang.String value) {
-				this.type = value;
-				return (Pool) this;
+			@Override
+			protected void load$(java.lang.String name, java.util.List<?> values) {
+				super.load$(name, values);
 			}
 
-			public io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Output output() {
+			@Override
+			protected void set$(java.lang.String name, java.util.List<?> values) {
+				super.set$(name, values);
+			}
+
+			public io.flogo.blatt.model.BlattGraph graph() {
+				return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
+			}
+		}
+
+		public static class MaxPool extends io.flogo.blatt.model.ConvolutionalSection.Block.Pool implements io.intino.magritte.framework.tags.Terminal {
+			protected io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.Output output;
+
+			public MaxPool(io.intino.magritte.framework.Node node) {
+				super(node);
+			}
+
+			public io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.Output output() {
 				return output;
 			}
 
@@ -1309,32 +1376,29 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			@Override
 			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
 				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
-				map.put("type", new java.util.ArrayList(java.util.Collections.singletonList(this.type)));
 				return map;
 			}
 
 			@Override
 			protected void addNode$(io.intino.magritte.framework.Node node) {
 				super.addNode$(node);
-				if (node.is("ConvolutionalSection$Block$Pool$Output")) this.output = node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Output.class);
+				if (node.is("ConvolutionalSection$Block$MaxPool$Output")) this.output = node.as(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.Output.class);
 			}
 
 			@Override
 			protected void removeNode$(io.intino.magritte.framework.Node node) {
 				super.removeNode$(node);
-				if (node.is("ConvolutionalSection$Block$Pool$Output")) this.output = null;
+				if (node.is("ConvolutionalSection$Block$MaxPool$Output")) this.output = null;
 			}
 
 			@Override
 			protected void load$(java.lang.String name, java.util.List<?> values) {
 				super.load$(name, values);
-				if (name.equalsIgnoreCase("type")) this.type = io.intino.magritte.framework.loaders.StringLoader.load(values, this).get(0);
 			}
 
 			@Override
 			protected void set$(java.lang.String name, java.util.List<?> values) {
 				super.set$(name, values);
-				if (name.equalsIgnoreCase("type")) this.type = (java.lang.String) values.get(0);
 			}
 
 			public Create create() {
@@ -1345,15 +1409,143 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				return new Create(name);
 			}
 
-			public class Create extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer.Create {
+			public class Create extends io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Create {
 
 
 				public Create(java.lang.String name) {
 					super(name);
 				}
 
-				public io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Output output(int x, int y) {
-					io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Output newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Output.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Output.class);
+				public io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.Output output(int x, int y) {
+					io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.Output newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.Output.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.Output.class);
+					newElement.core$().set(newElement, "x", java.util.Collections.singletonList(x));
+					newElement.core$().set(newElement, "y", java.util.Collections.singletonList(y));
+					return newElement;
+				}
+
+			}
+
+			public static class Output  extends io.intino.magritte.framework.Layer implements io.intino.magritte.framework.tags.Terminal {
+				protected int x;
+				protected int y;
+
+				public Output(io.intino.magritte.framework.Node node) {
+					super(node);
+				}
+
+				public int x() {
+					return x;
+				}
+
+				public int y() {
+					return y;
+				}
+
+				public Output x(int value) {
+					this.x = value;
+					return (Output) this;
+				}
+
+				public Output y(int value) {
+					this.y = value;
+					return (Output) this;
+				}
+
+				@Override
+				protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
+					java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>();
+					map.put("x", new java.util.ArrayList(java.util.Collections.singletonList(this.x)));
+					map.put("y", new java.util.ArrayList(java.util.Collections.singletonList(this.y)));
+					return map;
+				}
+
+				@Override
+				protected void load$(java.lang.String name, java.util.List<?> values) {
+					super.load$(name, values);
+					if (name.equalsIgnoreCase("x")) this.x = io.intino.magritte.framework.loaders.IntegerLoader.load(values, this).get(0);
+					else if (name.equalsIgnoreCase("y")) this.y = io.intino.magritte.framework.loaders.IntegerLoader.load(values, this).get(0);
+				}
+
+				@Override
+				protected void set$(java.lang.String name, java.util.List<?> values) {
+					super.set$(name, values);
+					if (name.equalsIgnoreCase("x")) this.x = (java.lang.Integer) values.get(0);
+					else if (name.equalsIgnoreCase("y")) this.y = (java.lang.Integer) values.get(0);
+				}
+
+				public io.flogo.blatt.model.BlattGraph graph() {
+					return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
+				}
+			}
+
+
+			public io.flogo.blatt.model.BlattGraph graph() {
+				return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
+			}
+		}
+
+		public static class AvgPool extends io.flogo.blatt.model.ConvolutionalSection.Block.Pool implements io.intino.magritte.framework.tags.Terminal {
+			protected io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.Output output;
+
+			public AvgPool(io.intino.magritte.framework.Node node) {
+				super(node);
+			}
+
+			public io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.Output output() {
+				return output;
+			}
+
+			protected java.util.List<io.intino.magritte.framework.Node> componentList$() {
+				java.util.Set<io.intino.magritte.framework.Node> components = new java.util.LinkedHashSet<>(super.componentList$());
+				if (output != null) components.add(this.output.core$());
+				return new java.util.ArrayList<>(components);
+			}
+
+			@Override
+			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
+				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
+				return map;
+			}
+
+			@Override
+			protected void addNode$(io.intino.magritte.framework.Node node) {
+				super.addNode$(node);
+				if (node.is("ConvolutionalSection$Block$AvgPool$Output")) this.output = node.as(io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.Output.class);
+			}
+
+			@Override
+			protected void removeNode$(io.intino.magritte.framework.Node node) {
+				super.removeNode$(node);
+				if (node.is("ConvolutionalSection$Block$AvgPool$Output")) this.output = null;
+			}
+
+			@Override
+			protected void load$(java.lang.String name, java.util.List<?> values) {
+				super.load$(name, values);
+			}
+
+			@Override
+			protected void set$(java.lang.String name, java.util.List<?> values) {
+				super.set$(name, values);
+			}
+
+			public Create create() {
+				return new Create(null);
+			}
+
+			public Create create(java.lang.String name) {
+				return new Create(name);
+			}
+
+			public class Create extends io.flogo.blatt.model.ConvolutionalSection.Block.Pool.Create {
+
+
+				public Create(java.lang.String name) {
+					super(name);
+				}
+
+				public io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.Output output(int x, int y) {
+					io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.Output newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.Output.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.AvgPool.Output.class);
 					newElement.core$().set(newElement, "x", java.util.Collections.singletonList(x));
 					newElement.core$().set(newElement, "y", java.util.Collections.singletonList(y));
 					return newElement;
@@ -1423,7 +1615,6 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 		public static class Normalization extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
 			protected double eps;
 			protected double momentum;
-			protected io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output output;
 
 			public Normalization(io.intino.magritte.framework.Node node) {
 				super(node);
@@ -1447,34 +1638,12 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				return (Normalization) this;
 			}
 
-			public io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output output() {
-				return output;
-			}
-
-			protected java.util.List<io.intino.magritte.framework.Node> componentList$() {
-				java.util.Set<io.intino.magritte.framework.Node> components = new java.util.LinkedHashSet<>(super.componentList$());
-				if (output != null) components.add(this.output.core$());
-				return new java.util.ArrayList<>(components);
-			}
-
 			@Override
 			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
 				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
 				map.put("eps", new java.util.ArrayList(java.util.Collections.singletonList(this.eps)));
 				map.put("momentum", new java.util.ArrayList(java.util.Collections.singletonList(this.momentum)));
 				return map;
-			}
-
-			@Override
-			protected void addNode$(io.intino.magritte.framework.Node node) {
-				super.addNode$(node);
-				if (node.is("ConvolutionalSection$Block$Normalization$Output")) this.output = node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output.class);
-			}
-
-			@Override
-			protected void removeNode$(io.intino.magritte.framework.Node node) {
-				super.removeNode$(node);
-				if (node.is("ConvolutionalSection$Block$Normalization$Output")) this.output = null;
 			}
 
 			@Override
@@ -1490,70 +1659,6 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				if (name.equalsIgnoreCase("eps")) this.eps = (java.lang.Double) values.get(0);
 				else if (name.equalsIgnoreCase("momentum")) this.momentum = (java.lang.Double) values.get(0);
 			}
-
-			public Create create() {
-				return new Create(null);
-			}
-
-			public Create create(java.lang.String name) {
-				return new Create(name);
-			}
-
-			public class Create extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer.Create {
-
-
-				public Create(java.lang.String name) {
-					super(name);
-				}
-
-				public io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output output(int z) {
-					io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output.class);
-					newElement.core$().set(newElement, "z", java.util.Collections.singletonList(z));
-					return newElement;
-				}
-
-			}
-
-			public static class Output  extends io.intino.magritte.framework.Layer implements io.intino.magritte.framework.tags.Terminal {
-				protected int z;
-
-				public Output(io.intino.magritte.framework.Node node) {
-					super(node);
-				}
-
-				public int z() {
-					return z;
-				}
-
-				public Output z(int value) {
-					this.z = value;
-					return (Output) this;
-				}
-
-				@Override
-				protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
-					java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>();
-					map.put("z", new java.util.ArrayList(java.util.Collections.singletonList(this.z)));
-					return map;
-				}
-
-				@Override
-				protected void load$(java.lang.String name, java.util.List<?> values) {
-					super.load$(name, values);
-					if (name.equalsIgnoreCase("z")) this.z = io.intino.magritte.framework.loaders.IntegerLoader.load(values, this).get(0);
-				}
-
-				@Override
-				protected void set$(java.lang.String name, java.util.List<?> values) {
-					super.set$(name, values);
-					if (name.equalsIgnoreCase("z")) this.z = (java.lang.Integer) values.get(0);
-				}
-
-				public io.flogo.blatt.model.BlattGraph graph() {
-					return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
-				}
-			}
-
 
 			public io.flogo.blatt.model.BlattGraph graph() {
 				return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
