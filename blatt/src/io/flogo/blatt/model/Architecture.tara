@@ -2,40 +2,86 @@ dsl Proteo
 
 Concept Training
 	has:{1..1} Optimizer
-	has:{1..1} EarlyStopping
 	has:{1..1} LossFunction
+	has:{1..1} EarlyStopper
 
 Concept Optimizer is component
 	sub Adadelta
 		var double lr=0.001
 		var double rho=0.9
 		var double eps=1e-6
+		var double weightDecay=0
     sub Adagrad
     	var double lr=0.001
+		var double lrDecay=0
+        var double eps=1e-6
+        var double weightDecay=0.00000000001
+        var double initialAccumulator=0
     sub Adam
-    	var double lr=0.001
-    sub RMSProp
-    	var double lr=0.001
+    	var double lr=0.0001
+    	var double beta0=0.9
+    	var double beta1=0.999
+    	var double weightDecay=0
+    sub AMSGrad
+    	var double lr=0.0001
+    	var double beta0=0.9
+    	var double beta1=0.999
+    	var double weightDecay=0
     sub ASGD
     	var double lr=0.001
+		var double lrDecay=0.00001
     	var double alpha=0.75
+    	var double pointToStartAverage=0.0000001
+		var double weightDecay=0.0000001
+    sub RMSProp
+         var double lr=0.001
+         var double momentum=0
+         var double alpha=0.99
+         var double eps=0.000000001
+         var double weightDecay=0
+    sub CenteredRMSProp
+         var double lr=0.001
+         var double momentum=0
+         var double alpha=0.99
+         var double eps=0.000000001
+         var double weightDecay=0
     sub SGD
     	var double lr=0.001
     	var double momentum=0
+    	var double momentumDecay=0
+		var double weightDecay=0
+   	sub SGDWithNesterovMomentum
+    	var double lr=0.001
+    	var double momentum=0
+    	var double momentumDecay=0
+		var double weightDecay=0
 
-Concept EarlyStopping is component
+Concept LossFunction is component
+    sub HingeEmbeddingLoss
+    	var double margin = 1
+	sub BinaryCrossEntropyLoss
+    sub CrossEntropyLoss
+    sub MAELoss
+    sub MSELoss
+    sub NLLLoss
+    sub MarginRankingLoss
+    sub KullbackLeiblerDivergenceLoss
+    sub TripletMarginLossWithSwap
+    	var double margin = 1
+    	var double normDegree = 2
+    	var double eps = 0.0000001
+    sub TripletMarginLoss
+    	var double margin = 1
+    	var double normDegree = 2
+		var double eps = 0.0000001
+
+Concept EarlyStopper is component
 	sub GrowthEarlyStopper
 		var integer patience=5
 		var double threshold=1
     sub PrecisionEarlyStopper
 		var integer patience=5
     	var integer threshold=95
-
-Concept LossFunction is component
-	sub BinaryCrossEntropyLoss
-    sub CrossEntropyLoss
-    sub MAELoss
-    sub MSELoss
 
 Concept NeuralNetwork
 	has:{1..*}:CheckSectionsWithNoInput:CheckSectionsWithNoInput Section

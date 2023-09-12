@@ -6,6 +6,7 @@ public class Adadelta extends io.flogo.blatt.model.Optimizer implements io.intin
 	protected double lr;
 	protected double rho;
 	protected double eps;
+	protected double weightDecay;
 
 	public Adadelta(io.intino.magritte.framework.Node node) {
 		super(node);
@@ -23,6 +24,10 @@ public class Adadelta extends io.flogo.blatt.model.Optimizer implements io.intin
 		return eps;
 	}
 
+	public double weightDecay() {
+		return weightDecay;
+	}
+
 	public Adadelta lr(double value) {
 		this.lr = value;
 		return (Adadelta) this;
@@ -38,12 +43,18 @@ public class Adadelta extends io.flogo.blatt.model.Optimizer implements io.intin
 		return (Adadelta) this;
 	}
 
+	public Adadelta weightDecay(double value) {
+		this.weightDecay = value;
+		return (Adadelta) this;
+	}
+
 	@Override
 	protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
 		java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
 		map.put("lr", new java.util.ArrayList(java.util.Collections.singletonList(this.lr)));
 		map.put("rho", new java.util.ArrayList(java.util.Collections.singletonList(this.rho)));
 		map.put("eps", new java.util.ArrayList(java.util.Collections.singletonList(this.eps)));
+		map.put("weightDecay", new java.util.ArrayList(java.util.Collections.singletonList(this.weightDecay)));
 		return map;
 	}
 
@@ -53,6 +64,7 @@ public class Adadelta extends io.flogo.blatt.model.Optimizer implements io.intin
 		if (name.equalsIgnoreCase("lr")) this.lr = io.intino.magritte.framework.loaders.DoubleLoader.load(values, this).get(0);
 		else if (name.equalsIgnoreCase("rho")) this.rho = io.intino.magritte.framework.loaders.DoubleLoader.load(values, this).get(0);
 		else if (name.equalsIgnoreCase("eps")) this.eps = io.intino.magritte.framework.loaders.DoubleLoader.load(values, this).get(0);
+		else if (name.equalsIgnoreCase("weightDecay")) this.weightDecay = io.intino.magritte.framework.loaders.DoubleLoader.load(values, this).get(0);
 	}
 
 	@Override
@@ -61,6 +73,7 @@ public class Adadelta extends io.flogo.blatt.model.Optimizer implements io.intin
 		if (name.equalsIgnoreCase("lr")) this.lr = (java.lang.Double) values.get(0);
 		else if (name.equalsIgnoreCase("rho")) this.rho = (java.lang.Double) values.get(0);
 		else if (name.equalsIgnoreCase("eps")) this.eps = (java.lang.Double) values.get(0);
+		else if (name.equalsIgnoreCase("weightDecay")) this.weightDecay = (java.lang.Double) values.get(0);
 	}
 
 	public io.flogo.blatt.model.BlattGraph graph() {

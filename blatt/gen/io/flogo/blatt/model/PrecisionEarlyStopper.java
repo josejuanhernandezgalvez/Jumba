@@ -2,7 +2,7 @@ package io.flogo.blatt.model;
 
 import io.flogo.blatt.model.*;
 
-public class PrecisionEarlyStopper extends io.flogo.blatt.model.EarlyStopping implements io.intino.magritte.framework.tags.Component, io.intino.magritte.framework.tags.Terminal {
+public class PrecisionEarlyStopper extends io.flogo.blatt.model.EarlyStopper implements io.intino.magritte.framework.tags.Component, io.intino.magritte.framework.tags.Terminal {
 	protected int patience;
 	protected int threshold;
 

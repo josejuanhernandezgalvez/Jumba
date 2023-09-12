@@ -3,7 +3,7 @@ dsl Blatt
 Training
 	Adam
 	MAELoss
-	GrowthEarlyStopper
+	GrowthEarlyStopper(patience = 5, threshold = 95)
 
 NeuralNetwork ClassificationLinearNeuralNetwork
 	LinearSection

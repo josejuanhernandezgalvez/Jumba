@@ -4,8 +4,9 @@ import io.flogo.blatt.model.BlattGraph;
 import io.flogo.blatt.model.Section;
 import io.flogo.builder.model.SectionRenderer;
 import io.flogo.builder.model.TrainingRenderer;
-import io.flogo.builder.model.views.Output;
-import io.flogo.builder.model.views.SectionView;
+import io.flogo.builder.model.architecture_views.TrainingView;
+import io.flogo.builder.model.structure_views.Output;
+import io.flogo.builder.model.structure_views.SectionView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,9 +54,30 @@ public class BlattCompiler {
 		return compiledFiles;
 	}
 
+	private void processCompilationException(Exception e) {
+		if (e instanceof BlattException) {
+			addErrorMessage((BlattException) e);
+			return;
+		}
+		LOG.severe(e.getMessage());
+		addMessageWithoutLocation(e.getMessage(), true);
+	}
+
+	private void addMessageWithoutLocation(String message, boolean error) {
+		collector.add(new CompilerMessage(error ? io.intino.magritte.builder.core.CompilerMessage.ERROR : io.intino.magritte.builder.core.CompilerMessage.WARNING, message, null, -1, -1));
+	}
+
+	private void addErrorMessage(BlattException exception) {
+		collector.add(new CompilerMessage(CompilerMessage.ERROR, exception.getMessage(), "null", -1, -1));
+	}
+
+	private void addWarnings(List<WarningMessage> warningMessages) {
+		warningMessages.forEach(w -> collector.add(new CompilerMessage(CompilerMessage.WARNING, w.message(), w.owner() == null ? "null" : w.owner().getAbsolutePath(), w.line(), w.column())));
+	}
+
 	private void render(BlattGraph graph, CompilationContext context) throws BlattException, Exception {
 		AtomicReference<Output> input = new AtomicReference<>(getInputFrom(graph.neuralNetwork(0).section(0)));
-		new TrainingRenderer().render(graph.training(0));
+		TrainingView trainingView = new TrainingRenderer().render(graph.training(0));
 		System.out.println(graph.neuralNetwork(0).sectionList().stream().map(s -> getSectionView(input, s)).toList());
 	}
 
@@ -122,32 +144,10 @@ public class BlattCompiler {
 	}
 
 	private String className(Section section) {
-		return "io.flogo.builder.model.renderers." + extractFrom(section, Name) + "Renderer";
+		return SectionRenderer.packageRoute + extractFrom(section, Name) + "Renderer";
 	}
-
 
 	private static String extractFrom(Section section, int abstractionIndex) {
 		return section.core$().conceptList().get(abstractionIndex).toString().split("\\{")[0];
-	}
-
-	private void processCompilationException(Exception e) {
-		if (e instanceof BlattException) {
-			addErrorMessage((BlattException) e);
-			return;
-		}
-		LOG.severe(e.getMessage());
-		addMessageWithoutLocation(e.getMessage(), true);
-	}
-
-	private void addMessageWithoutLocation(String message, boolean error) {
-		collector.add(new CompilerMessage(error ? io.intino.magritte.builder.core.CompilerMessage.ERROR : io.intino.magritte.builder.core.CompilerMessage.WARNING, message, null, -1, -1));
-	}
-
-	private void addErrorMessage(BlattException exception) {
-		collector.add(new CompilerMessage(CompilerMessage.ERROR, exception.getMessage(), "null", -1, -1));
-	}
-
-	private void addWarnings(List<WarningMessage> warningMessages) {
-		warningMessages.forEach(w -> collector.add(new CompilerMessage(CompilerMessage.WARNING, w.message(), w.owner() == null ? "null" : w.owner().getAbsolutePath(), w.line(), w.column())));
 	}
 }

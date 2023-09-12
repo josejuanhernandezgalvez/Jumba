@@ -1,10 +1,10 @@
 package unit.kernels;
 
-import io.flogo.builder.model.views.layers.output.ThreeDimensionsOutput;
-import io.flogo.builder.model.views.layers.processing.kernels.ConvolutionTwoDimensionsKernel;
-import io.flogo.builder.model.views.layers.processing.kernels.paddings.TwoDimensionsPadding;
-import io.flogo.builder.model.views.layers.processing.kernels.size.TwoDimensionsSize;
-import io.flogo.builder.model.views.layers.processing.kernels.strides.TwoDimensionsStride;
+import io.flogo.builder.model.structure_views.layers.output.ThreeDimensionsOutput;
+import io.flogo.builder.model.structure_views.layers.processing.kernels.ConvolutionTwoDimensionsKernel;
+import io.flogo.builder.model.structure_views.layers.processing.kernels.paddings.TwoDimensionsPadding;
+import io.flogo.builder.model.structure_views.layers.processing.kernels.size.TwoDimensionsSize;
+import io.flogo.builder.model.structure_views.layers.processing.kernels.strides.TwoDimensionsStride;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.*;
