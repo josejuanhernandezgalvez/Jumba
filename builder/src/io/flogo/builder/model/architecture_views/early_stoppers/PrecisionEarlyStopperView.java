@@ -1,7 +1,6 @@
 package io.flogo.builder.model.architecture_views.early_stoppers;
 
 import io.flogo.blatt.model.EarlyStopper;
-import io.flogo.blatt.model.PrecisionEarlyStopper;
 import io.flogo.builder.model.architecture_views.EarlyStopperView;
 
 public class PrecisionEarlyStopperView implements EarlyStopperView {
@@ -14,7 +13,7 @@ public class PrecisionEarlyStopperView implements EarlyStopperView {
     }
 
     public static PrecisionEarlyStopperView from(EarlyStopper stopper) {
-        return new PrecisionEarlyStopperView(((PrecisionEarlyStopper) stopper).patience(),
-                                             ((PrecisionEarlyStopper) stopper).threshold());
+        return new PrecisionEarlyStopperView(stopper.patience(),
+                                             stopper.threshold());
     }
 }

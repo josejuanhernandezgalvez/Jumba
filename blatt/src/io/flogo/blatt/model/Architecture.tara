@@ -56,6 +56,12 @@ Concept Optimizer is component
     	var double momentumDecay=0
 		var double weightDecay=0
 
+Concept EarlyStopper is component
+	var integer patience=5
+	var double threshold=1
+	sub GrowthEarlyStopper
+    sub PrecisionEarlyStopper
+
 Concept LossFunction is component
     sub HingeEmbeddingLoss
     	var double margin = 1
@@ -75,13 +81,6 @@ Concept LossFunction is component
     	var double normDegree = 2
 		var double eps = 0.0000001
 
-Concept EarlyStopper is component
-	sub GrowthEarlyStopper
-		var integer patience=5
-		var double threshold=1
-    sub PrecisionEarlyStopper
-		var integer patience=5
-    	var integer threshold=95
 
 Concept NeuralNetwork
 	has:{1..*}:CheckSectionsWithNoInput:CheckSectionsWithNoInput Section

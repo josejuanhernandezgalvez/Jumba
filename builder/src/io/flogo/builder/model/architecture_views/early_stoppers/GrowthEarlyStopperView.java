@@ -1,7 +1,6 @@
 package io.flogo.builder.model.architecture_views.early_stoppers;
 
 import io.flogo.blatt.model.EarlyStopper;
-import io.flogo.blatt.model.GrowthEarlyStopper;
 import io.flogo.builder.model.architecture_views.EarlyStopperView;
 
 public class GrowthEarlyStopperView implements EarlyStopperView {
@@ -14,7 +13,7 @@ public class GrowthEarlyStopperView implements EarlyStopperView {
     }
 
     public static GrowthEarlyStopperView from(EarlyStopper stopper) {
-        return new GrowthEarlyStopperView(((GrowthEarlyStopper) stopper).patience(),
-                                          ((GrowthEarlyStopper) stopper).threshold());
+        return new GrowthEarlyStopperView(stopper.patience(),
+                                          stopper.threshold());
     }
 }

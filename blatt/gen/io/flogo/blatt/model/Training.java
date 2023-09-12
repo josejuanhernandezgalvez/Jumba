@@ -79,14 +79,20 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 		}
 
 
-		public io.flogo.blatt.model.Adagrad adagrad() {
-			io.flogo.blatt.model.Adagrad newElement = core$().graph().concept(io.flogo.blatt.model.Adagrad.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adagrad.class);
+		public io.flogo.blatt.model.AMSGrad aMSGrad() {
+			io.flogo.blatt.model.AMSGrad newElement = core$().graph().concept(io.flogo.blatt.model.AMSGrad.class).createNode(this.name, core$()).as(io.flogo.blatt.model.AMSGrad.class);
 
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.AMSGrad aMSGrad() {
-			io.flogo.blatt.model.AMSGrad newElement = core$().graph().concept(io.flogo.blatt.model.AMSGrad.class).createNode(this.name, core$()).as(io.flogo.blatt.model.AMSGrad.class);
+		public io.flogo.blatt.model.Adam adam() {
+			io.flogo.blatt.model.Adam newElement = core$().graph().concept(io.flogo.blatt.model.Adam.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adam.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.RMSProp rMSProp() {
+			io.flogo.blatt.model.RMSProp newElement = core$().graph().concept(io.flogo.blatt.model.RMSProp.class).createNode(this.name, core$()).as(io.flogo.blatt.model.RMSProp.class);
 
 			return newElement;
 		}
@@ -97,8 +103,8 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.Adam adam() {
-			io.flogo.blatt.model.Adam newElement = core$().graph().concept(io.flogo.blatt.model.Adam.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adam.class);
+		public io.flogo.blatt.model.Adagrad adagrad() {
+			io.flogo.blatt.model.Adagrad newElement = core$().graph().concept(io.flogo.blatt.model.Adagrad.class).createNode(this.name, core$()).as(io.flogo.blatt.model.Adagrad.class);
 
 			return newElement;
 		}
@@ -121,38 +127,8 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.RMSProp rMSProp() {
-			io.flogo.blatt.model.RMSProp newElement = core$().graph().concept(io.flogo.blatt.model.RMSProp.class).createNode(this.name, core$()).as(io.flogo.blatt.model.RMSProp.class);
-
-			return newElement;
-		}
-
 		public io.flogo.blatt.model.SGDWithNesterovMomentum sGDWithNesterovMomentum() {
 			io.flogo.blatt.model.SGDWithNesterovMomentum newElement = core$().graph().concept(io.flogo.blatt.model.SGDWithNesterovMomentum.class).createNode(this.name, core$()).as(io.flogo.blatt.model.SGDWithNesterovMomentum.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.CrossEntropyLoss crossEntropyLoss() {
-			io.flogo.blatt.model.CrossEntropyLoss newElement = core$().graph().concept(io.flogo.blatt.model.CrossEntropyLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.CrossEntropyLoss.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.TripletMarginLoss tripletMarginLoss() {
-			io.flogo.blatt.model.TripletMarginLoss newElement = core$().graph().concept(io.flogo.blatt.model.TripletMarginLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.TripletMarginLoss.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.MSELoss mSELoss() {
-			io.flogo.blatt.model.MSELoss newElement = core$().graph().concept(io.flogo.blatt.model.MSELoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.MSELoss.class);
-
-			return newElement;
-		}
-
-		public io.flogo.blatt.model.KullbackLeiblerDivergenceLoss kullbackLeiblerDivergenceLoss() {
-			io.flogo.blatt.model.KullbackLeiblerDivergenceLoss newElement = core$().graph().concept(io.flogo.blatt.model.KullbackLeiblerDivergenceLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.KullbackLeiblerDivergenceLoss.class);
 
 			return newElement;
 		}
@@ -163,8 +139,8 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.HingeEmbeddingLoss hingeEmbeddingLoss() {
-			io.flogo.blatt.model.HingeEmbeddingLoss newElement = core$().graph().concept(io.flogo.blatt.model.HingeEmbeddingLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.HingeEmbeddingLoss.class);
+		public io.flogo.blatt.model.MarginRankingLoss marginRankingLoss() {
+			io.flogo.blatt.model.MarginRankingLoss newElement = core$().graph().concept(io.flogo.blatt.model.MarginRankingLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.MarginRankingLoss.class);
 
 			return newElement;
 		}
@@ -181,8 +157,26 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.MarginRankingLoss marginRankingLoss() {
-			io.flogo.blatt.model.MarginRankingLoss newElement = core$().graph().concept(io.flogo.blatt.model.MarginRankingLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.MarginRankingLoss.class);
+		public io.flogo.blatt.model.TripletMarginLoss tripletMarginLoss() {
+			io.flogo.blatt.model.TripletMarginLoss newElement = core$().graph().concept(io.flogo.blatt.model.TripletMarginLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.TripletMarginLoss.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.CrossEntropyLoss crossEntropyLoss() {
+			io.flogo.blatt.model.CrossEntropyLoss newElement = core$().graph().concept(io.flogo.blatt.model.CrossEntropyLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.CrossEntropyLoss.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.MSELoss mSELoss() {
+			io.flogo.blatt.model.MSELoss newElement = core$().graph().concept(io.flogo.blatt.model.MSELoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.MSELoss.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.KullbackLeiblerDivergenceLoss kullbackLeiblerDivergenceLoss() {
+			io.flogo.blatt.model.KullbackLeiblerDivergenceLoss newElement = core$().graph().concept(io.flogo.blatt.model.KullbackLeiblerDivergenceLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.KullbackLeiblerDivergenceLoss.class);
 
 			return newElement;
 		}
@@ -193,14 +187,20 @@ public class Training  extends io.intino.magritte.framework.Layer implements io.
 			return newElement;
 		}
 
-		public io.flogo.blatt.model.GrowthEarlyStopper growthEarlyStopper() {
-			io.flogo.blatt.model.GrowthEarlyStopper newElement = core$().graph().concept(io.flogo.blatt.model.GrowthEarlyStopper.class).createNode(this.name, core$()).as(io.flogo.blatt.model.GrowthEarlyStopper.class);
+		public io.flogo.blatt.model.HingeEmbeddingLoss hingeEmbeddingLoss() {
+			io.flogo.blatt.model.HingeEmbeddingLoss newElement = core$().graph().concept(io.flogo.blatt.model.HingeEmbeddingLoss.class).createNode(this.name, core$()).as(io.flogo.blatt.model.HingeEmbeddingLoss.class);
 
 			return newElement;
 		}
 
 		public io.flogo.blatt.model.PrecisionEarlyStopper precisionEarlyStopper() {
 			io.flogo.blatt.model.PrecisionEarlyStopper newElement = core$().graph().concept(io.flogo.blatt.model.PrecisionEarlyStopper.class).createNode(this.name, core$()).as(io.flogo.blatt.model.PrecisionEarlyStopper.class);
+
+			return newElement;
+		}
+
+		public io.flogo.blatt.model.GrowthEarlyStopper growthEarlyStopper() {
+			io.flogo.blatt.model.GrowthEarlyStopper newElement = core$().graph().concept(io.flogo.blatt.model.GrowthEarlyStopper.class).createNode(this.name, core$()).as(io.flogo.blatt.model.GrowthEarlyStopper.class);
 
 			return newElement;
 		}
