@@ -189,6 +189,7 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.LeakyReLU> leakyReLUList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Mish> mishList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer> processingLayerList = new java.util.ArrayList<>();
+		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Dropout> dropoutList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional> convolutionalList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Pool> poolList = new java.util.ArrayList<>();
 		protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool> maxPoolList = new java.util.ArrayList<>();
@@ -423,6 +424,22 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			return processingLayerList().stream().filter(predicate).findFirst().orElse(null);
 		}
 
+		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Dropout> dropoutList() {
+			return java.util.Collections.unmodifiableList(dropoutList);
+		}
+
+		public io.flogo.blatt.model.ConvolutionalSection.Block.Dropout dropout(int index) {
+			return dropoutList.get(index);
+		}
+
+		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Dropout> dropoutList(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Dropout> predicate) {
+			return dropoutList().stream().filter(predicate).collect(java.util.stream.Collectors.toList());
+		}
+
+		public io.flogo.blatt.model.ConvolutionalSection.Block.Dropout dropout(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Dropout> predicate) {
+			return dropoutList().stream().filter(predicate).findFirst().orElse(null);
+		}
+
 		public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional> convolutionalList() {
 			return java.util.Collections.unmodifiableList(convolutionalList);
 		}
@@ -519,6 +536,7 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			new java.util.ArrayList<>(leakyReLUList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(mishList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(processingLayerList).forEach(c -> components.add(c.core$()));
+			new java.util.ArrayList<>(dropoutList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(convolutionalList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(poolList).forEach(c -> components.add(c.core$()));
 			new java.util.ArrayList<>(maxPoolList).forEach(c -> components.add(c.core$()));
@@ -550,6 +568,7 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			if (node.is("ConvolutionalSection$Block$LeakyReLU")) this.leakyReLUList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.LeakyReLU.class));
 			if (node.is("ConvolutionalSection$Block$Mish")) this.mishList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Mish.class));
 			if (node.is("ConvolutionalSection$Block$ProcessingLayer")) this.processingLayerList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer.class));
+			if (node.is("ConvolutionalSection$Block$Dropout")) this.dropoutList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Dropout.class));
 			if (node.is("ConvolutionalSection$Block$Convolutional")) this.convolutionalList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional.class));
 			if (node.is("ConvolutionalSection$Block$Pool")) this.poolList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.class));
 			if (node.is("ConvolutionalSection$Block$MaxPool")) this.maxPoolList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.class));
@@ -574,6 +593,7 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			if (node.is("ConvolutionalSection$Block$LeakyReLU")) this.leakyReLUList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.LeakyReLU.class));
 			if (node.is("ConvolutionalSection$Block$Mish")) this.mishList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Mish.class));
 			if (node.is("ConvolutionalSection$Block$ProcessingLayer")) this.processingLayerList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer.class));
+			if (node.is("ConvolutionalSection$Block$Dropout")) this.dropoutList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Dropout.class));
 			if (node.is("ConvolutionalSection$Block$Convolutional")) this.convolutionalList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional.class));
 			if (node.is("ConvolutionalSection$Block$Pool")) this.poolList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Pool.class));
 			if (node.is("ConvolutionalSection$Block$MaxPool")) this.maxPoolList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool.class));
@@ -672,6 +692,12 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				return newElement;
 			}
 
+			public io.flogo.blatt.model.ConvolutionalSection.Block.Dropout dropout(double probability) {
+				io.flogo.blatt.model.ConvolutionalSection.Block.Dropout newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.Dropout.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.Dropout.class);
+				newElement.core$().set(newElement, "probability", java.util.Collections.singletonList(probability));
+				return newElement;
+			}
+
 			public io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional convolutional() {
 				io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional.class);
 
@@ -745,6 +771,10 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 
 			public void mish(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Mish> filter) {
 				new java.util.ArrayList<>(mishList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
+			}
+
+			public void dropout(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Dropout> filter) {
+				new java.util.ArrayList<>(dropoutList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
 			}
 
 			public void convolutional(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional> filter) {
@@ -1187,6 +1217,46 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 			}
 		}
 
+		public static class Dropout extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
+			protected double probability;
+
+			public Dropout(io.intino.magritte.framework.Node node) {
+				super(node);
+			}
+
+			public double probability() {
+				return probability;
+			}
+
+			public Dropout probability(double value) {
+				this.probability = value;
+				return (Dropout) this;
+			}
+
+			@Override
+			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
+				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
+				map.put("probability", new java.util.ArrayList(java.util.Collections.singletonList(this.probability)));
+				return map;
+			}
+
+			@Override
+			protected void load$(java.lang.String name, java.util.List<?> values) {
+				super.load$(name, values);
+				if (name.equalsIgnoreCase("probability")) this.probability = io.intino.magritte.framework.loaders.DoubleLoader.load(values, this).get(0);
+			}
+
+			@Override
+			protected void set$(java.lang.String name, java.util.List<?> values) {
+				super.set$(name, values);
+				if (name.equalsIgnoreCase("probability")) this.probability = (java.lang.Double) values.get(0);
+			}
+
+			public io.flogo.blatt.model.BlattGraph graph() {
+				return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
+			}
+		}
+
 		public static class Convolutional extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
 			protected io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional.Output output;
 
@@ -1615,6 +1685,7 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 		public static class Normalization extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
 			protected double eps;
 			protected double momentum;
+			protected java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output> outputList = new java.util.ArrayList<>();
 
 			public Normalization(io.intino.magritte.framework.Node node) {
 				super(node);
@@ -1638,12 +1709,46 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				return (Normalization) this;
 			}
 
+			public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output> outputList() {
+				return java.util.Collections.unmodifiableList(outputList);
+			}
+
+			public io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output output(int index) {
+				return outputList.get(index);
+			}
+
+			public java.util.List<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output> outputList(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output> predicate) {
+				return outputList().stream().filter(predicate).collect(java.util.stream.Collectors.toList());
+			}
+
+			public io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output output(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output> predicate) {
+				return outputList().stream().filter(predicate).findFirst().orElse(null);
+			}
+
+			protected java.util.List<io.intino.magritte.framework.Node> componentList$() {
+				java.util.Set<io.intino.magritte.framework.Node> components = new java.util.LinkedHashSet<>(super.componentList$());
+				new java.util.ArrayList<>(outputList).forEach(c -> components.add(c.core$()));
+				return new java.util.ArrayList<>(components);
+			}
+
 			@Override
 			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
 				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
 				map.put("eps", new java.util.ArrayList(java.util.Collections.singletonList(this.eps)));
 				map.put("momentum", new java.util.ArrayList(java.util.Collections.singletonList(this.momentum)));
 				return map;
+			}
+
+			@Override
+			protected void addNode$(io.intino.magritte.framework.Node node) {
+				super.addNode$(node);
+				if (node.is("ConvolutionalSection$Block$Normalization$Output")) this.outputList.add(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output.class));
+			}
+
+			@Override
+			protected void removeNode$(io.intino.magritte.framework.Node node) {
+				super.removeNode$(node);
+				if (node.is("ConvolutionalSection$Block$Normalization$Output")) this.outputList.remove(node.as(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output.class));
 			}
 
 			@Override
@@ -1659,6 +1764,80 @@ public class ConvolutionalSection extends io.flogo.blatt.model.ProcessingSection
 				if (name.equalsIgnoreCase("eps")) this.eps = (java.lang.Double) values.get(0);
 				else if (name.equalsIgnoreCase("momentum")) this.momentum = (java.lang.Double) values.get(0);
 			}
+
+			public Create create() {
+				return new Create(null);
+			}
+
+			public Create create(java.lang.String name) {
+				return new Create(name);
+			}
+
+			public class Create extends io.flogo.blatt.model.ConvolutionalSection.Block.ProcessingLayer.Create {
+
+
+				public Create(java.lang.String name) {
+					super(name);
+				}
+
+				public io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output output(double z) {
+					io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output newElement = core$().graph().concept(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output.class).createNode(this.name, core$()).as(io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output.class);
+					newElement.core$().set(newElement, "z", java.util.Collections.singletonList(z));
+					return newElement;
+				}
+
+			}
+
+			public Clear clear() {
+				return new Clear();
+			}
+
+			public class Clear  {
+				public void output(java.util.function.Predicate<io.flogo.blatt.model.ConvolutionalSection.Block.Normalization.Output> filter) {
+					new java.util.ArrayList<>(outputList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
+				}
+			}
+
+			public static class Output  extends io.intino.magritte.framework.Layer implements io.intino.magritte.framework.tags.Terminal {
+				protected double z;
+
+				public Output(io.intino.magritte.framework.Node node) {
+					super(node);
+				}
+
+				public double z() {
+					return z;
+				}
+
+				public Output z(double value) {
+					this.z = value;
+					return (Output) this;
+				}
+
+				@Override
+				protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
+					java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>();
+					map.put("z", new java.util.ArrayList(java.util.Collections.singletonList(this.z)));
+					return map;
+				}
+
+				@Override
+				protected void load$(java.lang.String name, java.util.List<?> values) {
+					super.load$(name, values);
+					if (name.equalsIgnoreCase("z")) this.z = io.intino.magritte.framework.loaders.DoubleLoader.load(values, this).get(0);
+				}
+
+				@Override
+				protected void set$(java.lang.String name, java.util.List<?> values) {
+					super.set$(name, values);
+					if (name.equalsIgnoreCase("z")) this.z = (java.lang.Double) values.get(0);
+				}
+
+				public io.flogo.blatt.model.BlattGraph graph() {
+					return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
+				}
+			}
+
 
 			public io.flogo.blatt.model.BlattGraph graph() {
 				return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);

@@ -1053,25 +1053,52 @@ public class LinearSection extends io.flogo.blatt.model.ProcessingSection implem
 		}
 
 		public static abstract class ProcessingLayer extends io.flogo.blatt.model.LinearSection.Block.Layer implements io.intino.magritte.framework.tags.Terminal {
-			protected java.util.List<io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output> outputList = new java.util.ArrayList<>();
 
 			public ProcessingLayer(io.intino.magritte.framework.Node node) {
 				super(node);
 			}
 
-			public java.util.List<io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output> outputList() {
+			@Override
+			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
+				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
+				return map;
+			}
+
+			@Override
+			protected void load$(java.lang.String name, java.util.List<?> values) {
+				super.load$(name, values);
+			}
+
+			@Override
+			protected void set$(java.lang.String name, java.util.List<?> values) {
+				super.set$(name, values);
+			}
+
+			public io.flogo.blatt.model.BlattGraph graph() {
+				return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
+			}
+		}
+
+		public static class Linear extends io.flogo.blatt.model.LinearSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
+			protected java.util.List<io.flogo.blatt.model.LinearSection.Block.Linear.Output> outputList = new java.util.ArrayList<>();
+
+			public Linear(io.intino.magritte.framework.Node node) {
+				super(node);
+			}
+
+			public java.util.List<io.flogo.blatt.model.LinearSection.Block.Linear.Output> outputList() {
 				return java.util.Collections.unmodifiableList(outputList);
 			}
 
-			public io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output output(int index) {
+			public io.flogo.blatt.model.LinearSection.Block.Linear.Output output(int index) {
 				return outputList.get(index);
 			}
 
-			public java.util.List<io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output> outputList(java.util.function.Predicate<io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output> predicate) {
+			public java.util.List<io.flogo.blatt.model.LinearSection.Block.Linear.Output> outputList(java.util.function.Predicate<io.flogo.blatt.model.LinearSection.Block.Linear.Output> predicate) {
 				return outputList().stream().filter(predicate).collect(java.util.stream.Collectors.toList());
 			}
 
-			public io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output output(java.util.function.Predicate<io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output> predicate) {
+			public io.flogo.blatt.model.LinearSection.Block.Linear.Output output(java.util.function.Predicate<io.flogo.blatt.model.LinearSection.Block.Linear.Output> predicate) {
 				return outputList().stream().filter(predicate).findFirst().orElse(null);
 			}
 
@@ -1090,13 +1117,13 @@ public class LinearSection extends io.flogo.blatt.model.ProcessingSection implem
 			@Override
 			protected void addNode$(io.intino.magritte.framework.Node node) {
 				super.addNode$(node);
-				if (node.is("LinearSection$Block$ProcessingLayer$Output")) this.outputList.add(node.as(io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output.class));
+				if (node.is("LinearSection$Block$Linear$Output")) this.outputList.add(node.as(io.flogo.blatt.model.LinearSection.Block.Linear.Output.class));
 			}
 
 			@Override
 			protected void removeNode$(io.intino.magritte.framework.Node node) {
 				super.removeNode$(node);
-				if (node.is("LinearSection$Block$ProcessingLayer$Output")) this.outputList.remove(node.as(io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output.class));
+				if (node.is("LinearSection$Block$Linear$Output")) this.outputList.remove(node.as(io.flogo.blatt.model.LinearSection.Block.Linear.Output.class));
 			}
 
 			@Override
@@ -1117,15 +1144,15 @@ public class LinearSection extends io.flogo.blatt.model.ProcessingSection implem
 				return new Create(name);
 			}
 
-			public class Create extends io.flogo.blatt.model.LinearSection.Block.Layer.Create {
+			public class Create extends io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Create {
 
 
 				public Create(java.lang.String name) {
 					super(name);
 				}
 
-				public io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output output(int x) {
-					io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output newElement = core$().graph().concept(io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output.class).createNode(this.name, core$()).as(io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output.class);
+				public io.flogo.blatt.model.LinearSection.Block.Linear.Output output(int x) {
+					io.flogo.blatt.model.LinearSection.Block.Linear.Output newElement = core$().graph().concept(io.flogo.blatt.model.LinearSection.Block.Linear.Output.class).createNode(this.name, core$()).as(io.flogo.blatt.model.LinearSection.Block.Linear.Output.class);
 					newElement.core$().set(newElement, "x", java.util.Collections.singletonList(x));
 					return newElement;
 				}
@@ -1137,7 +1164,7 @@ public class LinearSection extends io.flogo.blatt.model.ProcessingSection implem
 			}
 
 			public class Clear  {
-				public void output(java.util.function.Predicate<io.flogo.blatt.model.LinearSection.Block.ProcessingLayer.Output> filter) {
+				public void output(java.util.function.Predicate<io.flogo.blatt.model.LinearSection.Block.Linear.Output> filter) {
 					new java.util.ArrayList<>(outputList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
 				}
 			}
@@ -1188,53 +1215,39 @@ public class LinearSection extends io.flogo.blatt.model.ProcessingSection implem
 			}
 		}
 
-		public static class Linear extends io.flogo.blatt.model.LinearSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
-
-			public Linear(io.intino.magritte.framework.Node node) {
-				super(node);
-			}
-
-			@Override
-			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
-				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
-				return map;
-			}
-
-			@Override
-			protected void load$(java.lang.String name, java.util.List<?> values) {
-				super.load$(name, values);
-			}
-
-			@Override
-			protected void set$(java.lang.String name, java.util.List<?> values) {
-				super.set$(name, values);
-			}
-
-			public io.flogo.blatt.model.BlattGraph graph() {
-				return (io.flogo.blatt.model.BlattGraph) core$().graph().as(io.flogo.blatt.model.BlattGraph.class);
-			}
-		}
-
 		public static class Dropout extends io.flogo.blatt.model.LinearSection.Block.ProcessingLayer implements io.intino.magritte.framework.tags.Terminal {
+			protected double probability;
 
 			public Dropout(io.intino.magritte.framework.Node node) {
 				super(node);
 			}
 
+			public double probability() {
+				return probability;
+			}
+
+			public Dropout probability(double value) {
+				this.probability = value;
+				return (Dropout) this;
+			}
+
 			@Override
 			protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
 				java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
+				map.put("probability", new java.util.ArrayList(java.util.Collections.singletonList(this.probability)));
 				return map;
 			}
 
 			@Override
 			protected void load$(java.lang.String name, java.util.List<?> values) {
 				super.load$(name, values);
+				if (name.equalsIgnoreCase("probability")) this.probability = io.intino.magritte.framework.loaders.DoubleLoader.load(values, this).get(0);
 			}
 
 			@Override
 			protected void set$(java.lang.String name, java.util.List<?> values) {
 				super.set$(name, values);
+				if (name.equalsIgnoreCase("probability")) this.probability = (java.lang.Double) values.get(0);
 			}
 
 			public io.flogo.blatt.model.BlattGraph graph() {

@@ -6,64 +6,64 @@ Concept Training
 	has:{1..1} EarlyStopper
 
 Concept Optimizer is component
-	sub Adadelta
-		var double lr=0.001
-		var double rho=0.9
-		var double eps=1e-6
-		var double weightDecay=0
-    sub Adagrad
+    sub:CheckAdagradParameters Adagrad
     	var double lr=0.001
 		var double lrDecay=0
         var double eps=1e-6
         var double weightDecay=0.00000000001
         var double initialAccumulator=0
-    sub Adam
+	sub:CheckAdadeltaParameters Adadelta
+		var double lr=1.0
+		var double rho=0.9
+		var double eps=0.000001
+		var double weightDecay=0
+    sub:CheckAdamParameters Adam
     	var double lr=0.0001
     	var double beta0=0.9
     	var double beta1=0.999
     	var double weightDecay=0
-    sub AMSGrad
+    sub:CheckAMSGradParameters AMSGrad
     	var double lr=0.0001
     	var double beta0=0.9
     	var double beta1=0.999
     	var double weightDecay=0
-    sub ASGD
+    sub:CheckASGDParameters ASGD
     	var double lr=0.001
 		var double lrDecay=0.00001
     	var double alpha=0.75
     	var double pointToStartAverage=0.0000001
 		var double weightDecay=0.0000001
-    sub RMSProp
+    sub:CheckRMSPropParameters RMSProp
          var double lr=0.001
          var double momentum=0
          var double alpha=0.99
          var double eps=0.000000001
          var double weightDecay=0
-    sub CenteredRMSProp
+    sub:CheckCenteredRMSPropParameters CenteredRMSProp
          var double lr=0.001
          var double momentum=0
          var double alpha=0.99
          var double eps=0.000000001
          var double weightDecay=0
-    sub SGD
+    sub:CheckSGDParameters SGD
     	var double lr=0.001
     	var double momentum=0
     	var double momentumDecay=0
 		var double weightDecay=0
-   	sub SGDWithNesterovMomentum
+   	sub:CheckSGDWithNesterovMomentumParameters SGDWithNesterovMomentum
     	var double lr=0.001
     	var double momentum=0
     	var double momentumDecay=0
 		var double weightDecay=0
 
-Concept EarlyStopper is component
+Concept:CheckEarlyStopperParameters EarlyStopper is component
 	var integer patience=5
 	var double threshold=1
 	sub GrowthEarlyStopper
     sub PrecisionEarlyStopper
 
 Concept LossFunction is component
-    sub HingeEmbeddingLoss
+    sub:CheckHingeEmbeddingLossParameters HingeEmbeddingLoss
     	var double margin = 1
 	sub BinaryCrossEntropyLoss
     sub CrossEntropyLoss
@@ -72,20 +72,20 @@ Concept LossFunction is component
     sub NLLLoss
     sub MarginRankingLoss
     sub KullbackLeiblerDivergenceLoss
-    sub TripletMarginLossWithSwap
+    sub:CheckTripletMarginLossWithSwapParameters TripletMarginLossWithSwap
     	var double margin = 1
     	var double normDegree = 2
     	var double eps = 0.0000001
-    sub TripletMarginLoss
+    sub:CheckTripletMarginLossParameters TripletMarginLoss
     	var double margin = 1
     	var double normDegree = 2
 		var double eps = 0.0000001
 
 
 Concept NeuralNetwork
-	has:{1..*}:CheckSectionsWithNoInput:CheckSectionsWithNoInput Section
+	has:{1..*}:CheckFirstSectionWithInput:CheckSectionsWithNoInput Section
 
-Concept Module is component
+Concept:CheckModuleParameters Module is component
 	var string path
 	var integer section
 	var integer from
@@ -99,7 +99,7 @@ Concept Section is component
 		sub FlattenSection
 	sub ProcessingSection
 		sub ConvolutionalSection
-			Concept:{0..1} Input
+			Concept:{0..1}:CheckThreeDimensionInputParameters Input
 				var integer x
 				var integer y
 				var integer z
@@ -114,74 +114,146 @@ Concept Section is component
 						sub GELU
 						sub SiLU
 						sub GLU
-						sub ELU > var integer alpha=1
-						sub LeakyReLU > var integer alpha=1
+						sub:CheckELUParameters ELU > var integer alpha=1
+						sub:CheckReLUParameters LeakyReLU > var integer alpha=1
 						sub Mish
 					sub ProcessingLayer
+						sub Dropout
+							var double probability
 						sub Convolutional
-							Concept:{1..1} Output
+							Concept:{1..1}:CheckThreeDimensionOutputParameters Output
                         		var integer x
                         		var integer y
                         		var integer z
 						sub Pool
 							sub MaxPool
-								Concept:{1..1} Output
+								Concept:{1..1}:CheckTwoDimensionOutputParameters Output
                         			var integer x
                         			var integer y
                         	sub AvgPool
-                            	Concept:{1..1} Output
+                            	Concept:{1..1}:CheckTwoDimensionOutputParameters Output
                                 	var integer x
 									var integer y
 						sub Normalization
+							Concept Output
+								var double z
 							var double eps = 0.00001
 							var double momentum = 0.1
 		sub LinearSection
-			Concept:{0..1} Input
+			Concept:{0..1}:CheckOneDimensionInputParameters Input
             	var integer x
 			Concept:{1..*} Block
             	Concept:{1..*} Layer
             		sub ActivationLayer
             			sub ReLU
-            			sub ELU > var integer alpha=1
+            			sub:CheckELUParameters ELU > var integer alpha=1
             			sub SELU
             			sub GELU
             			sub SiLU
             			sub GLU
-            			sub LeakyReLU > var integer alpha=1
+            			sub:CheckReLUParameters LeakyReLU > var integer alpha=1
             			sub LogSigmoid
             			sub Sigmoid
             			sub Tanh
             			sub Mish
             		sub ProcessingLayer
-            			Concept Output > var integer x
             			sub Linear
+            				Concept:CheckOneDimensionOutputParameters Output > var integer x
             			sub Dropout
+            				var double probability=0.1
 		sub ResidualSection
-			Concept:{0..1} Input
+			Concept:{0..1}:CheckOneDimensionInputParameters Input
+				var integer x
+				var integer y
             	var integer z
-        	Concept:{1..*} Block
-        		Concept Output
-                	var integer z
-                Concept ActivationLayer
-                	sub ReLU
-                    sub ELU > var integer alpha=1
-                    sub SELU
-                    sub GELU
-                    sub SiLU
-                    sub GLU
-                    sub LeakyReLU > var integer alpha=1
-                    sub LogSigmoid
-                    sub Sigmoid
-                    sub Tanh
-                    sub Mish
+            Concept:{0..1} FirstStage
+            	sub DefaultFirstStage
+            	sub CustomFirstStage
+            		Concept:{1..*} Block
+            			Concept:{1..*} Layer
+                            sub ActivationLayer
+                            	sub ReLU
+                            	sub:CheckELUParameters ELU > var integer alpha=1
+                            	sub SELU
+                            	sub GELU
+                            	sub SiLU
+                            	sub GLU
+                            	sub:CheckReLUParameters LeakyReLU > var integer alpha=1
+                            	sub LogSigmoid
+                            	sub Sigmoid
+                            	sub Tanh
+                            	sub Mish
+                            sub ProcessingLayer
+                            	sub Dropout
+                            		var double probability
+                            	sub Convolutional
+                            		Concept:{1..1}:CheckThreeDimensionOutputParameters Output
+                                		var integer x
+                                		var integer y
+                                		var integer z
+                            	sub Pool
+                            		sub MaxPool
+                            			Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                                			var integer x
+                                			var integer y
+                                	sub AvgPool
+                                    	Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                                        	var integer x
+                            				var integer y
+                            	sub Normalization
+                            		Concept Output
+                            			var double z
+                            		var double eps = 0.00001
+                            		var double momentum = 0.1
+        	Concept:{1..*} ResidualLayer
         		var integer repeat=1
+        		var integer expansion=4
+			Concept:{0..1} LastStage
+            	sub DefaultLastStage
+            	sub CustomLastStage
+            		Concept:{1..*} Block
+            			Concept:{1..*} Layer
+                            sub ActivationLayer
+                            	sub ReLU
+                            	sub:CheckELUParameters ELU > var integer alpha=1
+                            	sub SELU
+                            	sub GELU
+                            	sub SiLU
+                            	sub GLU
+                            	sub:CheckReLUParameters LeakyReLU > var integer alpha=1
+                            	sub LogSigmoid
+                            	sub Sigmoid
+                            	sub Tanh
+                            	sub Mish
+                            sub ProcessingLayer
+                            	sub Dropout
+                            		var double probability
+                            	sub Convolutional
+                            		Concept:{1..1}:CheckThreeDimensionOutputParameters Output
+                                		var integer x
+                                		var integer y
+                                		var integer z
+                            	sub Pool
+                            		sub MaxPool
+                            			Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                                			var integer x
+                                			var integer y
+                                	sub AvgPool
+                                    	Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                                        	var integer x
+                            				var integer y
+                            	sub Normalization
+                            		Concept Output
+                            			var double z
+                            		var double eps = 0.00001
+                            		var double momentum = 0.1
         sub RecurrentSection
-        	Concept:{0..1} Input
+        	Concept:{0..1}:CheckOneDimensionInputParameters Input
         		var integer x
-        	Concept Output > var integer x
-        	Concept Type > var string type="LSTM"
+        	Concept:CheckOneDimensionOutputParameters Output > var integer x
+        	Concept:CheckRecurrentSectionType Type > var string type="LSTM"
 
-Concept SaveModule
+Concept:CheckSaveModuleParameters SaveModule
 	var string path
 	var integer section
 	var integer from

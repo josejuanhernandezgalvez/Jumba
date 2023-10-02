@@ -5,10 +5,10 @@ import io.intino.magritte.lang.model.rules.NodeRule;
 
 import java.util.List;
 
-public class CheckSectionsWithNoInput implements NodeRule {
+public class CheckAdamParameters implements NodeRule {
 
-    @Override
+
     public boolean accept(Node node) {
-        return true;
+        return false;
     }
 }

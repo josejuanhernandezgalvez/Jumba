@@ -7,16 +7,23 @@ Training
 
 NeuralNetwork ResidualNeuralNetwork
 	ResidualSection
-		Input(z=3)
-		Block
-			Output(z=10)
-			repeat = 4
-		Block
-        	Output(z=16)
-        	repeat = 3
-		Block
-        	Output(z=24)
-        	repeat = 4
+		Input(224, 225, 3)
+		CustomFirstStage
+			Block
+				Convolutional > Output(x=40, y=40, z=6)
+				Normalization(eps=0.0001, momentum=0.1)
+				MaxPool > Output(x=24, y=24)
+				ReLU
+		ResidualLayer
+			repeat=2
+			expansion=1
+		ResidualLayer
+        	repeat=3
+        	expansion=1
+        ResidualLayer
+        	repeat=2
+        	expansion=1
+        DefaultLastStage
 
     FlattenSection
 

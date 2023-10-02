@@ -5,7 +5,7 @@ import io.intino.magritte.lang.model.rules.NodeRule;
 
 import java.util.List;
 
-public class CheckSectionsWithNoInput implements NodeRule {
+public class CheckModuleParameters implements NodeRule {
 
     @Override
     public boolean accept(Node node) {
