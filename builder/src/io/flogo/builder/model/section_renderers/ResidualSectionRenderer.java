@@ -4,16 +4,12 @@ import io.flogo.blatt.model.ResidualSection;
 import io.flogo.blatt.model.Section;
 import io.flogo.builder.model.SectionRenderer;
 import io.flogo.builder.model.section_renderers.stage.FirstStageRenderer;
+import io.flogo.builder.model.section_renderers.stage.LastStageRenderer;
 import io.flogo.builder.model.structure_views.Output;
 import io.flogo.builder.model.structure_views.SectionView;
 import io.flogo.builder.model.structure_views.blocks.processing.ConvolutionalBlockView;
 import io.flogo.builder.model.structure_views.blocks.processing.residual.ResidualBlockView;
 import io.flogo.builder.model.structure_views.layers.output.ThreeDimensionsOutput;
-import io.flogo.builder.model.structure_views.layers.processing.AvgPoolLayerView;
-import io.flogo.builder.model.structure_views.layers.processing.kernels.PoolTwoDimensionsKernel;
-import io.flogo.builder.model.structure_views.layers.processing.kernels.paddings.TwoDimensionsPadding;
-import io.flogo.builder.model.structure_views.layers.processing.kernels.size.TwoDimensionsSize;
-import io.flogo.builder.model.structure_views.layers.processing.kernels.strides.TwoDimensionsStride;
 import io.flogo.builder.model.structure_views.sections.processing.ResidualSectionView;
 
 import java.util.List;
@@ -52,18 +48,9 @@ public class ResidualSectionRenderer implements SectionRenderer {
     }
 
     private ConvolutionalBlockView lastStageView(LastStage lastStage) {
-        AvgPoolLayerView pool = new AvgPoolLayerView(
-                new PoolTwoDimensionsKernel(
-                        new TwoDimensionsSize(7, 7),
-                        new TwoDimensionsStride(1, 1),
-                        new TwoDimensionsPadding(0, 0)),
-                previousOutput);
-        previousOutput = (ThreeDimensionsOutput) pool.getLayerOutput();
-        return new ConvolutionalBlockView(List.of(pool));
-    }
-
-    private ResidualBlockView lastBlock() {
-        return null;
+        ConvolutionalBlockView result = LastStageRenderer.render(lastStage, previousOutput);
+        previousOutput = FirstStageRenderer.output;
+        return result;
     }
 
     private ResidualBlockView processEach(ResidualLayer residualLayer) {
@@ -85,15 +72,5 @@ public class ResidualSectionRenderer implements SectionRenderer {
     @Override
     public Output sectionOutput() {
         return previousOutput;
-    }
-
-    private static class LastStageRenderer {
-        public static ConvolutionalBlockView render(LastStage firstStage) {
-            return null;
-        }
-
-        private static class DefaultLastStageView {
-
-        }
     }
 }

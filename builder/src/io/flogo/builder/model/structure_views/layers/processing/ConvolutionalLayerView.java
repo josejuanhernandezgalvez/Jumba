@@ -1,6 +1,5 @@
 package io.flogo.builder.model.structure_views.layers.processing;
 
-import io.flogo.blatt.model.ConvolutionalSection.Block.Convolutional;
 import io.flogo.builder.model.structure_views.Output;
 import io.flogo.builder.model.structure_views.layers.ProcessingLayerView;
 import io.flogo.builder.model.structure_views.layers.output.ThreeDimensionsOutput;
@@ -54,7 +53,16 @@ public class ConvolutionalLayerView implements ProcessingLayerView {
     }
 
     private static ThreeDimensionsOutput thisOutput(Layer layer) {
-        return new ThreeDimensionsOutput(((Convolutional) layer).output());
+        try {
+            Object output = layer.getClass().getMethod("output").invoke(layer);
+            return new ThreeDimensionsOutput(getValue(output, "x"), getValue(output, "y"), getValue(output, "z"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static int getValue(Object output, String argument) throws Exception {
+        return (int) output.getClass().getMethod(argument).invoke(output);
     }
 
     @Override

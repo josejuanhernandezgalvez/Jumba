@@ -169,84 +169,82 @@ Concept Section is component
             Concept:{0..1} FirstStage
             	sub DefaultFirstStage
             	sub CustomFirstStage
-            		Concept:{1..*} Block
-            			Concept:{1..*} Layer
-                            sub ActivationLayer
-                            	sub ReLU
-                            	sub:CheckELUParameters ELU > var integer alpha=1
-                            	sub SELU
-                            	sub GELU
-                            	sub SiLU
-                            	sub GLU
-                            	sub:CheckReLUParameters LeakyReLU > var integer alpha=1
-                            	sub LogSigmoid
-                            	sub Sigmoid
-                            	sub Tanh
-                            	sub Mish
-                            sub ProcessingLayer
-                            	sub Dropout
-                            		var double probability
-                            	sub Convolutional
-                            		Concept:{1..1}:CheckThreeDimensionOutputParameters Output
-                                		var integer x
-                                		var integer y
-                                		var integer z
-                            	sub Pool
-                            		sub MaxPool
-                            			Concept:{1..1}:CheckTwoDimensionOutputParameters Output
-                                			var integer x
-                                			var integer y
-                                	sub AvgPool
-                                    	Concept:{1..1}:CheckTwoDimensionOutputParameters Output
-                                        	var integer x
-                            				var integer y
-                            	sub Normalization
-                            		Concept Output
-                            			var double z
-                            		var double eps = 0.00001
-                            		var double momentum = 0.1
+            		Concept:{1..*} Layer
+                        sub ActivationLayer
+                        	sub ReLU
+                        	sub:CheckELUParameters ELU > var integer alpha=1
+                        	sub SELU
+                        	sub GELU
+                        	sub SiLU
+                        	sub GLU
+                        	sub:CheckReLUParameters LeakyReLU > var integer alpha=1
+                        	sub LogSigmoid
+                        	sub Sigmoid
+                        	sub Tanh
+                        	sub Mish
+                        sub ProcessingLayer
+                        	sub Dropout
+                        		var double probability
+                        	sub Convolutional
+                        		Concept:{1..1}:CheckThreeDimensionOutputParameters Output
+                            		var integer x
+                            		var integer y
+                            		var integer z
+                        	sub Pool
+                        		sub MaxPool
+                        			Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                            			var integer x
+                            			var integer y
+                            	sub AvgPool
+                                	Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                                    	var integer x
+                        				var integer y
+                        	sub Normalization
+                        		Concept Output
+                        			var double z
+                        		var double eps = 0.00001
+                        		var double momentum = 0.1
         	Concept:{1..*} ResidualLayer
         		var integer repeat=1
         		var integer expansion=4
 			Concept:{0..1} LastStage
             	sub DefaultLastStage
             	sub CustomLastStage
-            		Concept:{1..*} Block
-            			Concept:{1..*} Layer
-                            sub ActivationLayer
-                            	sub ReLU
-                            	sub:CheckELUParameters ELU > var integer alpha=1
-                            	sub SELU
-                            	sub GELU
-                            	sub SiLU
-                            	sub GLU
-                            	sub:CheckReLUParameters LeakyReLU > var integer alpha=1
-                            	sub LogSigmoid
-                            	sub Sigmoid
-                            	sub Tanh
-                            	sub Mish
-                            sub ProcessingLayer
-                            	sub Dropout
-                            		var double probability
-                            	sub Convolutional
-                            		Concept:{1..1}:CheckThreeDimensionOutputParameters Output
-                                		var integer x
-                                		var integer y
-                                		var integer z
-                            	sub Pool
-                            		sub MaxPool
-                            			Concept:{1..1}:CheckTwoDimensionOutputParameters Output
-                                			var integer x
-                                			var integer y
-                                	sub AvgPool
-                                    	Concept:{1..1}:CheckTwoDimensionOutputParameters Output
-                                        	var integer x
-                            				var integer y
-                            	sub Normalization
-                            		Concept Output
-                            			var double z
-                            		var double eps = 0.00001
-                            		var double momentum = 0.1
+            		Concept:{1..*} Layer
+                        sub ActivationLayer
+                        	sub ReLU
+                        	sub:CheckELUParameters ELU > var integer alpha=1
+                        	sub SELU
+                        	sub GELU
+                        	sub SiLU
+                        	sub GLU
+                        	sub:CheckReLUParameters LeakyReLU > var integer alpha=1
+                        	sub LogSigmoid
+                        	sub Sigmoid
+                        	sub Tanh
+                        	sub Mish
+                        sub ProcessingLayer
+                        	sub Dropout
+                        		var double probability
+                        	sub Convolutional
+                        		Concept:{1..1}:CheckThreeDimensionOutputParameters Output
+                            		var integer x
+                            		var integer y
+                            		var integer z
+                        	sub Pool
+                        		sub MaxPool
+                        			Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                            			var integer x
+                            			var integer y
+                            	sub AvgPool
+                                	Concept:{1..1}:CheckTwoDimensionOutputParameters Output
+                                    	var integer x
+                        				var integer y
+                        	sub Normalization
+                        		Concept Output
+                        			var double z
+                        		var double eps = 0.00001
+                        		var double momentum = 0.1
         sub RecurrentSection
         	Concept:{0..1}:CheckOneDimensionInputParameters Input
         		var integer x

@@ -78,7 +78,8 @@ public class BlattCompiler {
 	private void render(BlattGraph graph, CompilationContext context) throws BlattException, Exception {
 		AtomicReference<Output> input = new AtomicReference<>(getInputFrom(graph.neuralNetwork(0).section(0)));
 		TrainingView trainingView = new TrainingRenderer().render(graph.training(0));
-		System.out.println(graph.neuralNetwork(0).sectionList().stream().map(s -> getSectionView(input, s)).toList());
+		List<SectionView> neuralNetwork = graph.neuralNetwork(0).sectionList().stream().map(s -> getSectionView(input, s)).toList();
+		System.out.println(neuralNetwork);
 	}
 
 	private SectionView getSectionView(AtomicReference<Output> input, Section section) {

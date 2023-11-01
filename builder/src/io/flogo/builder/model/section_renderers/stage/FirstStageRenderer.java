@@ -9,8 +9,9 @@ import io.flogo.builder.model.structure_views.layers.processing.ConvolutionalLay
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class FirstStageRenderer {
+public class FirstStageRenderer extends StageRenderer {
     private final static ThreeDimensionsOutput desiredInput = new ThreeDimensionsOutput(224, 224, 3);
     private final static ThreeDimensionsOutput desiredOutput = new ThreeDimensionsOutput(56, 56, 64);
     public static ThreeDimensionsOutput output = desiredOutput;
@@ -18,11 +19,16 @@ public class FirstStageRenderer {
 
     public static ConvolutionalBlockView render(ResidualSection.FirstStage firstStage, ThreeDimensionsOutput previousOutput) {
         if (isDefault(firstStage)) return defaultStage(previousOutput);
-        return createStage((ResidualSection.CustomFirstStage) firstStage);
+        return createStage((ResidualSection.CustomFirstStage) firstStage, previousOutput);
     }
 
-    private static ConvolutionalBlockView createStage(ResidualSection.CustomFirstStage firstStage) {
-        return null;
+    private static ConvolutionalBlockView createStage(ResidualSection.CustomFirstStage firstStage, ThreeDimensionsOutput previousOutput) {
+        return new ConvolutionalBlockView(createViews(firstStage, previousOutput));
+    }
+
+    private static List<LayerView> createViews(ResidualSection.CustomFirstStage firstStage, ThreeDimensionsOutput previousOutput) {
+        init(previousOutput);
+        return firstStage.layerList().stream().map(StageRenderer::processEach).collect(Collectors.toList());
     }
 
     private static ConvolutionalBlockView defaultStage(ThreeDimensionsOutput input) {

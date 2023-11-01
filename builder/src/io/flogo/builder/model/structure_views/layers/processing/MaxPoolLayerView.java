@@ -1,6 +1,5 @@
 package io.flogo.builder.model.structure_views.layers.processing;
 
-import io.flogo.blatt.model.ConvolutionalSection.Block.MaxPool;
 import io.flogo.builder.model.structure_views.Output;
 import io.flogo.builder.model.structure_views.layers.ProcessingLayerView;
 import io.flogo.builder.model.structure_views.layers.output.ThreeDimensionsOutput;
@@ -47,8 +46,18 @@ public class MaxPoolLayerView implements ProcessingLayerView {
         return new MaxPoolLayerView((ThreeDimensionsOutput) previousOutput, thisOutput(layer, previousOutput));
     }
 
+
     private static ThreeDimensionsOutput thisOutput(Layer layer, Output previousOutput) {
-        return new ThreeDimensionsOutput(((MaxPool) layer).output(), ((ThreeDimensionsOutput) previousOutput).z());
+        try {
+            Object output = layer.getClass().getMethod("output").invoke(layer);
+            return new ThreeDimensionsOutput(getValue(output, "x"), getValue(output, "y"), ((ThreeDimensionsOutput) previousOutput).z());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static int getValue(Object output, String argument) throws Exception {
+        return (int) output.getClass().getMethod(argument).invoke(output);
     }
 
     @Override
