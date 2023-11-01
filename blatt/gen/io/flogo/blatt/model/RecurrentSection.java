@@ -3,61 +3,48 @@ package io.flogo.blatt.model;
 import io.flogo.blatt.model.*;
 
 public class RecurrentSection extends io.flogo.blatt.model.ProcessingSection implements io.intino.magritte.framework.tags.Component, io.intino.magritte.framework.tags.Terminal {
+	protected int numLayers;
 	protected io.flogo.blatt.model.RecurrentSection.Input input;
-	protected java.util.List<io.flogo.blatt.model.RecurrentSection.Output> outputList = new java.util.ArrayList<>();
-	protected java.util.List<io.flogo.blatt.model.RecurrentSection.Type> typeList = new java.util.ArrayList<>();
+	protected io.flogo.blatt.model.RecurrentSection.Output output;
+	protected io.flogo.blatt.model.RecurrentSection.Type type;
 
 	public RecurrentSection(io.intino.magritte.framework.Node node) {
 		super(node);
+	}
+
+	public int numLayers() {
+		return numLayers;
+	}
+
+	public RecurrentSection numLayers(int value) {
+		this.numLayers = value;
+		return (RecurrentSection) this;
 	}
 
 	public io.flogo.blatt.model.RecurrentSection.Input input() {
 		return input;
 	}
 
-	public java.util.List<io.flogo.blatt.model.RecurrentSection.Output> outputList() {
-		return java.util.Collections.unmodifiableList(outputList);
+	public io.flogo.blatt.model.RecurrentSection.Output output() {
+		return output;
 	}
 
-	public io.flogo.blatt.model.RecurrentSection.Output output(int index) {
-		return outputList.get(index);
-	}
-
-	public java.util.List<io.flogo.blatt.model.RecurrentSection.Output> outputList(java.util.function.Predicate<io.flogo.blatt.model.RecurrentSection.Output> predicate) {
-		return outputList().stream().filter(predicate).collect(java.util.stream.Collectors.toList());
-	}
-
-	public io.flogo.blatt.model.RecurrentSection.Output output(java.util.function.Predicate<io.flogo.blatt.model.RecurrentSection.Output> predicate) {
-		return outputList().stream().filter(predicate).findFirst().orElse(null);
-	}
-
-	public java.util.List<io.flogo.blatt.model.RecurrentSection.Type> typeList() {
-		return java.util.Collections.unmodifiableList(typeList);
-	}
-
-	public io.flogo.blatt.model.RecurrentSection.Type type(int index) {
-		return typeList.get(index);
-	}
-
-	public java.util.List<io.flogo.blatt.model.RecurrentSection.Type> typeList(java.util.function.Predicate<io.flogo.blatt.model.RecurrentSection.Type> predicate) {
-		return typeList().stream().filter(predicate).collect(java.util.stream.Collectors.toList());
-	}
-
-	public io.flogo.blatt.model.RecurrentSection.Type type(java.util.function.Predicate<io.flogo.blatt.model.RecurrentSection.Type> predicate) {
-		return typeList().stream().filter(predicate).findFirst().orElse(null);
+	public io.flogo.blatt.model.RecurrentSection.Type type() {
+		return type;
 	}
 
 	protected java.util.List<io.intino.magritte.framework.Node> componentList$() {
 		java.util.Set<io.intino.magritte.framework.Node> components = new java.util.LinkedHashSet<>(super.componentList$());
 		if (input != null) components.add(this.input.core$());
-		new java.util.ArrayList<>(outputList).forEach(c -> components.add(c.core$()));
-		new java.util.ArrayList<>(typeList).forEach(c -> components.add(c.core$()));
+		if (output != null) components.add(this.output.core$());
+		if (type != null) components.add(this.type.core$());
 		return new java.util.ArrayList<>(components);
 	}
 
 	@Override
 	protected java.util.Map<java.lang.String, java.util.List<?>> variables$() {
 		java.util.Map<java.lang.String, java.util.List<?>> map = new java.util.LinkedHashMap<>(super.variables$());
+		map.put("numLayers", new java.util.ArrayList(java.util.Collections.singletonList(this.numLayers)));
 		return map;
 	}
 
@@ -65,26 +52,28 @@ public class RecurrentSection extends io.flogo.blatt.model.ProcessingSection imp
 	protected void addNode$(io.intino.magritte.framework.Node node) {
 		super.addNode$(node);
 		if (node.is("RecurrentSection$Input")) this.input = node.as(io.flogo.blatt.model.RecurrentSection.Input.class);
-		if (node.is("RecurrentSection$Output")) this.outputList.add(node.as(io.flogo.blatt.model.RecurrentSection.Output.class));
-		if (node.is("RecurrentSection$Type")) this.typeList.add(node.as(io.flogo.blatt.model.RecurrentSection.Type.class));
+		if (node.is("RecurrentSection$Output")) this.output = node.as(io.flogo.blatt.model.RecurrentSection.Output.class);
+		if (node.is("RecurrentSection$Type")) this.type = node.as(io.flogo.blatt.model.RecurrentSection.Type.class);
 	}
 
 	@Override
 	protected void removeNode$(io.intino.magritte.framework.Node node) {
 		super.removeNode$(node);
 		if (node.is("RecurrentSection$Input")) this.input = null;
-		if (node.is("RecurrentSection$Output")) this.outputList.remove(node.as(io.flogo.blatt.model.RecurrentSection.Output.class));
-		if (node.is("RecurrentSection$Type")) this.typeList.remove(node.as(io.flogo.blatt.model.RecurrentSection.Type.class));
+		if (node.is("RecurrentSection$Output")) this.output = null;
+		if (node.is("RecurrentSection$Type")) this.type = null;
 	}
 
 	@Override
 	protected void load$(java.lang.String name, java.util.List<?> values) {
 		super.load$(name, values);
+		if (name.equalsIgnoreCase("numLayers")) this.numLayers = io.intino.magritte.framework.loaders.IntegerLoader.load(values, this).get(0);
 	}
 
 	@Override
 	protected void set$(java.lang.String name, java.util.List<?> values) {
 		super.set$(name, values);
+		if (name.equalsIgnoreCase("numLayers")) this.numLayers = (java.lang.Integer) values.get(0);
 	}
 
 	public Create create() {
@@ -120,20 +109,6 @@ public class RecurrentSection extends io.flogo.blatt.model.ProcessingSection imp
 			return newElement;
 		}
 
-	}
-
-	public Clear clear() {
-		return new Clear();
-	}
-
-	public class Clear  {
-		public void output(java.util.function.Predicate<io.flogo.blatt.model.RecurrentSection.Output> filter) {
-			new java.util.ArrayList<>(outputList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
-		}
-
-		public void type(java.util.function.Predicate<io.flogo.blatt.model.RecurrentSection.Type> filter) {
-			new java.util.ArrayList<>(typeList()).stream().filter(filter).forEach(io.intino.magritte.framework.Layer::delete$);
-		}
 	}
 
 	public static class Input  extends io.intino.magritte.framework.Layer implements io.intino.magritte.framework.tags.Terminal {

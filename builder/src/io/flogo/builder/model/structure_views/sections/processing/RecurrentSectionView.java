@@ -6,14 +6,14 @@ import io.flogo.builder.model.structure_views.SectionView;
 import java.util.List;
 
 public class RecurrentSectionView implements SectionView {
-    public final List<BlockView> blockViews;
+    public final BlockView blockView;
 
-    public RecurrentSectionView(List<BlockView> blockViews) {
-        this.blockViews = blockViews;
+    public RecurrentSectionView(BlockView blockViews) {
+        this.blockView = blockViews;
     }
 
     @Override
     public List<BlockView> blocks() {
-        return blockViews;
+        return List.of(blockView);
     }
 }

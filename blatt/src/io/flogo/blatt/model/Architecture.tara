@@ -248,8 +248,9 @@ Concept Section is component
         sub RecurrentSection
         	Concept:{0..1}:CheckOneDimensionInputParameters Input
         		var integer x
-        	Concept:CheckOneDimensionOutputParameters Output > var integer x
-        	Concept:CheckRecurrentSectionType Type > var string type="LSTM"
+        	Concept:{0..1}:CheckOneDimensionOutputParameters Output > var integer x
+        	Concept:{0..1}:CheckRecurrentSectionType Type > var string type="LSTM"
+        	var integer numLayers = 1
 
 Concept:CheckSaveModuleParameters SaveModule
 	var string path

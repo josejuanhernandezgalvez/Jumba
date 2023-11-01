@@ -1,4 +1,4 @@
-package io.flogo.builder.model.section_renderers.stage;
+package io.flogo.builder.model.section_renderers.stages;
 
 import io.flogo.blatt.model.ResidualSection;
 import io.flogo.builder.model.structure_views.LayerView;
