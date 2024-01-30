@@ -27,5 +27,3 @@ NeuralNetwork ResidualNeuralNetwork
 		Block
 			Linear > Output(200)
 			ReLU
-
-	SoftmaxSection

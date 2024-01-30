@@ -1,14 +1,13 @@
 package io.flogo.blatt.model.rules;
-
-import io.intino.magritte.lang.model.Node;
-import io.intino.magritte.lang.model.rules.NodeRule;
+import io.intino.tara.language.model.Mogram;
+import io.intino.tara.language.model.rules.NodeRule;
 
 import java.util.List;
 
 public class CheckLinearLayers implements NodeRule {
 
 
-	public boolean accept(Node node) {
+	public boolean accept(Mogram mogram) {
 		return true;
 	}
 }

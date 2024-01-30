@@ -1,7 +1,7 @@
 dsl Legio
 
-Artifact(groupId = "io.flogo", version = "1.0.0") blatt as Product
-	Model(language= "Proteo", version ="3.4.7", sdkVersion= "4.2.3")
+Artifact(groupId = "io.flogo", version = "1.0.0") blatt
+	Model(language= "Proteo", version ="4.0.0", sdkVersion= "5.0.0")
 	Package(mode = ModulesAndLibrariesLinkedByManifest)
 
 Repository("intino-maven")

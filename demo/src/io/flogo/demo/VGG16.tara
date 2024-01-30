@@ -45,5 +45,3 @@ NeuralNetwork VGG16
 		Block
 			Linear > Output(x=100)
 			ReLU
-
-	SoftmaxSection

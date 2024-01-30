@@ -25,5 +25,3 @@ NeuralNetwork ConvolutionalNeuralNetwork
 		Block
 			Linear > Output(x=10)
 			ReLU
-
-	SoftmaxSection

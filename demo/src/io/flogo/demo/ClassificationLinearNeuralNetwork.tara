@@ -20,5 +20,3 @@ NeuralNetwork ClassificationLinearNeuralNetwork
 		Block
 			Linear > Output(x=10)
 			ReLU
-
-	SoftmaxSection
