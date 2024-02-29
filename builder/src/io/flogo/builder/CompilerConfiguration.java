@@ -1,8 +1,7 @@
 package io.flogo.builder;
 
 import io.intino.Configuration;
-import io.intino.Configuration.Artifact.Model.Level;
-import tara.dsl.Blatt;
+import tara.dsl.Flogo;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +14,8 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
+
+import static io.intino.Configuration.Artifact.Model.*;
 
 public class CompilerConfiguration implements Cloneable {
 	private static final Logger LOG = Logger.getGlobal();
@@ -355,7 +356,7 @@ public class CompilerConfiguration implements Cloneable {
 	}
 
 	public static class Language {
-		Blatt language;
+		Flogo language;
 		String name;
 		String version;
 
@@ -364,13 +365,13 @@ public class CompilerConfiguration implements Cloneable {
 			this.version = version;
 		}
 
-		public Language(tara.dsl.Blatt language) {
+		public Language(Flogo language) {
 			this.language = language;
 			this.name = this.language.languageName();
 		}
 
-		public Blatt get() {
-			return language == null ? (language = new Blatt()) : language;
+		public Flogo get() {
+			return language == null ? (language = new Flogo()) : language;
 		}
 
 		public String name() {

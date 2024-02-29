@@ -1,7 +1,6 @@
 package io.flogo.builder;
 
 public class BlattCompilerMessageCategories {
-
     public static final String ERROR = "error";
     public static final String WARNING = "warning";
     public static final String INFORMATION = "information";

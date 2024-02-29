@@ -1,12 +1,20 @@
-dsl Blatt
+dsl Flogo
 
-Training
+Evolution(name = "")
 	Adam
 	MAELoss
-	GrowthEarlyStopper
+	Dataset(name = "cats and dogs", train=0.8, test=0.2, batchSize = 10)
+		path = ""
+	Cycle(epochs = 10)
+		fit = 0.7
+		val = 0.3
 
-NeuralNetwork RecurrentNeuralNetwork
+Architecture(name = "") RecurrentNeuralNetwork
 	RecurrentSection
 		Input(x=1000)
 		Output(x=10)
 		Type("LSTM")
+    	OutputElement("lastOutput")
+
+Lifecycle
+	Server("example server")

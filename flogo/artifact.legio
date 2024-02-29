@@ -1,0 +1,11 @@
+dsl Legio
+
+Artifact(groupId = "io.flogo", version = "1.0.0") flogo
+	Model(language= "Proteo", version ="4.0.0", sdkVersion= "5.0.0")
+	Code("io.flogo")
+	Package(mode = ModulesAndLibrariesLinkedByManifest)
+
+Repository("intino-maven")
+	Release("https://artifactory.intino.io/artifactory/releases")
+
+RunConfiguration local

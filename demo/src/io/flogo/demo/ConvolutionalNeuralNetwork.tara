@@ -1,15 +1,24 @@
-dsl Blatt
+dsl Flogo
 
-Training
+Evolution(name = "AdamMae")
 	Adam
 	MAELoss
-	GrowthEarlyStopper
+	Dataset(name = "cats and dogs", train=0.8, test=0.2, batchSize = 10)
+		path = ""
+	Cycle(epochs = 10)
+		fit = 0.7
+		val = 0.3
 
-NeuralNetwork ConvolutionalNeuralNetwork
+Architecture(name = "") ConvolutionalNeuralNetwork
 	ConvolutionalSection
 		Input(x=50,y=50,z=1)
 		Block
-			Convolutional > Output(x=40, y=40, z=6)
+			Convolutional
+				Kernel
+					Size(x=3, y=3)
+					Stride(x=1, y=1)
+					Padding(x=0, y=0)
+				OutChannels(z = 10)
 			Normalization(eps=0.0001, momentum=0.1)
 			MaxPool > Output(x=24, y=24)
 			ReLU
@@ -33,3 +42,6 @@ NeuralNetwork ConvolutionalNeuralNetwork
 			ReLU
 
 	SoftmaxSection
+
+Lifecycle
+	Server("example server")

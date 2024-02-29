@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import static io.flogo.builder.BlattBuildConstants.*;
-import static io.intino.magritte.builder.shared.TaraBuildConstants.*;
+import static io.intino.tara.builder.shared.TaraBuildConstants.*;
 import static java.io.File.separator;
 
 class CompilationInfoExtractor {
@@ -127,6 +127,11 @@ class CompilationInfoExtractor {
 
 			@Override
 			public String password() {
+				return null;
+			}
+
+			@Override
+			public UpdatePolicy updatePolicy() {
 				return null;
 			}
 

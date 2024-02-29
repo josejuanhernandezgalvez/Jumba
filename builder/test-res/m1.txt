@@ -1,13 +1,12 @@
 def.file
-$PROJECT_DIRECTORY/demo/src/io/flogo/demo/ClassificationRecurrentNeuralNetwork.tara#true
+$PROJECT_DIRECTORY/demo/src/io/flogo/demo/ConvolutionalNeuralNetwork.tara#true
 
 project
-dsl-blatt
+dsl-flogo
 module
 demo
 semantic.lib
-$HOME/Library/Caches/JetBrains/IntelliJIdea2023.1/plugins-sandbox/plugins/intino-plugin/lib/language-1.3.4.jar
-outputpath
+$HOME/.m2/repository/io/intino/tara/language/1.4.0/language-1.4.0.jaroutputpath
 $PROJECT_DIRECTORY/demo/gen
 final_outputpath
 $PROJECT_DIRECTORY/out/production/model/
@@ -22,9 +21,9 @@ $PROJECT_DIRECTORY/demo/src
 $PROJECT_DIRECTORY/demo/gen
 
 level
-Solution
+Model
 language
-Blatt:1.0.0
+flogo:1.0.0
 
 groupId
 io.flogo

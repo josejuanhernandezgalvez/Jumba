@@ -1,7 +1,7 @@
 dsl Legio
 
-Artifact(groupId = "io.flogo", version = "1.0.0") demo as Solution
-	Model("Blatt", "1.0.0", "4.2.3")
+Artifact(groupId = "io.flogo", version = "1.0.0") demo
+	Model("Flogo", "1.0.0", "5.0.0")
 		exclude = ExcludeFrameworkCode
 	Imports
 		Test(groupId = "junit", artifactId = "junit", version = "4.13")

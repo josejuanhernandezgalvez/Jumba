@@ -1,13 +1,14 @@
 dsl Legio
 
-Artifact(groupId = "io.flogo", version = "1.0.0") builder
+Artifact("io.flogo", "1.0.0") builder
 	Imports
-		Test(groupId = "junit", artifactId = "junit", version = "4.13")
+		Test("junit", "junit", "4.13")
 		Test("org.assertj", "assertj-core", "3.24.2")
-		Compile(groupId = "io.flogo", artifactId = "blatt", version = "1.0.0")
-		Compile("io.intino.magritte", "builder", "4.2.3")
+		Compile("io.flogo", "Flogo", "1.0.0")
+		Compile("io.intino.magritte", "builder", "5.0.0")
+		Compile("io.intino", "configuration", "1.5.0")
 		Compile("commons-io", "commons-io", "2.13.0")
-		Compile("tara.dsl", "Blatt", "1.0.0")
+		Compile("tara.dsl", "flogo", "1.0.0")
 	Package(mode = ModulesAndLibrariesLinkedByManifest)
 
 Repository(identifier = "intino-maven")

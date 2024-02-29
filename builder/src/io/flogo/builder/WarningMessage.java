@@ -11,7 +11,6 @@ public class WarningMessage {
 	private final int column;
 
 	public WarningMessage(String message, File owner, int line, int column) {
-		this.importance = importance;
 		this.message = message;
 		this.owner = owner;
 		this.line = line;

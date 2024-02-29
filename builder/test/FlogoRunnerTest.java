@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import static io.flogo.builder.BlattcRunner.main;
+import static io.flogo.builder.FlogocRunner.main;
 
 
 @Ignore
@@ -21,7 +21,7 @@ public class FlogoRunnerTest {
 	}
 
 	@Test
-	public void exampleM1() {
+	public void execute() {
 		main(new String[]{temp(home + File.separator + "m1.txt")});
 	}
 

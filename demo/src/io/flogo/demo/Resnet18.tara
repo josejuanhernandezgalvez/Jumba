@@ -1,11 +1,15 @@
-dsl Blatt
+dsl Flogo
 
-Training
+Evolution(name = "")
 	Adam
 	MAELoss
-	GrowthEarlyStopper
+	Dataset(name = "cats and dogs", train=0.8, test=0.2, batchSize = 10)
+		path = ""
+	Cycle(epochs = 10)
+		fit = 0.7
+		val = 0.3
 
-NeuralNetwork ResidualNeuralNetwork
+Architecture(name = "") Resnet18
 	ResidualSection
 		Input(224, 224, 3)
 		DefaultFirstStage
@@ -33,3 +37,6 @@ NeuralNetwork ResidualNeuralNetwork
 			ReLU
 
 	SoftmaxSection
+
+Lifecycle
+	Server("example server")

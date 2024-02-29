@@ -1,0 +1,369 @@
+dsl Proteo
+
+Concept:{1..1} Evolution
+	var string name
+	has:{0..1} Optimizer
+	has:{0..1} LossFunction
+	has:{0..1} EarlyStopper
+	has:{0..1} CheckPointSaver
+	Concept:{1..1} Dataset
+		var string name
+		var string path = ""
+		var double train = 0.8
+		var double test = 0.2
+		var integer batchSize = 10
+	Concept:{1..1} Cycle
+		var integer epochs
+		var double fit = 0.8
+		var double val = 0.2
+
+Concept Optimizer is component
+    sub Adagrad
+    	var double lr=0.001
+		var double lrDecay=0
+        var double eps=1e-6
+        var double weightDecay=0.00000000001
+        var double initialAccumulator=0
+	sub Adadelta
+		var double lr=1.0
+		var double rho=0.9
+		var double eps=0.000001
+		var double weightDecay=0
+    sub Adam
+    	var double lr=0.0001
+    	var double beta0=0.9
+    	var double beta1=0.999
+    	var double weightDecay=0
+    sub AMSGrad
+    	var double lr=0.0001
+    	var double beta0=0.9
+    	var double beta1=0.999
+    	var double weightDecay=0
+    sub ASGD
+    	var double lr=0.001
+		var double lrDecay=0.00001
+    	var double alpha=0.75
+    	var double pointToStartAverage=0.0000001
+		var double weightDecay=0.0000001
+    sub RMSProp
+         var double lr=0.001
+         var double momentum=0
+         var double alpha=0.99
+         var double eps=0.000000001
+         var double weightDecay=0
+    sub CenteredRMSProp
+         var double lr=0.001
+         var double momentum=0
+         var double alpha=0.99
+         var double eps=0.000000001
+         var double weightDecay=0
+    sub SGD
+    	var double lr=0.001
+    	var double momentum=0
+    	var double momentumDecay=0
+		var double weightDecay=0
+   	sub SGDWithNesterovMomentum
+    	var double lr=0.001
+    	var double momentum=0
+    	var double momentumDecay=0
+		var double weightDecay=0
+
+Concept EarlyStopper
+    sub LossDrivenEarlyStopper
+    	var integer patience=5
+        var double threshold=0.5
+
+Concept CheckPointSaver
+	sub MaxCheckPointSaver
+
+Concept LossFunction is component
+    sub HingeEmbeddingLoss
+    	var double margin = 1
+	sub BinaryCrossEntropyLoss
+    sub CrossEntropyLoss
+    sub MAELoss
+    sub MSELoss
+    sub NLLLoss
+    sub MarginRankingLoss
+    sub KullbackLeiblerDivergenceLoss
+    sub TripletMarginLossWithSwap
+    	var double margin = 1
+    	var double normDegree = 2
+    	var double eps = 0.0000001
+    sub TripletMarginLoss
+    	var double margin = 1
+    	var double normDegree = 2
+		var double eps = 0.0000001
+
+
+Concept:{1..1} Architecture
+	has:CheckFirstSectionWithInput:CheckSectionsWithNoInput Section
+	var string name
+Concept Section is component
+	sub LinkSection
+		sub SoftmaxSection
+		sub FlattenSection
+	sub ProcessingSection
+		sub ConvolutionalSection
+			Concept:{0..1} Input
+				var integer x
+				var integer y
+				var integer z
+			Concept:{1..*} Block
+				Concept:{1..*} Layer
+					sub ActivationLayer
+						sub Tanh
+						sub Sigmoid
+						sub LogSigmoid
+						sub ReLU
+						sub SELU
+						sub GELU
+						sub SiLU
+						sub GLU
+						sub ELU > var integer alpha=1
+						sub LeakyReLU > var integer alpha=1
+						sub Mish
+					sub ProcessingLayer
+						sub Dropout
+							var double probability = 0.8
+                        sub:CheckIsDefinedEitherOutputOrKernel Convolutional
+                        	Concept:{0..1} Output
+                        		var integer x
+                        		var integer y
+                        		var integer z
+                        	Concept:{0..1} Kernel
+                        		Concept:{1..1} Size
+                        			var integer x
+                        			var integer y
+                        		Concept:{1..1} Stride
+                        			var integer x
+                        			var integer y
+                        		Concept:{1..1} Padding
+                        			var integer x
+                        			var integer y
+							Concept:{0..1} OutChannels
+								var integer z
+                        sub Pool
+                        	sub:CheckIsDefinedEitherOutputOrKernel MaxPool
+                        		Concept:{0..1} Output
+                        			var integer x
+                        			var integer y
+                        		Concept:{0..1} Kernel
+                        			Concept Size
+                        				var integer x
+                        				var integer y
+                        			Concept Stride
+                        				var integer x
+                        				var integer y
+                        			Concept Padding
+                        				var integer x
+                        				var integer y
+								Concept:{0..1} OutChannels
+									var integer z
+                        	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
+                            	Concept:{0..1} Output
+                                	var integer x
+                        			var integer y
+                        		Concept:{0..1} Kernel
+                        			Concept:{1..1} Size
+                        				var integer x
+                        				var integer y
+                        			Concept:{1..1} Stride
+                        				var integer x
+                        				var integer y
+                        			Concept:{1..1} Padding
+                        				var integer x
+                        				var integer y
+								Concept:{0..1} OutChannels
+									var integer z
+						sub Normalization
+							var double eps = 0.00001
+							var double momentum = 0.1
+		sub LinearSection
+			Concept:{0..1} Input
+            	var integer x
+			Concept:{1..*} Block
+            	Concept:{1..*} Layer
+            		sub ActivationLayer
+            			sub ReLU
+            			sub ELU > var integer alpha=1
+            			sub SELU
+            			sub GELU
+            			sub SiLU
+            			sub GLU
+            			sub LeakyReLU > var integer alpha=1
+            			sub LogSigmoid
+            			sub Sigmoid
+            			sub Tanh
+            			sub Mish
+            		sub ProcessingLayer
+            			sub Linear
+            				Concept:{1..1} Output > var integer x
+            			sub Dropout
+            				var double probability=0.1
+		sub ResidualSection
+			Concept:{0..1} Input
+				var integer x
+				var integer y
+            	var integer z
+            Concept:{0..1} FirstStage
+            	sub DefaultFirstStage
+            	sub CustomFirstStage
+            		Concept:{1..*} Layer
+                        sub ActivationLayer
+                        	sub ReLU
+                        	sub ELU > var integer alpha=1
+                        	sub SELU
+                        	sub GELU
+                        	sub SiLU
+                        	sub GLU
+                        	sub LeakyReLU > var integer alpha=1
+                        	sub LogSigmoid
+                        	sub Sigmoid
+                        	sub Tanh
+                        	sub Mish
+                        sub ProcessingLayer
+                        	sub Dropout
+                        		var double probability = 0.8
+                        	sub:CheckIsDefinedEitherOutputOrKernel Convolutional
+                            	Concept:{0..1} Output
+                            		var integer x
+                            		var integer y
+                            		var integer z
+                            	Concept:{0..1} Kernel
+                            		Concept:{1..1} Size
+                            			var integer x
+                            			var integer y
+                            		Concept:{1..1} Stride
+                            			var integer x
+                            			var integer y
+                            		Concept:{1..1} Padding
+                            			var integer x
+                            			var integer y
+								Concept:{0..1} OutChannels
+									var integer z
+                            sub:CheckIsDefinedEitherOutputOrKernel Pool
+                            	sub MaxPool
+                            		Concept:{0..1} Output
+                            			var integer x
+                            			var integer y
+                            		Concept:{0..1} Kernel
+                            			Concept:{1..1} Size
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Stride
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Padding
+                            				var integer x
+                            				var integer y
+									Concept:{0..1} OutChannels
+										var integer z
+                            	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
+                                	Concept:{0..1} Output
+                                    	var integer x
+                            			var integer y
+                            		Concept:{0..1} Kernel
+                            			Concept:{1..1} Size
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Stride
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Padding
+                            				var integer x
+                            				var integer y
+									Concept:{0..1} OutChannels
+										var integer z
+                        	sub Normalization
+                        		var double eps = 0.00001
+                        		var double momentum = 0.1
+        	Concept:{1..*} ResidualLayer
+        		var integer repeat=1
+        		var integer expansion=4
+			Concept:{0..1} LastStage
+            	sub DefaultLastStage
+            	sub CustomLastStage
+            		Concept:{1..*} Layer
+                        sub ActivationLayer
+                        	sub ReLU
+                        	sub ELU > var integer alpha=1
+                        	sub SELU
+                        	sub GELU
+                        	sub SiLU
+                        	sub GLU
+                        	sub LeakyReLU > var integer alpha=1
+                        	sub LogSigmoid
+                        	sub Sigmoid
+                        	sub Tanh
+                        	sub Mish
+                        sub ProcessingLayer
+                        	sub Dropout
+                        		var double probability = 0.8
+                        	sub:CheckIsDefinedEitherOutputOrKernel Convolutional
+                        		Concept:{0..1} Output
+                            		var integer x
+                            		var integer y
+                            		var integer z
+                            	Concept:{0..1} Kernel
+                            		Concept:{1..1} Size
+                            			var integer x
+                            			var integer y
+                            		Concept:{1..1} Stride
+                            			var integer x
+                            			var integer y
+                            		Concept:{1..1} Padding
+                            			var integer x
+                            			var integer y
+								Concept:{0..1} OutChannels
+									var integer z
+                        	sub Pool
+                        		sub:CheckIsDefinedEitherOutputOrKernel MaxPool
+                        			Concept:{0..1} Output
+                            			var integer x
+                            			var integer y
+                            		Concept:{0..1} Kernel
+                            			Concept:{1..1} Size
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Stride
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Padding
+                            				var integer x
+                            				var integer y
+									Concept:{0..1} OutChannels
+										var integer z
+                            	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
+                                	Concept:{0..1} Output
+                                    	var integer x
+                        				var integer y
+                            		Concept:{0..1} Kernel
+                            			Concept:{1..1} Size
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Stride
+                            				var integer x
+                            				var integer y
+                            			Concept:{1..1} Padding
+                            				var integer x
+                            				var integer y
+									Concept:{0..1} OutChannels
+										var integer z
+                        	sub Normalization
+                        		var double eps = 0.00001
+                        		var double momentum = 0.1
+        sub RecurrentSection
+        	Concept:{1..1} Input
+        		var integer x
+        	Concept:{1..1} Output
+        		var integer x
+        	Concept:{0..1}:CheckRecurrentSectionType Type > var string type="LSTM"
+        	var integer stackedRecurrentSections = 1
+        	var boolean bidirectional = false
+        	Concept:{0..1}:CheckRecurrentSectionOutputType OutputElement > var string type="lastOutput"
+
+
+Concept:{1..1} Lifecycle
+	Concept:{1..1} Server
+		var string name
