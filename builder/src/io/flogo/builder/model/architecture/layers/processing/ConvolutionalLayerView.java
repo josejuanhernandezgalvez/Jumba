@@ -10,6 +10,8 @@ import io.flogo.builder.model.architecture.layers.processing.kernels.strides.Two
 import io.flogo.model.ConvolutionalSection.Block.Convolutional;
 import io.intino.magritte.framework.Layer;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class ConvolutionalLayerView implements ProcessingLayerView {
     public final int inChannels;
     public final int outChannels;
@@ -50,13 +52,21 @@ public class ConvolutionalLayerView implements ProcessingLayerView {
     }
 
     public static ProcessingLayerView from(Layer layer, Output previousOutput) {
-        if (((Convolutional) layer).output() == null)
+        if (output(layer) == null)
             return new ConvolutionalLayerView(
                 ((ThreeDimensionsOutput) previousOutput).z(),
                 ((Convolutional) layer).outChannels().z(),
                 kernel(layer),
                 (ThreeDimensionsOutput) previousOutput);
         return new ConvolutionalLayerView((ThreeDimensionsOutput) previousOutput, thisOutput(layer));
+    }
+
+    private static Object output(Layer layer) {
+        try {
+            return layer.getClass().getDeclaredMethod("output").invoke(layer);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static ConvolutionTwoDimensionsKernel kernel(Layer layer) {

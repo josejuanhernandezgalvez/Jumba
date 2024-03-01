@@ -1,29 +1,53 @@
 dsl Proteo
 
-Concept:{1..1} Evolution
-	var string name
-	has:{0..1} Optimizer
-	has:{0..1} LossFunction
+Concept:{1..1} Laboratory
+	has:{1..1} Optimizer
+	has:{1..1} LossFunction
 	has:{0..1} EarlyStopper
 	has:{0..1} CheckPointSaver
 	Concept:{1..1} Dataset
 		var string name
-		var string path = ""
-		var double train = 0.8
-		var double test = 0.2
 		var integer batchSize = 10
-	Concept:{1..1} Cycle
-		var integer epochs
-		var double fit = 0.8
-		var double val = 0.2
+		Concept:{1..1} Split
+			var double train
+			var double test
+			var double validation
+	Concept:{1..*} Experiment
+		has:{0..1} Optimizer
+		has:{0..1} LossFunction
+		Concept Substitute
+			var string id
+			Concept:{0..1} Layer
+				sub ActivationLayer
+					sub Tanh
+            		sub Sigmoid
+            		sub LogSigmoid
+            		sub ReLU
+            		sub SELU
+            		sub GELU
+            		sub SiLU
+            		sub GLU
+            		sub ELU > var integer alpha=1
+            		sub LeakyReLU > var integer alpha=1
+            		sub Mish
+            	sub ProcessingLayer
+            		sub Normalization
+                    	var double eps = 0.00001
+                    	var double momentum = 0.1
+                    sub Linear
+                    	Concept:{1..1} Output > var integer x
+                    sub Dropout
+            			var double probability=0.8
+
+
 
 Concept Optimizer is component
     sub Adagrad
     	var double lr=0.001
 		var double lrDecay=0
-        var double eps=1e-6
-        var double weightDecay=0.00000000001
-        var double initialAccumulator=0
+		var double eps=1e-6
+		var double weightDecay=0.00000000001
+		var double initialAccumulator=0
 	sub Adadelta
 		var double lr=1.0
 		var double rho=0.9
@@ -98,7 +122,6 @@ Concept LossFunction is component
 
 Concept:{1..1} Architecture
 	has:CheckFirstSectionWithInput:CheckSectionsWithNoInput Section
-	var string name
 Concept Section is component
 	sub LinkSection
 		sub SoftmaxSection
@@ -200,7 +223,7 @@ Concept Section is component
             			sub Linear
             				Concept:{1..1} Output > var integer x
             			sub Dropout
-            				var double probability=0.1
+            				var double probability=0.8
 		sub ResidualSection
 			Concept:{0..1} Input
 				var integer x
@@ -222,6 +245,8 @@ Concept Section is component
                         	sub Sigmoid
                         	sub Tanh
                         	sub Mish
+							sub Activation
+                        		var string id
                         sub ProcessingLayer
                         	sub Dropout
                         		var double probability = 0.8

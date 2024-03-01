@@ -12,7 +12,7 @@ import static io.flogo.builder.model.architecture.layers.ActivationLayerView.Act
 import static io.flogo.builder.model.architecture.layers.ProcessingLayerView.ProcessingLayersViewPackage;
 
 public abstract class StageRenderer {
-    private static Output previousOutput = null;
+    protected static Output previousOutput = null;
 
     protected static void init(Output output) {
         previousOutput = output;

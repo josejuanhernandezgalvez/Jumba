@@ -17,7 +17,7 @@ public class LinearSectionRenderer extends ProcessingSectionRenderer {
     }
 
     private LinearBlockView processEach(LinearSection.Block block) {
-        return new LinearBlockView(block.layerList().stream().map(this::processEach).toList());
+        return new LinearBlockView(block.layerList().stream().map(layerRenderer::process).toList());
     }
 
 }

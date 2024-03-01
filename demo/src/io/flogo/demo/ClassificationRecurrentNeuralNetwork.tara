@@ -1,17 +1,15 @@
 dsl Flogo
 
-Evolution(name = "")
-	Adam(lr=0.1, beta0=0.0001, beta1=0.9999, weightDecay=0.1)
+Laboratory
+	Adam
 	MAELoss
-	LossDrivenEarlyStopper
-	MaxCheckPointSaver
-	Dataset(name = "cats and dogs", train=0.8, test=0.2, batchSize = 10)
-		path = ""
-	Cycle(epochs = 10)
-		fit = 0.7
-		val = 0.3
+	Dataset(name = "cats and dogs", batchSize = 10)
+		Split(train=0.7, test=0.2, validation=0.1)
 
-Architecture(name = "")
+	Experiment e626
+		Adagrad
+
+Architecture
 	RecurrentSection
     	Input(x=1000)
     	Output(x=100)

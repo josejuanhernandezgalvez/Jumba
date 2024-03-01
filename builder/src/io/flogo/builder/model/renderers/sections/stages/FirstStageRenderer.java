@@ -19,7 +19,9 @@ public class FirstStageRenderer extends StageRenderer {
 
     public static ConvolutionalBlockView render(ResidualSection.FirstStage firstStage, ThreeDimensionsOutput previousOutput) {
         if (isDefault(firstStage)) return defaultStage(previousOutput);
-        return createStage((ResidualSection.CustomFirstStage) firstStage, previousOutput);
+        ConvolutionalBlockView stage = createStage((ResidualSection.CustomFirstStage) firstStage, previousOutput);
+        output = (ThreeDimensionsOutput) StageRenderer.previousOutput;
+        return stage;
     }
 
     private static ConvolutionalBlockView createStage(ResidualSection.CustomFirstStage firstStage, ThreeDimensionsOutput previousOutput) {

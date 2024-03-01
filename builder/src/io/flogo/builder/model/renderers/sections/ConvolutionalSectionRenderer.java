@@ -17,7 +17,7 @@ public class ConvolutionalSectionRenderer extends ProcessingSectionRenderer {
     }
 
     private ConvolutionalBlockView processEach(ConvolutionalSection.Block block) {
-        return new ConvolutionalBlockView(block.layerList().stream().map(this::processEach).toList());
+        return new ConvolutionalBlockView(block.layerList().stream().map(layerRenderer::process).toList());
     }
 
 }

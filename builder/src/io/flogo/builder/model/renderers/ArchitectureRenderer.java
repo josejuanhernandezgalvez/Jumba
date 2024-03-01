@@ -23,9 +23,24 @@ public class ArchitectureRenderer implements Renderer {
         return new ArchitectureView(architecture.sectionList().stream().map(s -> getSectionView(input, s)).toList());
     }
 
+    private SectionView getSectionView(AtomicReference<Output> input, Section section) {
+        SectionRenderer sectionRenderer = getRendererFor(section);
+        SectionView sectionView = sectionRenderer.init(input.get()).render(section);
+        input.set(sectionRenderer.sectionOutput());
+        return sectionView;
+    }
+
+    private SectionRenderer getRendererFor(Section section) {
+        try {
+            return (SectionRenderer) Class.forName(getOutputClassNameFor(section)).getConstructors()[0].newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static Output getInputFrom(Section section) {
         try {
-            Object input = section.core$().findNode(getInputClassFor(section)).get(0);
+            Object input = section.core$().findNode(getInputClassFor(section)).getFirst();
             return determineOutputClass(input).getConstructor(List.class).newInstance(getFieldsOf(input));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -44,11 +59,13 @@ public class ArchitectureRenderer implements Renderer {
                 .toList();
     }
 
-    private SectionView getSectionView(AtomicReference<Output> input, Section section) {
-        SectionRenderer sectionRenderer = getRendererFor(section);
-        SectionView sectionView = sectionRenderer.init(input.get()).render(section);
-        input.set(sectionRenderer.sectionOutput());
-        return sectionView;
+    private static Object getValue(Object input, Field field) {
+        try {
+            field.setAccessible(true);
+            return field.get(input);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static List<Class> outputClasses() {
@@ -81,23 +98,6 @@ public class ArchitectureRenderer implements Renderer {
 
     private static String extractFrom(Section section) {
         return section.core$().conceptList().getFirst().toString().split("\\{")[0];
-    }
-
-    private static Object getValue(Object input, Field field) {
-        try {
-            field.setAccessible(true);
-            return field.get(input);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private SectionRenderer getRendererFor(Section section) {
-        try {
-            return (SectionRenderer) Class.forName(getOutputClassNameFor(section)).getConstructors()[0].newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
