@@ -30,6 +30,3 @@ Architecture RegressionLinearNeuralNetwork
 		Block
 			Linear > Output(x=1)
 			ReLU
-
-Lifecycle
-	Server("example server")

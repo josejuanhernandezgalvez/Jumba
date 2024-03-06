@@ -26,7 +26,3 @@ Architecture
 			ReLU
 
 	SoftmaxSection
-
-
-Lifecycle
-	Server("example server")

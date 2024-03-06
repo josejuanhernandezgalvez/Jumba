@@ -51,6 +51,3 @@ Architecture ConvolutionalNeuralNetwork
 			ReLU
 
 	SoftmaxSection
-
-Lifecycle
-	Server("monentia")

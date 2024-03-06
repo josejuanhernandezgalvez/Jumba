@@ -30,6 +30,3 @@ Architecture LinearNeuralNetwork
 			ReLU
 
 	SoftmaxSection
-
-Lifecycle
-	Server("example server")

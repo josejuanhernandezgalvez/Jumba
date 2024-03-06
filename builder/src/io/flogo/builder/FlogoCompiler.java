@@ -2,10 +2,8 @@ package io.flogo.builder;
 
 import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.laboratory.LaboratoryView;
-import io.flogo.builder.model.lifecycle.LifecycleView;
 import io.flogo.builder.model.renderers.architecture.ArchitectureRenderer;
 import io.flogo.builder.model.renderers.laboratory.LaboratoryRenderer;
-import io.flogo.builder.model.renderers.lifecycle.LifecycleRenderer;
 import io.flogo.model.FlogoGraph;
 
 import java.io.File;
@@ -75,9 +73,7 @@ public class FlogoCompiler {
     private void render(FlogoGraph graph, CompilationContext context) throws BlattException, Exception {
         ArchitectureView architectureView = new ArchitectureRenderer().render(graph.architecture());
         LaboratoryView laboratoryView = new LaboratoryRenderer().render(graph.laboratory());
-        LifecycleView lifecycleView = new LifecycleRenderer().render(graph.lifecycle());
         System.out.println(laboratoryView);
-        System.out.println(lifecycleView);
         System.out.println(architectureView.sections());
     }
 }

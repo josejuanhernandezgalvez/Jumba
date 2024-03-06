@@ -17,5 +17,3 @@ Architecture RecurrentNeuralNetwork
 			Normalization
 			Dropout
 
-Lifecycle
-	Server("home")

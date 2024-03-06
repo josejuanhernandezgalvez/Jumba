@@ -398,9 +398,3 @@ Concept Section is component
             	        sub Tanh
             	        sub Mish
 						sub Activation > var string id
-
-
-
-Concept:{1..1} Lifecycle
-	Concept:{1..1} Server
-		var string name

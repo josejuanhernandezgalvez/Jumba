@@ -38,6 +38,3 @@ Architecture Resnet18
 			ReLU
 
 	SoftmaxSection
-
-Lifecycle
-	Server("example server")

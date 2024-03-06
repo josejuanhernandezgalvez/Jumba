@@ -43,8 +43,3 @@ Architecture CustomResnet
 			ReLU
 
 	SoftmaxSection
-
-
-Lifecycle
-	Server("servidor monentia")
-

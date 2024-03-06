@@ -54,6 +54,3 @@ Architecture VGG16
 			ReLU
 
 	SoftmaxSection
-
-Lifecycle
-	Server("example server")
