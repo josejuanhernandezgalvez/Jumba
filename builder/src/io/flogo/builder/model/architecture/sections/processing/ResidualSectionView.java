@@ -1,27 +1,31 @@
 package io.flogo.builder.model.architecture.sections.processing;
 
 import io.flogo.builder.model.architecture.BlockView;
+import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.SectionView;
-import io.flogo.builder.model.architecture.blocks.processing.ConvolutionalBlockView;
-import io.flogo.builder.model.architecture.blocks.processing.residual.ResidualBlockView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResidualSectionView implements SectionView {
-    public final ConvolutionalBlockView firstStage;
-    public final List<ResidualBlockView> blockViews;
-    public final ConvolutionalBlockView finalStage;
+    public final BlockView firstStage;
+    public final List<BlockView> blockViews;
+    public final BlockView lastStage;
 
 
-    public ResidualSectionView(ConvolutionalBlockView firstStage, List<ResidualBlockView> blockViews, ConvolutionalBlockView finalStage) {
+    public ResidualSectionView(BlockView firstStage, List<BlockView> blockViews, BlockView lastStage) {
         this.firstStage = firstStage;
         this.blockViews = blockViews;
-        this.finalStage = finalStage;
+        this.lastStage = lastStage;
     }
 
     @Override
     public List<BlockView> blocks() {
         return new ArrayList<>(blockViews);
+    }
+
+    @Override
+    public OutputView output() {
+        return lastStage.output();
     }
 }

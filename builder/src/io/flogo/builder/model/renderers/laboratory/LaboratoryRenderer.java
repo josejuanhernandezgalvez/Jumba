@@ -1,14 +1,13 @@
-package io.flogo.builder.model.renderers;
+package io.flogo.builder.model.renderers.laboratory;
 
 import io.flogo.builder.model.Renderer;
 import io.flogo.builder.model.laboratory.*;
-import io.flogo.builder.model.renderers.laboratory.ExperimentsRenderer;
-import io.flogo.model.*;
+import io.flogo.model.Laboratory;
 import io.intino.magritte.framework.Layer;
 
 import java.lang.reflect.Method;
 
-public class LaboratoryRenderer implements Renderer {
+public class LaboratoryRenderer implements Renderer<Laboratory, LaboratoryView> {
     private static final LossFunctionRenderer lossFunctionRenderer = new LossFunctionRenderer();
     private static final OptimizerRenderer optimizerRenderer = new OptimizerRenderer();
     private static final CheckPointSaverRenderer checkPointSaverRenderer = new CheckPointSaverRenderer();
@@ -35,7 +34,7 @@ public class LaboratoryRenderer implements Renderer {
         }
     }
 
-    public static abstract class TrainingParameterTraining implements Renderer {
+    public static abstract class ParameterRenderer<U extends ParameterView> implements Renderer<Layer, U> {
         protected ParameterView createViewFor(Layer layer) throws Exception {
             return (ParameterView) getMethodToCreateView(layer).invoke(null, layer);
         }
@@ -51,8 +50,8 @@ public class LaboratoryRenderer implements Renderer {
         abstract String getClassName(Layer layer);
     }
 
-    public static class EarlyStopperRenderer extends TrainingParameterTraining {
-        public EarlyStopperView render(EarlyStopper earlyStopper) throws Exception {
+    public static class EarlyStopperRenderer extends ParameterRenderer<EarlyStopperView> {
+        public EarlyStopperView render(Layer earlyStopper) throws Exception {
             return earlyStopper != null ? (EarlyStopperView) createViewFor(earlyStopper) : null;
         }
 
@@ -62,8 +61,8 @@ public class LaboratoryRenderer implements Renderer {
         }
     }
 
-    public static class LossFunctionRenderer extends TrainingParameterTraining {
-        public LossFunctionView render(LossFunction lossFunction) throws Exception {
+    public static class LossFunctionRenderer extends ParameterRenderer<LossFunctionView> {
+        public LossFunctionView render(Layer lossFunction) throws Exception {
             return (LossFunctionView) createViewFor(lossFunction);
         }
 
@@ -73,8 +72,8 @@ public class LaboratoryRenderer implements Renderer {
         }
     }
 
-    public static class OptimizerRenderer extends TrainingParameterTraining {
-        public OptimizerView render(Optimizer optimizer) throws Exception {
+    public static class OptimizerRenderer extends ParameterRenderer<OptimizerView> {
+        public OptimizerView render(Layer optimizer) throws Exception {
             return (OptimizerView) createViewFor(optimizer);
         }
 
@@ -84,8 +83,8 @@ public class LaboratoryRenderer implements Renderer {
         }
     }
 
-    public static class DatasetRenderer extends TrainingParameterTraining {
-        public DatasetView render(Laboratory.Dataset dataset) throws Exception {
+    public static class DatasetRenderer extends ParameterRenderer<DatasetView> {
+        public DatasetView render(Layer dataset) throws Exception {
             return (DatasetView) createViewFor(dataset);
         }
 
@@ -95,8 +94,8 @@ public class LaboratoryRenderer implements Renderer {
         }
     }
 
-    public static class CheckPointSaverRenderer extends TrainingParameterTraining {
-        public CheckPointSaverView render(CheckPointSaver checkPointSaver) throws Exception {
+    public static class CheckPointSaverRenderer extends ParameterRenderer<CheckPointSaverView> {
+        public CheckPointSaverView render(Layer checkPointSaver) throws Exception {
             return checkPointSaver != null ? (CheckPointSaverView) createViewFor(checkPointSaver) : null;
         }
 

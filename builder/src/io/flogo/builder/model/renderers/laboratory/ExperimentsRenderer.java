@@ -1,6 +1,5 @@
 package io.flogo.builder.model.renderers.laboratory;
 
-import io.flogo.builder.model.Renderer;
 import io.flogo.builder.model.laboratory.ExperimentView;
 import io.flogo.builder.model.laboratory.LossFunctionView;
 import io.flogo.builder.model.laboratory.OptimizerView;
@@ -10,9 +9,10 @@ import io.flogo.model.Laboratory.Experiment.Substitute;
 
 import java.util.List;
 
-import static io.flogo.builder.model.renderers.LaboratoryRenderer.*;
+import static io.flogo.builder.model.renderers.laboratory.LaboratoryRenderer.LossFunctionRenderer;
+import static io.flogo.builder.model.renderers.laboratory.LaboratoryRenderer.OptimizerRenderer;
 
-public class ExperimentsRenderer implements Renderer {
+public class ExperimentsRenderer {
     private final ExperimentRenderer experimentRenderer;
 
     public ExperimentsRenderer(LossFunctionRenderer lossFunctionRenderer, OptimizerRenderer optimizerRenderer) {
@@ -57,7 +57,8 @@ public class ExperimentsRenderer implements Renderer {
                 return experiment.optimizer() == null ? optimizerView : optimizerRenderer.render(experiment.optimizer());
             } catch (Exception e) {
                 throw new RuntimeException(e);
-            }    }
+            }
+        }
 
         private LossFunctionView lossFunctionView(Laboratory.Experiment experiment, LossFunctionView lossFunctionView) {
             try {
@@ -77,7 +78,6 @@ public class ExperimentsRenderer implements Renderer {
             }
         }
     }
-
 
 
 }

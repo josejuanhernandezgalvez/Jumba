@@ -1,8 +1,8 @@
 package io.flogo.builder.model.laboratory.optimizers;
 
+import io.flogo.builder.model.laboratory.OptimizerView;
 import io.flogo.model.AMSGrad;
 import io.flogo.model.Optimizer;
-import io.flogo.builder.model.laboratory.OptimizerView;
 
 public class AMSGradView implements OptimizerView {
     public final double learningRate;
@@ -19,8 +19,8 @@ public class AMSGradView implements OptimizerView {
 
     public static OptimizerView from(Optimizer optimizer) {
         return new AdamView(((AMSGrad) optimizer).lr(),
-                            ((AMSGrad) optimizer).beta0(),
-                            ((AMSGrad) optimizer).beta1(),
-                            ((AMSGrad) optimizer).weightDecay());
+                ((AMSGrad) optimizer).beta0(),
+                ((AMSGrad) optimizer).beta1(),
+                ((AMSGrad) optimizer).weightDecay());
     }
 }

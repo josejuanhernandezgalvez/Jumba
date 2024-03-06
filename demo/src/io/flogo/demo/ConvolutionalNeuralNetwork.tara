@@ -21,12 +21,20 @@ Architecture ConvolutionalNeuralNetwork
 					Padding(x=0, y=0)
 				OutChannels(z = 10)
 			Normalization(eps=0.0001, momentum=0.1)
-			MaxPool > Output(x=24, y=24)
+			MaxPool
+				Kernel
+					Size(x=2, y=2)
+                	Stride(x=2, y=2)
+                	Padding(x=2, y=2)
 			ReLU
 		Block
 			Convolutional > Output(x=22, y=22, z=16)
 			Normalization(eps=0.0001, momentum=0.1)
-        	MaxPool > Output(x=10, y=10)
+        	AvgPool
+        		Kernel
+					Size(x=2, y=2)
+					Stride(x=2, y=2)
+					Padding(x=2, y=2)
 			ReLU
 
 	FlattenSection

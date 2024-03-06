@@ -4,4 +4,7 @@ import java.util.List;
 
 public interface SectionView {
     List<BlockView> blocks();
+
+    OutputView output();
+
 }

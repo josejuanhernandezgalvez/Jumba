@@ -12,9 +12,10 @@ Laboratory
 Architecture RecurrentNeuralNetwork
 	RecurrentSection
 		Input(x=1000)
-		Output(x=10)
-		Type("LSTM")
-    	OutputElement("lastOutput")
+		Block
+			LSTM > Output(x=10)
+			Normalization
+			Dropout
 
 Lifecycle
-	Server("example server")
+	Server("home")

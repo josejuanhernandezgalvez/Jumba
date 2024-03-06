@@ -1,8 +1,10 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
-public interface Kernel  {
+public interface Kernel {
     Size size();
+
     Stride stride();
+
     Padding padding();
 
     interface Size {
@@ -11,6 +13,6 @@ public interface Kernel  {
     interface Stride {
     }
 
-    interface Padding{
+    interface Padding {
     }
 }

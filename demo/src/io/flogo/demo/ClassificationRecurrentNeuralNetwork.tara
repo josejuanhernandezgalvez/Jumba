@@ -12,9 +12,10 @@ Laboratory
 Architecture
 	RecurrentSection
     	Input(x=1000)
-    	Output(x=100)
-    	Type("GRU")
-    	OutputElement("lastOutput")
+    	Block
+			GRU > Output(x=100)
+
+	FlattenSection
 
 	LinearSection
 		Block
@@ -25,6 +26,7 @@ Architecture
 			ReLU
 
 	SoftmaxSection
+
 
 Lifecycle
 	Server("example server")

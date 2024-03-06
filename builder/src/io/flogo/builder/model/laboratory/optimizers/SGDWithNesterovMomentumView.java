@@ -1,7 +1,7 @@
 package io.flogo.builder.model.laboratory.optimizers;
 
-import io.flogo.model.Optimizer;
 import io.flogo.builder.model.laboratory.OptimizerView;
+import io.flogo.model.Optimizer;
 import io.flogo.model.SGDWithNesterovMomentum;
 
 public class SGDWithNesterovMomentumView implements OptimizerView {
@@ -20,8 +20,8 @@ public class SGDWithNesterovMomentumView implements OptimizerView {
 
     public static OptimizerView from(Optimizer optimizer) {
         return new SGDWithNesterovMomentumView(((SGDWithNesterovMomentum) optimizer).lr(),
-                                           ((SGDWithNesterovMomentum) optimizer).momentum(),
-                                           ((SGDWithNesterovMomentum) optimizer).momentumDecay(),
-                                           ((SGDWithNesterovMomentum) optimizer).weightDecay());
+                ((SGDWithNesterovMomentum) optimizer).momentum(),
+                ((SGDWithNesterovMomentum) optimizer).momentumDecay(),
+                ((SGDWithNesterovMomentum) optimizer).weightDecay());
     }
 }

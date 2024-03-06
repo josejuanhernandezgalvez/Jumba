@@ -1,18 +1,26 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
-import io.flogo.model.LinearSection;
-import io.flogo.builder.model.architecture.Output;
+import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
-import io.flogo.builder.model.architecture.layers.output.OneDimensionOutput;
+import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
+import io.flogo.model.LinearSection;
 import io.intino.magritte.framework.Layer;
 
-public record LinearLayerView(OneDimensionOutput previousLayerOutput, OneDimensionOutput thisLayerOutput) implements ProcessingLayerView {
-    public static ProcessingLayerView from(Layer layer, Output previousOutput) {
-        return new LinearLayerView((OneDimensionOutput) previousOutput, getOutputFor(layer));
+public final class LinearLayerView implements ProcessingLayerView {
+    public final OneDimensionOutputView previousLayerOutput;
+    public final OneDimensionOutputView thisLayerOutput;
+
+    public LinearLayerView(OneDimensionOutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput) {
+        this.previousLayerOutput = previousLayerOutput;
+        this.thisLayerOutput = thisLayerOutput;
     }
 
-    private static OneDimensionOutput getOutputFor(Layer layer) {
-        return new OneDimensionOutput(getX((LinearSection.Block.Linear) layer));
+    public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
+        return new LinearLayerView((OneDimensionOutputView) previousOutput, getOutputFor(layer));
+    }
+
+    private static OneDimensionOutputView getOutputFor(Layer layer) {
+        return new OneDimensionOutputView(getX((LinearSection.Block.Linear) layer));
     }
 
     private static int getX(LinearSection.Block.Linear layer) {
@@ -20,7 +28,7 @@ public record LinearLayerView(OneDimensionOutput previousLayerOutput, OneDimensi
     }
 
     @Override
-    public Output getLayerOutput() {
+    public OutputView getOutputView() {
         return thisLayerOutput;
     }
 }

@@ -1,7 +1,7 @@
 package io.flogo.builder.model.laboratory.earlystoppers;
 
-import io.flogo.model.EarlyStopper;
 import io.flogo.builder.model.laboratory.EarlyStopperView;
+import io.flogo.model.EarlyStopper;
 import io.flogo.model.LossDrivenEarlyStopper;
 
 public class LossDrivenEarlyStopperView implements EarlyStopperView {
@@ -16,6 +16,6 @@ public class LossDrivenEarlyStopperView implements EarlyStopperView {
     public static LossDrivenEarlyStopperView from(EarlyStopper stopper) {
         LossDrivenEarlyStopper lossDrivenEarlyStopper = (LossDrivenEarlyStopper) stopper;
         return new LossDrivenEarlyStopperView(lossDrivenEarlyStopper.patience(),
-                                              lossDrivenEarlyStopper.threshold());
+                lossDrivenEarlyStopper.threshold());
     }
 }

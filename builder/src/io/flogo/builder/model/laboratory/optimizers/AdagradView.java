@@ -1,8 +1,8 @@
 package io.flogo.builder.model.laboratory.optimizers;
 
+import io.flogo.builder.model.laboratory.OptimizerView;
 import io.flogo.model.Adagrad;
 import io.flogo.model.Optimizer;
-import io.flogo.builder.model.laboratory.OptimizerView;
 
 public class AdagradView implements OptimizerView {
     public final double learningRate;
@@ -22,9 +22,9 @@ public class AdagradView implements OptimizerView {
 
     public static OptimizerView from(Optimizer optimizer) {
         return new AdagradView(((Adagrad) optimizer).lr(),
-                               ((Adagrad) optimizer).lrDecay(),
-                               ((Adagrad) optimizer).eps(),
-                               ((Adagrad) optimizer).weightDecay(),
-                               ((Adagrad) optimizer).initialAccumulator());
+                ((Adagrad) optimizer).lrDecay(),
+                ((Adagrad) optimizer).eps(),
+                ((Adagrad) optimizer).weightDecay(),
+                ((Adagrad) optimizer).initialAccumulator());
     }
 }

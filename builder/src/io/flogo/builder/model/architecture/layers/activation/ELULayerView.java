@@ -1,13 +1,23 @@
 package io.flogo.builder.model.architecture.layers.activation;
 
+import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
 import io.intino.magritte.framework.Layer;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
-public record ELULayerView(int alpha) implements ActivationLayerView {
-    public static ActivationLayerView from(Layer layer) {
-        return new ELULayerView(getAlphaFrom(layer));
+public final class ELULayerView implements ActivationLayerView {
+    public final int alpha;
+    public final OutputView outputView;
+
+    public ELULayerView(int alpha, OutputView outputView) {
+        this.alpha = alpha;
+        this.outputView = outputView;
+    }
+
+    public static ActivationLayerView from(Layer layer, OutputView outputView) {
+        return new ELULayerView(getAlphaFrom(layer), outputView);
     }
 
     private static int getAlphaFrom(Layer layer) {
@@ -19,4 +29,31 @@ public record ELULayerView(int alpha) implements ActivationLayerView {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public OutputView getOutputView() {
+        return outputView;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (ELULayerView) obj;
+        return this.alpha == that.alpha &&
+                Objects.equals(this.outputView, that.outputView);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(alpha, outputView);
+    }
+
+    @Override
+    public String toString() {
+        return "ELULayerView[" +
+                "alpha=" + alpha + ", " +
+                "outputView=" + outputView + ']';
+    }
+
 }

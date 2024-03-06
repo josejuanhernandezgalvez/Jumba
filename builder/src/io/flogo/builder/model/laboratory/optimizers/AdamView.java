@@ -1,8 +1,8 @@
 package io.flogo.builder.model.laboratory.optimizers;
 
+import io.flogo.builder.model.laboratory.OptimizerView;
 import io.flogo.model.Adam;
 import io.flogo.model.Optimizer;
-import io.flogo.builder.model.laboratory.OptimizerView;
 
 public class AdamView implements OptimizerView {
     public final double learningRate;
@@ -19,8 +19,8 @@ public class AdamView implements OptimizerView {
 
     public static OptimizerView from(Optimizer optimizer) {
         return new AdamView(((Adam) optimizer).lr(),
-                            ((Adam) optimizer).beta0(),
-                            ((Adam) optimizer).beta1(),
-                            ((Adam) optimizer).weightDecay());
+                ((Adam) optimizer).beta0(),
+                ((Adam) optimizer).beta1(),
+                ((Adam) optimizer).weightDecay());
     }
 }

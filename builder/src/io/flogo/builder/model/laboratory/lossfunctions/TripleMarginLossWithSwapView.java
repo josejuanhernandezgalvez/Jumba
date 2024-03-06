@@ -1,8 +1,8 @@
 package io.flogo.builder.model.laboratory.lossfunctions;
 
+import io.flogo.builder.model.laboratory.LossFunctionView;
 import io.flogo.model.LossFunction;
 import io.flogo.model.TripletMarginLossWithSwap;
-import io.flogo.builder.model.laboratory.LossFunctionView;
 
 public class TripleMarginLossWithSwapView {
     public final double margin;
@@ -17,7 +17,7 @@ public class TripleMarginLossWithSwapView {
 
     public static LossFunctionView from(LossFunction lossFunction) {
         return new TripletMarginLossView(((TripletMarginLossWithSwap) lossFunction).margin(),
-                                         ((TripletMarginLossWithSwap) lossFunction).normDegree(),
-                                         ((TripletMarginLossWithSwap) lossFunction).eps());
+                ((TripletMarginLossWithSwap) lossFunction).normDegree(),
+                ((TripletMarginLossWithSwap) lossFunction).eps());
     }
 }

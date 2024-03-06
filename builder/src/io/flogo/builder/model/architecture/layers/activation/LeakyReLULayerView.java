@@ -1,13 +1,22 @@
 package io.flogo.builder.model.architecture.layers.activation;
 
+import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
 import io.intino.magritte.framework.Layer;
 
 import java.lang.reflect.Field;
 
-public record LeakyReLULayerView(int alpha) implements ActivationLayerView {
-    public static ActivationLayerView from(Layer layer) {
-        return new LeakyReLULayerView(getAlphaFrom(layer));
+public final class LeakyReLULayerView implements ActivationLayerView {
+    public final int alpha;
+    public final OutputView outputView;
+
+    public LeakyReLULayerView(int alpha, OutputView outputView) {
+        this.alpha = alpha;
+        this.outputView = outputView;
+    }
+
+    public static ActivationLayerView from(Layer layer, OutputView outputView) {
+        return new LeakyReLULayerView(getAlphaFrom(layer), outputView);
     }
 
     private static int getAlphaFrom(Layer layer) {
@@ -18,5 +27,10 @@ public record LeakyReLULayerView(int alpha) implements ActivationLayerView {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public OutputView getOutputView() {
+        return outputView;
     }
 }

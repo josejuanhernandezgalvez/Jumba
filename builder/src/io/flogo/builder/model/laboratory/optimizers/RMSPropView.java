@@ -1,8 +1,8 @@
 package io.flogo.builder.model.laboratory.optimizers;
 
+import io.flogo.builder.model.laboratory.OptimizerView;
 import io.flogo.model.Optimizer;
 import io.flogo.model.RMSProp;
-import io.flogo.builder.model.laboratory.OptimizerView;
 
 public class RMSPropView implements OptimizerView {
     public final double learningRate;
@@ -21,9 +21,9 @@ public class RMSPropView implements OptimizerView {
 
     public static OptimizerView from(Optimizer optimizer) {
         return new RMSPropView(((RMSProp) optimizer).lr(),
-                               ((RMSProp) optimizer).momentum(),
-                               ((RMSProp) optimizer).alpha(),
-                               ((RMSProp) optimizer).eps(),
-                               ((RMSProp) optimizer).weightDecay());
+                ((RMSProp) optimizer).momentum(),
+                ((RMSProp) optimizer).alpha(),
+                ((RMSProp) optimizer).eps(),
+                ((RMSProp) optimizer).weightDecay());
     }
 }

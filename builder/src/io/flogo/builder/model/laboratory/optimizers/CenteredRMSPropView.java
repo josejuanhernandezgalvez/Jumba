@@ -1,8 +1,8 @@
 package io.flogo.builder.model.laboratory.optimizers;
 
+import io.flogo.builder.model.laboratory.OptimizerView;
 import io.flogo.model.CenteredRMSProp;
 import io.flogo.model.Optimizer;
-import io.flogo.builder.model.laboratory.OptimizerView;
 
 public class CenteredRMSPropView {
     public final double learningRate;
@@ -21,10 +21,10 @@ public class CenteredRMSPropView {
 
     public static OptimizerView from(Optimizer optimizer) {
         return new RMSPropView(((CenteredRMSProp) optimizer).lr(),
-                               ((CenteredRMSProp) optimizer).momentum(),
-                               ((CenteredRMSProp) optimizer).alpha(),
-                               ((CenteredRMSProp) optimizer).eps(),
-                               ((CenteredRMSProp) optimizer).weightDecay());
+                ((CenteredRMSProp) optimizer).momentum(),
+                ((CenteredRMSProp) optimizer).alpha(),
+                ((CenteredRMSProp) optimizer).eps(),
+                ((CenteredRMSProp) optimizer).weightDecay());
 
     }
 }

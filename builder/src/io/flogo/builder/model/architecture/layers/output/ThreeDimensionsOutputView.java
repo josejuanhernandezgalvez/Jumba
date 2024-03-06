@@ -1,41 +1,41 @@
 package io.flogo.builder.model.architecture.layers.output;
 
+import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.model.ConvolutionalSection;
-import io.flogo.builder.model.architecture.Output;
 
 import java.util.List;
 import java.util.Objects;
 
-public final class ThreeDimensionsOutput implements Output {
+public final class ThreeDimensionsOutputView implements OutputView {
     private final int x;
     private final int y;
     private final int z;
 
-    public ThreeDimensionsOutput(int x, int y, int z) {
+    public ThreeDimensionsOutputView(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public ThreeDimensionsOutput(List<Object> objects) {
+    public ThreeDimensionsOutputView(List<Object> objects) {
         this.x = (int) objects.get(0);
         this.y = (int) objects.get(1);
         this.z = (int) objects.get(2);
     }
 
-    public ThreeDimensionsOutput(ConvolutionalSection.Block.Convolutional.Output output) {
+    public ThreeDimensionsOutputView(ConvolutionalSection.Block.Convolutional.Output output) {
         this.x = output.x();
         this.y = output.y();
         this.z = output.z();
     }
 
-    public ThreeDimensionsOutput(ConvolutionalSection.Block.MaxPool.Output output, int z) {
+    public ThreeDimensionsOutputView(ConvolutionalSection.Block.MaxPool.Output output, int z) {
         this.x = output.x();
         this.y = output.y();
         this.z = z;
     }
 
-    public ThreeDimensionsOutput(ConvolutionalSection.Block.AvgPool.Output output, int z) {
+    public ThreeDimensionsOutputView(ConvolutionalSection.Block.AvgPool.Output output, int z) {
         this.x = output.x();
         this.y = output.y();
         this.z = z;
@@ -62,7 +62,7 @@ public final class ThreeDimensionsOutput implements Output {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ThreeDimensionsOutput) obj;
+        var that = (ThreeDimensionsOutputView) obj;
         return this.x == that.x &&
                 this.y == that.y &&
                 this.z == that.z;

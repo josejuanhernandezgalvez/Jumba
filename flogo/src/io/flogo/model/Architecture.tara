@@ -172,17 +172,15 @@ Concept Section is component
                         			var integer x
                         			var integer y
                         		Concept:{0..1} Kernel
-                        			Concept Size
+                        			Concept:{1..1} Size
                         				var integer x
                         				var integer y
-                        			Concept Stride
+                        			Concept:{1..1} Stride
                         				var integer x
                         				var integer y
-                        			Concept Padding
+                        			Concept:{1..1} Padding
                         				var integer x
                         				var integer y
-								Concept:{0..1} OutChannels
-									var integer z
                         	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
                             	Concept:{0..1} Output
                                 	var integer x
@@ -197,8 +195,6 @@ Concept Section is component
                         			Concept:{1..1} Padding
                         				var integer x
                         				var integer y
-								Concept:{0..1} OutChannels
-									var integer z
 						sub Normalization
 							var double eps = 0.00001
 							var double momentum = 0.1
@@ -267,8 +263,8 @@ Concept Section is component
                             			var integer y
 								Concept:{0..1} OutChannels
 									var integer z
-                            sub:CheckIsDefinedEitherOutputOrKernel Pool
-                            	sub MaxPool
+                            sub Pool
+                            	sub:CheckIsDefinedEitherOutputOrKernel MaxPool
                             		Concept:{0..1} Output
                             			var integer x
                             			var integer y
@@ -282,8 +278,6 @@ Concept Section is component
                             			Concept:{1..1} Padding
                             				var integer x
                             				var integer y
-									Concept:{0..1} OutChannels
-										var integer z
                             	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
                                 	Concept:{0..1} Output
                                     	var integer x
@@ -298,8 +292,6 @@ Concept Section is component
                             			Concept:{1..1} Padding
                             				var integer x
                             				var integer y
-									Concept:{0..1} OutChannels
-										var integer z
                         	sub Normalization
                         		var double eps = 0.00001
                         		var double momentum = 0.1
@@ -357,8 +349,6 @@ Concept Section is component
                             			Concept:{1..1} Padding
                             				var integer x
                             				var integer y
-									Concept:{0..1} OutChannels
-										var integer z
                             	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
                                 	Concept:{0..1} Output
                                     	var integer x
@@ -373,20 +363,42 @@ Concept Section is component
                             			Concept:{1..1} Padding
                             				var integer x
                             				var integer y
-									Concept:{0..1} OutChannels
-										var integer z
                         	sub Normalization
                         		var double eps = 0.00001
                         		var double momentum = 0.1
         sub RecurrentSection
-        	Concept:{1..1} Input
-        		var integer x
-        	Concept:{1..1} Output
-        		var integer x
-        	Concept:{0..1}:CheckRecurrentSectionType Type > var string type="LSTM"
-        	var integer stackedRecurrentSections = 1
-        	var boolean bidirectional = false
-        	Concept:{0..1}:CheckRecurrentSectionOutputType OutputElement > var string type="lastOutput"
+			Concept:{0..1} Input
+            	var integer x
+			Concept:{1..*} Block
+        		Concept:{1..*} Layer
+					sub ProcessingLayer
+        				sub Recurrent
+        					Concept:{0..1}:CheckRecurrentSectionOutputType OutputElement > var string type="lastOutput"
+        					var integer stackedRecurrentSections = 1
+        					var boolean bidirectional = false
+        					Concept:{1..1} Output > var integer x
+        					sub LSTM
+        					sub GRU
+        					sub RNN
+            	        sub Dropout
+            	        	var double probability = 0.8
+            	        sub Normalization
+            	            var double eps = 0.00001
+            	            var double momentum = 0.1
+            	    sub ActivationLayer
+            	        sub ReLU
+            	        sub ELU > var integer alpha=1
+            	        sub SELU
+            	        sub GELU
+            	        sub SiLU
+            	        sub GLU
+            	        sub LeakyReLU > var integer alpha=1
+            	        sub LogSigmoid
+            	        sub Sigmoid
+            	        sub Tanh
+            	        sub Mish
+						sub Activation > var string id
+
 
 
 Concept:{1..1} Lifecycle

@@ -1,14 +1,17 @@
-package io.flogo.builder.model.renderers;
+package io.flogo.builder.model.renderers.lifecycle;
 
 import io.flogo.builder.model.Renderer;
 import io.flogo.builder.model.lifecycle.LifecycleView;
 import io.flogo.builder.model.lifecycle.ServerView;
 import io.flogo.model.Lifecycle;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
-public class LifecycleRenderer implements Renderer {
+public class LifecycleRenderer implements Renderer<Lifecycle, LifecycleView> {
     private final ServerRenderer serverRenderer;
 
     public LifecycleRenderer() {
@@ -27,7 +30,7 @@ public class LifecycleRenderer implements Renderer {
             return verified(server);
         }
 
-        private ServerView verified(Lifecycle.Server server) throws RuntimeException{
+        private ServerView verified(Lifecycle.Server server) throws RuntimeException {
             if (!serversFile().exists()) throw new RuntimeException("Server:" + server.name() + ", does not exist");
             return read(serversFile(), server.name());
         }

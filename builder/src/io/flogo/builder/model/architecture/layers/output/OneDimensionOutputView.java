@@ -1,18 +1,18 @@
 package io.flogo.builder.model.architecture.layers.output;
 
-import io.flogo.builder.model.architecture.Output;
+import io.flogo.builder.model.architecture.OutputView;
 
 import java.util.List;
 import java.util.Objects;
 
-public final class OneDimensionOutput implements Output {
+public final class OneDimensionOutputView implements OutputView {
     private final int x;
 
-    public OneDimensionOutput(int x) {
+    public OneDimensionOutputView(int x) {
         this.x = x;
     }
 
-    public OneDimensionOutput(List<Object> objects) {
+    public OneDimensionOutputView(List<Object> objects) {
         this.x = (int) objects.get(0);
     }
 
@@ -29,7 +29,7 @@ public final class OneDimensionOutput implements Output {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (OneDimensionOutput) obj;
+        var that = (OneDimensionOutputView) obj;
         return this.x == that.x;
     }
 

@@ -11,9 +11,8 @@ public class CheckRecurrentSectionOutputType implements NodeRule {
     }
 
     private static boolean isValid(Mogram mogram) {
-        for (String sectionOutput : validSectionOutput) {
+        for (String sectionOutput : validSectionOutput)
             if (sectionOutput.equals(mogram.parameters().get(0).values().get(0))) return true;
-        }
         return false;
     }
 }

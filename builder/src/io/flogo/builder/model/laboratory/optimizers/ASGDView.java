@@ -1,8 +1,8 @@
 package io.flogo.builder.model.laboratory.optimizers;
 
+import io.flogo.builder.model.laboratory.OptimizerView;
 import io.flogo.model.ASGD;
 import io.flogo.model.Optimizer;
-import io.flogo.builder.model.laboratory.OptimizerView;
 
 public class ASGDView implements OptimizerView {
     public final double learningRate;
@@ -22,9 +22,9 @@ public class ASGDView implements OptimizerView {
 
     public static OptimizerView from(Optimizer optimizer) {
         return new ASGDView(((ASGD) optimizer).lr(),
-                            ((ASGD) optimizer).lrDecay(),
-                            ((ASGD) optimizer).alpha(),
-                            ((ASGD) optimizer).pointToStartAverage(),
-                            ((ASGD) optimizer).weightDecay());
+                ((ASGD) optimizer).lrDecay(),
+                ((ASGD) optimizer).alpha(),
+                ((ASGD) optimizer).pointToStartAverage(),
+                ((ASGD) optimizer).weightDecay());
     }
 }
