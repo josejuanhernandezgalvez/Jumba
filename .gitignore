@@ -1,0 +1,8 @@
+flogo/gen/
+out
+.idea/libraries
+.idea/dictionaries
+.idea/codeStyles
+.idea/uiDesigner.xml
+.intino/model
+.intino/artifacts
