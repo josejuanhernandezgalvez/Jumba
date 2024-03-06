@@ -4,7 +4,7 @@ import io.flogo.model.FlogoGraph;
 import io.intino.magritte.builder.StashBuilder;
 import io.intino.magritte.framework.loaders.ClassFinder;
 import io.intino.magritte.framework.stores.ResourcesStore;
-import io.intino.magritte.io.Stash;
+import io.intino.magritte.io.model.Stash;
 import tara.dsl.Flogo;
 
 import java.io.ByteArrayOutputStream;

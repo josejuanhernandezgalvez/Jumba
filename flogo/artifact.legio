@@ -1,7 +1,7 @@
 dsl Legio
 
-Artifact(groupId = "io.flogo", version = "1.0.0") flogo
-	Model(language= "Proteo", version ="4.0.0", sdkVersion= "5.0.0")
+Artifact("io.flogo", "1.0.0") flogo
+	Model("Proteo", "5.0.0", "6.0.0")
 	Code("io.flogo")
 	Package(mode = ModulesAndLibrariesLinkedByManifest)
 
