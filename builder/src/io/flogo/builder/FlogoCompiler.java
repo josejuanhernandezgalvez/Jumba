@@ -1,6 +1,9 @@
 package io.flogo.builder;
 
+import io.flogo.builder.model.ExperimentArchitecture;
+import io.flogo.builder.model.FlogoDTO;
 import io.flogo.builder.model.architecture.ArchitectureView;
+import io.flogo.builder.model.laboratory.ExperimentView;
 import io.flogo.builder.model.laboratory.LaboratoryView;
 import io.flogo.builder.model.renderers.architecture.ArchitectureRenderer;
 import io.flogo.builder.model.renderers.laboratory.LaboratoryRenderer;
@@ -70,9 +73,18 @@ public class FlogoCompiler {
         warningMessages.forEach(w -> collector.add(new CompilerMessage(CompilerMessage.WARNING, w.message(), w.owner() == null ? "null" : w.owner().getAbsolutePath(), w.line(), w.column())));
     }
 
-    private void render(FlogoGraph graph, CompilationContext context) throws BlattException, Exception {
+    private void render(FlogoGraph graph, CompilationContext context) {
         ArchitectureView architectureView = new ArchitectureRenderer().render(graph.architecture());
         LaboratoryView laboratoryView = new LaboratoryRenderer().render(graph.laboratory());
+        for (ExperimentView experimentView : laboratoryView.experimentViews())
+            new FlogoDTO(
+                    architectureView,
+                    laboratoryView,
+                    new ExperimentArchitecture.Builder()
+                            .from(architectureView)
+                            .substitutes(experimentView.substitutes)
+                            .collapse()
+            );
         System.out.println(laboratoryView);
         System.out.println(architectureView.sections());
     }

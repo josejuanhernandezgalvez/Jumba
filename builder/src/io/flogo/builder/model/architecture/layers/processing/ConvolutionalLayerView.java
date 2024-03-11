@@ -3,28 +3,36 @@ package io.flogo.builder.model.architecture.layers.processing;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
+import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
 import io.flogo.builder.model.architecture.layers.processing.kernels.ConvolutionTwoDimensionsKernel;
+import io.flogo.builder.model.architecture.layers.processing.kernels.UndeterminedKernel;
 import io.flogo.builder.model.architecture.layers.processing.kernels.paddings.TwoDimensionsPadding;
 import io.flogo.builder.model.architecture.layers.processing.kernels.size.TwoDimensionsSize;
 import io.flogo.builder.model.architecture.layers.processing.kernels.strides.TwoDimensionsStride;
 import io.flogo.model.ConvolutionalSection.Block.Convolutional;
 import io.intino.magritte.framework.Layer;
 
-public class ConvolutionalLayerView implements ProcessingLayerView {
-    public final ConvolutionTwoDimensionsKernel kernel;
-    public final ThreeDimensionsOutputView previousLayerOutput;
-    public final ThreeDimensionsOutputView thisLayerOutput;
+import static io.flogo.builder.model.architecture.layers.processing.kernels.ConvolutionTwoDimensionsKernel.kernelFor;
 
-    public ConvolutionalLayerView(ThreeDimensionsOutputView previousLayerOutput, ThreeDimensionsOutputView thisLayerOutput) {
-        this.kernel = ConvolutionTwoDimensionsKernel.kernelFor(previousLayerOutput, thisLayerOutput);
+public class ConvolutionalLayerView extends ThreeDimensionLayerView {
+    public final Kernel kernel;
+    public final OutputView previousLayerOutput;
+    public final OutputView thisLayerOutput;
+
+    public ConvolutionalLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = thisLayerOutput;
+        this.kernel = isDetermined(previousLayerOutput) ?
+                kernelFor((ThreeDimensionsOutputView) previousLayerOutput, (ThreeDimensionsOutputView) thisLayerOutput) :
+                new UndeterminedKernel();
     }
 
-    public ConvolutionalLayerView(ConvolutionTwoDimensionsKernel kernel, ThreeDimensionsOutputView previousLayerOutput, int outChannels) {
+    public ConvolutionalLayerView(ConvolutionTwoDimensionsKernel kernel, OutputView previousLayerOutput, int outChannels) {
         this.kernel = kernel;
         this.previousLayerOutput = previousLayerOutput;
-        this.thisLayerOutput = calculateLayerOutput(outChannels);
+        this.thisLayerOutput = isDetermined(previousLayerOutput) ?
+                calculateLayerOutput((ThreeDimensionsOutputView) previousLayerOutput, outChannels) :
+                new UndeterminedOutputView();
     }
 
     @Override
@@ -32,34 +40,14 @@ public class ConvolutionalLayerView implements ProcessingLayerView {
         return thisLayerOutput;
     }
 
-    private ThreeDimensionsOutputView calculateLayerOutput(int outChannels) {
-        return new ThreeDimensionsOutputView(calculateX(), calculateY(), outChannels);
-    }
-
-    private int calculateX() {
-        return (previousLayerOutput.x() - ((TwoDimensionsSize) kernel.size()).xSize() + 1 +
-                2 * ((TwoDimensionsPadding) kernel.padding()).xPaddingFrameSize()) /
-                ((TwoDimensionsStride) kernel.stride()).xStrideStepSize();
-    }
-
-    private int calculateY() {
-        return (previousLayerOutput.y() - ((TwoDimensionsSize) kernel.size()).ySize() + 1 +
-                2 * ((TwoDimensionsPadding) kernel.padding()).yPaddingFrameSize()) /
-                ((TwoDimensionsStride) kernel.stride()).yStrideStepSize();
+    private ThreeDimensionsOutputView calculateLayerOutput(ThreeDimensionsOutputView previousLayerOutput, int outChannels) {
+        return new ThreeDimensionsOutputView(calculateX(previousLayerOutput, this.kernel), calculateY(previousLayerOutput, this.kernel), outChannels);
     }
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
         if (hasNotOutput(layer))
-            return new ConvolutionalLayerView(kernel(layer), cast(previousOutput), outChannels(layer));
-        return new ConvolutionalLayerView(cast(previousOutput), thisOutput(layer));
-    }
-
-    private static boolean hasNotOutput(Layer layer) {
-        try {
-            return layer.getClass().getDeclaredMethod("output").invoke(layer) == null;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+            return new ConvolutionalLayerView(kernel(layer), previousOutput, ((Convolutional) layer).outChannels().z());
+        return new ConvolutionalLayerView(previousOutput, thisOutput(layer));
     }
 
     private static ConvolutionTwoDimensionsKernel kernel(Layer layer) {
@@ -69,14 +57,6 @@ public class ConvolutionalLayerView implements ProcessingLayerView {
                 new TwoDimensionsPadding(((Convolutional) layer).kernel().padding().x(), ((Convolutional) layer).kernel().padding().y()));
     }
 
-    private static ThreeDimensionsOutputView cast(OutputView previousOutput) {
-        return (ThreeDimensionsOutputView) previousOutput;
-    }
-
-    private static int outChannels(Layer layer) {
-        return ((Convolutional) layer).outChannels().z();
-    }
-
     private static ThreeDimensionsOutputView thisOutput(Layer layer) {
         try {
             Object output = layer.getClass().getMethod("output").invoke(layer);
@@ -84,9 +64,5 @@ public class ConvolutionalLayerView implements ProcessingLayerView {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static int getValue(Object output, String argument) throws Exception {
-        return (int) output.getClass().getMethod(argument).invoke(output);
     }
 }

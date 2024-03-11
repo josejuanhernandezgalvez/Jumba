@@ -24,6 +24,7 @@ public abstract class SectionRenderer<U extends SectionView> {
     private static class LayerRenderer {
         private static final String ActivationLayersViewPackage = "io.flogo.builder.model.architecture.layers.activation.";
         private static final String ProcessingLayersViewPackage = "io.flogo.builder.model.architecture.layers.processing.";
+        private static final String LayersViewPackage = "io.flogo.builder.model.architecture.layers.";
 
         public LayerView render(Layer layer, OutputView previousOutput) {
             return layer(layer, previousOutput);
@@ -42,7 +43,7 @@ public abstract class SectionRenderer<U extends SectionView> {
         }
 
         private static String className(Layer layer) {
-            return packageName(layer) + layerName(layer) + "LayerView";
+            return !layer.getClass().getName().endsWith("VLayer") ? packageName(layer) + layerName(layer) + "LayerView" : LayersViewPackage + "VLayerView";
         }
 
         private static String layerName(Layer layer) {

@@ -4,6 +4,7 @@ Concept:{1..1} Laboratory
 	has:{1..1} Optimizer
 	has:{1..1} LossFunction
 	has:{0..1} EarlyStopper
+	has:{1..1} Strategy
 	has:{0..1} CheckPointSaver
 	Concept:{1..1} Dataset
 		var string name
@@ -17,7 +18,7 @@ Concept:{1..1} Laboratory
 		has:{0..1} LossFunction
 		Concept Substitute
 			var string id
-			Concept:{0..1} Layer
+			Concept:{1..1} Layer
 				sub ActivationLayer
 					sub Tanh
             		sub Sigmoid
@@ -38,8 +39,66 @@ Concept:{1..1} Laboratory
                     	Concept:{1..1} Output > var integer x
                     sub Dropout
             			var double probability=0.8
+            		sub:CheckIsDefinedEitherOutputOrKernel Convolutional
+                		Concept:{0..1} Output
+                			var integer x
+                			var integer y
+                			var integer z
+                		Concept:{0..1} Kernel
+                			Concept:{1..1} Size
+                				var integer x
+                				var integer y
+                			Concept:{1..1} Stride
+                				var integer x
+                				var integer y
+                			Concept:{1..1} Padding
+                				var integer x
+                				var integer y
+                		Concept:{0..1} OutChannels
+                			var integer z
+                	sub Pool
+                        sub:CheckIsDefinedEitherOutputOrKernel MaxPool
+                        	Concept:{0..1} Output
+                        		var integer x
+                        		var integer y
+                        	Concept:{0..1} Kernel
+                        		Concept:{1..1} Size
+                        			var integer x
+                        			var integer y
+                        		Concept:{1..1} Stride
+                        			var integer x
+                        			var integer y
+                        		Concept:{1..1} Padding
+                        			var integer x
+                        			var integer y
+                        sub:CheckIsDefinedEitherOutputOrKernel AvgPool
+                        	Concept:{0..1} Output
+                            	var integer x
+                        		var integer y
+                        	Concept:{0..1} Kernel
+                        		Concept:{1..1} Size
+                        			var integer x
+                        			var integer y
+                        		Concept:{1..1} Stride
+                        			var integer x
+                        			var integer y
+                        		Concept:{1..1} Padding
+                        			var integer x
+                        			var integer y
+        				sub Recurrent
+        					Concept:{0..1}:CheckRecurrentSectionOutputType OutputElement > var string type="lastOutput"
+        					var integer stackedRecurrentSections = 1
+        					var boolean bidirectional = false
+        					Concept:{1..1} Output > var integer x
+        					sub LSTM
+        					sub GRU
+        					sub RNN
 
 
+
+Concept Strategy is component
+	sub RegressionStrategy
+	sub ClassificationStrategy
 
 Concept Optimizer is component
     sub Adagrad
@@ -134,6 +193,8 @@ Concept Section is component
 				var integer z
 			Concept:{1..*} Block
 				Concept:{1..*} Layer
+					sub VLayer
+                    	var string id
 					sub ActivationLayer
 						sub Tanh
 						sub Sigmoid
@@ -203,6 +264,8 @@ Concept Section is component
             	var integer x
 			Concept:{1..*} Block
             	Concept:{1..*} Layer
+					sub VLayer
+                    	var string id
             		sub ActivationLayer
             			sub ReLU
             			sub ELU > var integer alpha=1
@@ -220,6 +283,9 @@ Concept Section is component
             				Concept:{1..1} Output > var integer x
             			sub Dropout
             				var double probability=0.8
+						sub Normalization
+                        	var double eps = 0.00001
+                        	var double momentum = 0.1
 		sub ResidualSection
 			Concept:{0..1} Input
 				var integer x
@@ -229,6 +295,8 @@ Concept Section is component
             	sub DefaultFirstStage
             	sub CustomFirstStage
             		Concept:{1..*} Layer
+						sub VLayer
+                    		var string id
                         sub ActivationLayer
                         	sub ReLU
                         	sub ELU > var integer alpha=1
@@ -241,8 +309,6 @@ Concept Section is component
                         	sub Sigmoid
                         	sub Tanh
                         	sub Mish
-							sub Activation
-                        		var string id
                         sub ProcessingLayer
                         	sub Dropout
                         		var double probability = 0.8
@@ -302,6 +368,8 @@ Concept Section is component
             	sub DefaultLastStage
             	sub CustomLastStage
             		Concept:{1..*} Layer
+						sub VLayer
+                    		var string id
                         sub ActivationLayer
                         	sub ReLU
                         	sub ELU > var integer alpha=1
@@ -371,6 +439,8 @@ Concept Section is component
             	var integer x
 			Concept:{1..*} Block
         		Concept:{1..*} Layer
+					sub VLayer
+                    	var string id
 					sub ProcessingLayer
         				sub Recurrent
         					Concept:{0..1}:CheckRecurrentSectionOutputType OutputElement > var string type="lastOutput"
@@ -397,4 +467,3 @@ Concept Section is component
             	        sub Sigmoid
             	        sub Tanh
             	        sub Mish
-						sub Activation > var string id

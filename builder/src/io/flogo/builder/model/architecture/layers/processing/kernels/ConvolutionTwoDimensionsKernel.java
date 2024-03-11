@@ -15,8 +15,7 @@ public record ConvolutionTwoDimensionsKernel(Size size, Stride stride, Padding p
     }
 
     private static Stride strideFor(ThreeDimensionsOutputView previousOutput, ThreeDimensionsOutputView thisOutput) {
-        return new TwoDimensionsStride(1,
-                1);
+        return new TwoDimensionsStride(1, 1);
     }
 
     private static TwoDimensionsSize sizeFor(ThreeDimensionsOutputView previousOutput, ThreeDimensionsOutputView thisOutput) {

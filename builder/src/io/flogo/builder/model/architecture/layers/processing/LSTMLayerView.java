@@ -6,13 +6,13 @@ import io.flogo.model.RecurrentSection;
 import io.intino.magritte.framework.Layer;
 
 public class LSTMLayerView extends RecurrentLayerView {
-    public LSTMLayerView(OneDimensionOutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput, int numLayers, String outputElement, boolean bidirectional) {
+    public LSTMLayerView(OutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput, int numLayers, String outputElement, boolean bidirectional) {
         super(previousLayerOutput, thisLayerOutput, numLayers, outputElement, bidirectional);
     }
 
     public static LSTMLayerView from(Layer layer, OutputView previousOutput) {
         RecurrentSection.Block.LSTM lstm = (RecurrentSection.Block.LSTM) layer;
-        return new LSTMLayerView((OneDimensionOutputView) previousOutput, output(lstm), lstm.stackedRecurrentSections(), outputType(lstm), lstm.bidirectional());
+        return new LSTMLayerView(previousOutput, output(lstm), lstm.stackedRecurrentSections(), outputType(lstm), lstm.bidirectional());
     }
 
     private static String outputType(RecurrentSection.Block.LSTM lstm) {

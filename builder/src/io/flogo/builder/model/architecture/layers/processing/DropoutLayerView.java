@@ -4,8 +4,6 @@ import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
 import io.intino.magritte.framework.Layer;
 
-import java.lang.reflect.InvocationTargetException;
-
 public final class DropoutLayerView implements ProcessingLayerView {
     public final double probability;
     public final OutputView output;

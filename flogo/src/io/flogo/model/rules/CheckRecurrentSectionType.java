@@ -18,6 +18,6 @@ public class CheckRecurrentSectionType implements NodeRule {
         Mogram componentType = null;
         for (Mogram component : mogram.container().components())
             if (component.type().endsWith("Type")) componentType = component;
-        return componentType != null ? (String) componentType.parameters().get(0).values().get(0) : LSTM;
+        return componentType != null ? (String) componentType.parameters().getFirst().values().getFirst() : LSTM;
     }
 }

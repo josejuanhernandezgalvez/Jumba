@@ -3,6 +3,7 @@ dsl Flogo
 Laboratory
 	Adam
 	MAELoss
+	RegressionStrategy
 	Dataset(name = "cats and dogs", batchSize = 10)
 		Split(train=0.7, test=0.2, validation=0.1)
 

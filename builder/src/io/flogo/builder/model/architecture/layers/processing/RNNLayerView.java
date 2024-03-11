@@ -6,13 +6,13 @@ import io.flogo.model.RecurrentSection;
 import io.intino.magritte.framework.Layer;
 
 public class RNNLayerView extends RecurrentLayerView {
-    public RNNLayerView(OneDimensionOutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput, int numLayers, String outputElement, boolean bidirectional) {
+    public RNNLayerView(OutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput, int numLayers, String outputElement, boolean bidirectional) {
         super(previousLayerOutput, thisLayerOutput, numLayers, outputElement, bidirectional);
     }
 
     public static RNNLayerView from(Layer layer, OutputView outputView) {
         RecurrentSection.Block.RNN rnn = (RecurrentSection.Block.RNN) layer;
-        return new RNNLayerView((OneDimensionOutputView) outputView, output(rnn), rnn.stackedRecurrentSections(), outputType(rnn), rnn.bidirectional());
+        return new RNNLayerView(outputView, output(rnn), rnn.stackedRecurrentSections(), outputType(rnn), rnn.bidirectional());
     }
 
     private static OneDimensionOutputView output(RecurrentSection.Block.RNN lstm) {

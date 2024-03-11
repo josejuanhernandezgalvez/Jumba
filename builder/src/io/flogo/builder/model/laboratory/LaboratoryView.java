@@ -4,5 +4,6 @@ import java.util.List;
 
 public record LaboratoryView(LossFunctionView lossFunctionView, OptimizerView optimizerView,
                              CheckPointSaverView checkPointSaverView, EarlyStopperView earlyStopperView,
-                             DatasetView datasetView, List<ExperimentView> experimentViews) {
+                             DatasetView datasetView, List<ExperimentView> experimentViews,
+                             StrategyView strategyView) {
 }

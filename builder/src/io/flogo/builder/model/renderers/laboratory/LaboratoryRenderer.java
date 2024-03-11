@@ -13,6 +13,7 @@ public class LaboratoryRenderer implements Renderer<Laboratory, LaboratoryView> 
     private static final CheckPointSaverRenderer checkPointSaverRenderer = new CheckPointSaverRenderer();
     private static final EarlyStopperRenderer earlyStopperRenderer = new EarlyStopperRenderer();
     private static final DatasetRenderer datasetRenderer = new DatasetRenderer();
+    private static final StrategyRenderer strategyRenderer = new StrategyRenderer();
     private static final ExperimentsRenderer experimentsRenderer = new ExperimentsRenderer(
             lossFunctionRenderer,
             optimizerRenderer);
@@ -27,7 +28,9 @@ public class LaboratoryRenderer implements Renderer<Laboratory, LaboratoryView> 
                     checkPointSaverRenderer.render(laboratory.checkPointSaver()),
                     earlyStopperRenderer.render(laboratory.earlyStopper()),
                     datasetRenderer.render(laboratory.dataset()),
-                    experimentsRenderer.render(laboratory.experimentList(), lossFunctionView, optimizerView)
+                    experimentsRenderer.render(laboratory.experimentList(), lossFunctionView, optimizerView),
+                    strategyRenderer.render(laboratory.strategy())
+
             );
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -102,6 +105,19 @@ public class LaboratoryRenderer implements Renderer<Laboratory, LaboratoryView> 
         @Override
         String getClassName(Layer layer) {
             return CheckPointSaverView.packageRoute + getName(layer);
+        }
+    }
+
+    public static class StrategyRenderer extends ParameterRenderer<StrategyView> {
+
+        @Override
+        public StrategyView render(Layer strategy) throws Exception {
+            return (StrategyView) createViewFor(strategy);
+        }
+
+        @Override
+        String getClassName(Layer layer) {
+            return StrategyView.packageRoute + getName(layer);
         }
     }
 }
