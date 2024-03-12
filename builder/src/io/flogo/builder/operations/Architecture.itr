@@ -1,0 +1,37 @@
+def type(architecture)
+	from implementations.$library.architecture.architecture import $library+FirstUppercase~Architecture as Architecture
+    $section+import...[$NL]
+    $block+import...[$NL]
+    $layer+import...[$NL]
+
+    architecture = (Architecture("$name")
+                        .attach($section...[,$NL])
+end
+
+def type(section) trigger(import)
+    from implementations.$library.architecture.sections.$type+Lowercase import $library+FirstUppercase~$type+CamelCase~Section as $type+CamelCase~Section
+end
+
+def type(section)
+    $type+CamelCase~Section($[
+        $block...[, $NL]
+    $])
+end
+
+def type(block) trigger(import)
+    from implementations.$library.architecture.blocks.$type+Lowercase import $library+FirstUppercase~$type+CamelCase~Block as $type+CamelCase~Block
+end
+
+def type(block)
+    $type+CamelCase~Block($[
+        $layer...[, $NL]
+    $])
+end
+
+def type(layer) trigger(import)
+    from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
+end
+
+def type(layer) attributes()
+    $type~Layer()
+end
