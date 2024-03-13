@@ -6,7 +6,8 @@ dsl-flogo
 module
 demo
 semantic.lib
-$HOME/.m2/repository/io/intino/tara/language/1.4.0/language-1.4.0.jaroutputpath
+$HOME/.m2/repository/io/intino/tara/language/1.4.0/language-1.4.0.jar
+outputpath
 $PROJECT_DIRECTORY/demo/gen
 final_outputpath
 $PROJECT_DIRECTORY/out/production/model/
