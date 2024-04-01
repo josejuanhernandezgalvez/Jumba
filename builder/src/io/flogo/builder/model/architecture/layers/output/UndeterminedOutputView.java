@@ -8,4 +8,9 @@ public class UndeterminedOutputView implements OutputView {
     public int dimensions() {
         return -1;
     }
+
+    @Override
+    public int[] asArray() {
+        return new int[0];
+    }
 }

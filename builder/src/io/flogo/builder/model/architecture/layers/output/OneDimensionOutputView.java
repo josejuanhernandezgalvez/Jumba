@@ -21,6 +21,11 @@ public final class OneDimensionOutputView implements OutputView {
         return 1;
     }
 
+    @Override
+    public int[] asArray() {
+        return new int[]{x};
+    }
+
     public int x() {
         return x;
     }

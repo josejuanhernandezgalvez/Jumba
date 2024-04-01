@@ -46,6 +46,11 @@ public final class ThreeDimensionsOutputView implements OutputView {
         return 3;
     }
 
+    @Override
+    public int[] asArray() {
+        return new int[]{x, y, z};
+    }
+
     public int x() {
         return x;
     }

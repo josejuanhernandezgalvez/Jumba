@@ -36,7 +36,7 @@ public class ArchitectureTest {
                                         new ReLULayerView(new OneDimensionOutputView(1))
                                 ))
                         ))));
-        System.out.println(new ArchitectureRenderer().render(architecture, "pytorch"));
+        System.out.println(new ArchitectureRenderer().render(architecture, "LinearArchitecture", "pytorch"));
     }
 
     @Test
@@ -60,12 +60,13 @@ public class ArchitectureTest {
                                 )),
                                         new BlockView(List.of(
                                                 new LinearLayerView(new OneDimensionOutputView(150), new OneDimensionOutputView(10)),
-                                                new ReLULayerView(new OneDimensionOutputView(10))
+                                                new ReLULayerView(new OneDimensionOutputView(10)),
+                                                new SoftmaxLayerView(new OneDimensionOutputView(10))
                                         )))
                         ),
                         new ClassificationSectionView(new BlockView(List.of(
                                 new SoftmaxLayerView(new OneDimensionOutputView(10))
                         )))));
-        System.out.println(new ArchitectureRenderer().render(architecture, "pytorch"));
+        System.out.println(new ArchitectureRenderer().render(architecture, "ConvolutionalArchitecture", "pytorch"));
     }
 }

@@ -24,6 +24,11 @@ public final class TwoDimensionsOutputView implements OutputView {
         return 2;
     }
 
+    @Override
+    public int[] asArray() {
+        return new int[]{x, y};
+    }
+
     public int x() {
         return x;
     }
