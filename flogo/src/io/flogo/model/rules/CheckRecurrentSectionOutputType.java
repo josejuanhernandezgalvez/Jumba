@@ -1,9 +1,9 @@
 package io.flogo.model.rules;
 
 import io.intino.tara.language.model.Mogram;
-import io.intino.tara.language.model.rules.NodeRule;
+import io.intino.tara.language.model.rules.MogramRule;
 
-public class CheckRecurrentSectionOutputType implements NodeRule {
+public class CheckRecurrentSectionOutputType implements MogramRule {
     private final static String[] validSectionOutput = {"lastOutput", "cellStates", "hiddenStates"};
 
     public boolean accept(Mogram mogram) {

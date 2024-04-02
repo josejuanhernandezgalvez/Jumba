@@ -1,9 +1,9 @@
 package io.flogo.model.rules;
 
 import io.intino.tara.language.model.Mogram;
-import io.intino.tara.language.model.rules.NodeRule;
+import io.intino.tara.language.model.rules.MogramRule;
 
-public class CheckRecurrentSectionType implements NodeRule {
+public class CheckRecurrentSectionType implements MogramRule {
     private static final String[] allowedTypes = {"LSTM", "GRU", "RNN"};
     private static String LSTM = "LSTM";
 

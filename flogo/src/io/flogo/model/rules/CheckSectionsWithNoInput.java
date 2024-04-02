@@ -1,12 +1,12 @@
 package io.flogo.model.rules;
 
 import io.intino.tara.language.model.Mogram;
-import io.intino.tara.language.model.rules.NodeRule;
+import io.intino.tara.language.model.rules.MogramRule;
 
 import java.util.Collection;
 import java.util.List;
 
-public class CheckSectionsWithNoInput implements NodeRule {
+public class CheckSectionsWithNoInput implements MogramRule {
 
     public boolean accept(Mogram mogram) {
 		boolean result = true;

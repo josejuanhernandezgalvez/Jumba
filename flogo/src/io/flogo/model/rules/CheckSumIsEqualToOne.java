@@ -2,9 +2,9 @@ package io.flogo.model.rules;
 
 import io.intino.tara.language.model.Mogram;
 import io.intino.tara.language.model.Parameter;
-import io.intino.tara.language.model.rules.NodeRule;
+import io.intino.tara.language.model.rules.MogramRule;
 
-public class CheckSumIsEqualToOne implements NodeRule {
+public class CheckSumIsEqualToOne implements MogramRule {
 
     public boolean accept(Mogram mogram) {
         double sum = 0;
