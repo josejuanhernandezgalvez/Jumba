@@ -9,8 +9,8 @@ import io.flogo.model.RecurrentSection;
 import io.intino.magritte.framework.Layer;
 
 public class RNNLayerView extends RecurrentLayerView {
-    public RNNLayerView(OutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput, int numLayers, String outputElement, boolean bidirectional) {
-        super(previousLayerOutput, thisLayerOutput, numLayers, outputElement, bidirectional);
+    public RNNLayerView(OutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput, int numLayers, OutputType outputType, boolean bidirectional) {
+        super(previousLayerOutput, thisLayerOutput, numLayers, outputType, bidirectional);
     }
 
     public static RNNLayerView from(Layer layer, OutputView outputView) {
@@ -22,8 +22,8 @@ public class RNNLayerView extends RecurrentLayerView {
         return new OneDimensionOutputView(lstm.output().x());
     }
 
-    private static String outputType(RecurrentSection.Block.RNN rnn) {
-        return rnn.outputElement() != null ? rnn.outputElement().type() : "lastOutput";
+    private static OutputType outputType(RecurrentSection.Block.RNN rnn) {
+        return OutputType.valueOf(rnn.outputType().toString());
     }
 
     @Override

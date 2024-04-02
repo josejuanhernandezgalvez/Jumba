@@ -89,13 +89,19 @@ Concept:{1..1} Laboratory
                         			var integer x
                         			var integer y
         				sub Recurrent
-        					Concept:{0..1}:CheckRecurrentSectionOutputType OutputElement > var string type="lastOutput"
-        					var integer stackedRecurrentSections = 1
-        					var boolean bidirectional = false
         					Concept:{1..1} Output > var integer x
         					sub LSTM
+        						var integer stackedRecurrentSections = 1
+								var boolean bidirectional = false
+        						var word:{LastHiddenState HiddenStates LastCellState CellStates} outputType
         					sub GRU
+        						var integer stackedRecurrentSections = 1
+								var boolean bidirectional = false
+        						var word:{LastHiddenState HiddenStates} outputType
         					sub RNN
+        						var integer stackedRecurrentSections = 1
+								var boolean bidirectional = false
+        						var word:{LastHiddenState HiddenStates} outputType
 
 
 
@@ -306,13 +312,21 @@ Concept Section is component
                     	var string id
 					sub ProcessingLayer
         				sub Recurrent
-        					Concept:{0..1}:CheckRecurrentSectionOutputType OutputElement > var string type="lastOutput"
-        					var integer stackedRecurrentSections = 1
-        					var boolean bidirectional = false
-        					Concept:{1..1} Output > var integer x
         					sub LSTM
+        						var integer stackedRecurrentSections = 1
+        						var boolean bidirectional = false
+        						var word:{LastHiddenState HiddenStates LastCellState CellStates} outputType
+        						Concept:{1..1} Output > var integer x
         					sub GRU
+        						var integer stackedRecurrentSections = 1
+        						var boolean bidirectional = false
+        						var word:{LastHiddenState HiddenStates} outputType
+        						Concept:{1..1} Output > var integer x
         					sub RNN
+        						var integer stackedRecurrentSections = 1
+        						var boolean bidirectional = false
+        						var word:{LastHiddenState HiddenStates} outputType
+								Concept:{1..1} Output > var integer x
             	        sub Dropout
             	        	var double probability = 0.8
             	        sub BatchNormalization

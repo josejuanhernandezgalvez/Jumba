@@ -18,7 +18,7 @@ Architecture RecurrentNeuralNetwork
 			CustomDownSampling
 
 			VLayer > id = "01"
-			LSTM > Output(x=10)
+			LSTM(outputType=LastHiddenState) > Output(x=10)
 			BatchNormalization
 			Dropout
 

@@ -7,14 +7,18 @@ public abstract class RecurrentLayerView implements LayerView {
     public final OutputView previousLayerOutput;
     public final OutputView thisLayerOutput;
     public final int numLayers;
-    public final String outputElement;
+    public final OutputType outputType;
     public final boolean bidirectional;
 
-    public RecurrentLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int numLayers, String outputElement, boolean bidirectional) {
+    public RecurrentLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int numLayers, OutputType outputType, boolean bidirectional) {
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = thisLayerOutput;
         this.numLayers = numLayers;
-        this.outputElement = outputElement;
+        this.outputType = outputType;
         this.bidirectional = bidirectional;
+    }
+
+    public enum OutputType {
+        LastHiddenState, HiddenStates, CellStates, LastCellState
     }
 }
