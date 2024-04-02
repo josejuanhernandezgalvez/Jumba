@@ -7,15 +7,15 @@ import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
-public class SiLULayerView implements ActivationLayerView {
+public class SoftmaxLayerView implements ActivationLayerView {
     private final OutputView outputView;
 
-    public SiLULayerView(OutputView outputView) {
+    public SoftmaxLayerView(OutputView outputView) {
         this.outputView = outputView;
     }
 
     public static ActivationLayerView from(Layer layer, OutputView outputView) {
-        return new SiLULayerView(outputView);
+        return new SoftmaxLayerView(outputView);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
+import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
 import io.flogo.builder.model.architecture.layers.processing.kernels.ConvolutionTwoDimensionsKernel;
@@ -9,6 +11,7 @@ import io.flogo.builder.model.architecture.layers.processing.kernels.Undetermine
 import io.flogo.builder.model.architecture.layers.processing.kernels.paddings.TwoDimensionsPadding;
 import io.flogo.builder.model.architecture.layers.processing.kernels.size.TwoDimensionsSize;
 import io.flogo.builder.model.architecture.layers.processing.kernels.strides.TwoDimensionsStride;
+import io.flogo.builder.model.laboratory.SubstituteView;
 import io.flogo.model.ConvolutionalSection.Block.Convolutional;
 import io.intino.magritte.framework.Layer;
 
@@ -38,6 +41,16 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     @Override
     public OutputView getOutputView() {
         return thisLayerOutput;
+    }
+
+    @Override
+    public LayerView from(VLayerView vLayerView, SubstituteView substituteViews) {
+        return null;
+    }
+
+    @Override
+    public LayerView from(LayerView previous) {
+        return null;
     }
 
     private ThreeDimensionsOutputView calculateLayerOutput(ThreeDimensionsOutputView previousLayerOutput, int outChannels) {

@@ -1,22 +1,25 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
+import io.flogo.builder.model.architecture.layers.VLayerView;
+import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
-public class NormalizationLayerView implements ProcessingLayerView {
+public class BatchNormalizationLayerView implements ProcessingLayerView {
     public final OutputView output;
     public final double momentum;
     public final double eps;
 
-    public NormalizationLayerView(OutputView output, double momentum, double eps) {
+    public BatchNormalizationLayerView(OutputView output, double momentum, double eps) {
         this.output = output;
         this.momentum = momentum;
         this.eps = eps;
     }
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
-        return new NormalizationLayerView(previousOutput, momentum(layer), eps(layer));
+        return new BatchNormalizationLayerView(previousOutput, momentum(layer), eps(layer));
     }
 
     private static double momentum(Layer layer) {
@@ -38,5 +41,15 @@ public class NormalizationLayerView implements ProcessingLayerView {
     @Override
     public OutputView getOutputView() {
         return output;
+    }
+
+    @Override
+    public LayerView from(VLayerView vLayerView, SubstituteView substituteViews) {
+        return null;
+    }
+
+    @Override
+    public LayerView from(LayerView previous) {
+        return null;
     }
 }

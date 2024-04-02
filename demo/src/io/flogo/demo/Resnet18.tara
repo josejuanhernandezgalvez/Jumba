@@ -12,19 +12,11 @@ Laboratory
 
 
 Architecture Resnet18
-	ResidualSection
+	ConvolutionalSection
 		Input(224, 224, 3)
-		DefaultFirstStage
-		ResidualLayer
-			repeat=2
-			expansion=1
-		ResidualLayer
-        	repeat=3
-        	expansion=1
-        ResidualLayer
-        	repeat=2
-        	expansion=1
-        DefaultLastStage
+		Block
+			Convolutional
+
     FlattenSection
 
     LinearSection
@@ -37,5 +29,4 @@ Architecture Resnet18
 		Block
 			Linear > Output(20)
 			ReLU
-
-	SoftmaxSection
+			Softmax

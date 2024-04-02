@@ -131,7 +131,7 @@ public class ArchitectureRenderer {
             case DropoutLayerView dropout ->
                     builder.add("probability", dropout.probability)
                             .add("package", "regularizations");
-            case NormalizationLayerView batchNormalization ->
+            case BatchNormalizationLayerView batchNormalization ->
                     builder.add("package", "regularizations")
                             .add("num_features", dimensionOf(batchNormalization.output.asArray()))
                             .add("eps", batchNormalization.eps)

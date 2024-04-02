@@ -31,10 +31,13 @@ Concept:{1..1} Laboratory
             		sub ELU > var integer alpha=1
             		sub LeakyReLU > var integer alpha=1
             		sub Mish
+            		sub Softmax
             	sub ProcessingLayer
-            		sub Normalization
+            		sub BatchNormalization
                     	var double eps = 0.00001
                     	var double momentum = 0.1
+					sub LayerNormalization
+						var double eps=0.00001
                     sub Linear
                     	Concept:{1..1} Output > var integer x
                     sub Dropout
@@ -183,7 +186,6 @@ Concept:{1..1} Architecture
 	has:CheckFirstSectionWithInput:CheckSectionsWithNoInput Section
 Concept Section is component
 	sub LinkSection
-		sub SoftmaxSection
 		sub FlattenSection
 	sub ProcessingSection
 		sub ConvolutionalSection
@@ -207,6 +209,7 @@ Concept Section is component
 						sub ELU > var integer alpha=1
 						sub LeakyReLU > var integer alpha=1
 						sub Mish
+						sub Softmax
 					sub ProcessingLayer
 						sub Dropout
 							var double probability = 0.8
@@ -256,9 +259,11 @@ Concept Section is component
                         			Concept:{1..1} Padding
                         				var integer x
                         				var integer y
-						sub Normalization
+						sub BatchNormalization
 							var double eps = 0.00001
 							var double momentum = 0.1
+						sub LayerNormalization
+							var double eps=0.00001
 		sub LinearSection
 			Concept:{0..1} Input
             	var integer x
@@ -278,166 +283,24 @@ Concept Section is component
             			sub Sigmoid
             			sub Tanh
             			sub Mish
+            			sub Softmax
             		sub ProcessingLayer
             			sub Linear
             				Concept:{1..1} Output > var integer x
             			sub Dropout
             				var double probability=0.8
-						sub Normalization
+						sub BatchNormalization
                         	var double eps = 0.00001
                         	var double momentum = 0.1
-		sub ResidualSection
-			Concept:{0..1} Input
-				var integer x
-				var integer y
-            	var integer z
-            Concept:{0..1} FirstStage
-            	sub DefaultFirstStage
-            	sub CustomFirstStage
-            		Concept:{1..*} Layer
-						sub VLayer
-                    		var string id
-                        sub ActivationLayer
-                        	sub ReLU
-                        	sub ELU > var integer alpha=1
-                        	sub SELU
-                        	sub GELU
-                        	sub SiLU
-                        	sub GLU
-                        	sub LeakyReLU > var integer alpha=1
-                        	sub LogSigmoid
-                        	sub Sigmoid
-                        	sub Tanh
-                        	sub Mish
-                        sub ProcessingLayer
-                        	sub Dropout
-                        		var double probability = 0.8
-                        	sub:CheckIsDefinedEitherOutputOrKernel Convolutional
-                            	Concept:{0..1} Output
-                            		var integer x
-                            		var integer y
-                            		var integer z
-                            	Concept:{0..1} Kernel
-                            		Concept:{1..1} Size
-                            			var integer x
-                            			var integer y
-                            		Concept:{1..1} Stride
-                            			var integer x
-                            			var integer y
-                            		Concept:{1..1} Padding
-                            			var integer x
-                            			var integer y
-								Concept:{0..1} OutChannels
-									var integer z
-                            sub Pool
-                            	sub:CheckIsDefinedEitherOutputOrKernel MaxPool
-                            		Concept:{0..1} Output
-                            			var integer x
-                            			var integer y
-                            		Concept:{0..1} Kernel
-                            			Concept:{1..1} Size
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Stride
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Padding
-                            				var integer x
-                            				var integer y
-                            	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
-                                	Concept:{0..1} Output
-                                    	var integer x
-                            			var integer y
-                            		Concept:{0..1} Kernel
-                            			Concept:{1..1} Size
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Stride
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Padding
-                            				var integer x
-                            				var integer y
-                        	sub Normalization
-                        		var double eps = 0.00001
-                        		var double momentum = 0.1
-        	Concept:{1..*} ResidualLayer
-        		var integer repeat=1
-        		var integer expansion=4
-			Concept:{0..1} LastStage
-            	sub DefaultLastStage
-            	sub CustomLastStage
-            		Concept:{1..*} Layer
-						sub VLayer
-                    		var string id
-                        sub ActivationLayer
-                        	sub ReLU
-                        	sub ELU > var integer alpha=1
-                        	sub SELU
-                        	sub GELU
-                        	sub SiLU
-                        	sub GLU
-                        	sub LeakyReLU > var integer alpha=1
-                        	sub LogSigmoid
-                        	sub Sigmoid
-                        	sub Tanh
-                        	sub Mish
-                        sub ProcessingLayer
-                        	sub Dropout
-                        		var double probability = 0.8
-                        	sub:CheckIsDefinedEitherOutputOrKernel Convolutional
-                        		Concept:{0..1} Output
-                            		var integer x
-                            		var integer y
-                            		var integer z
-                            	Concept:{0..1} Kernel
-                            		Concept:{1..1} Size
-                            			var integer x
-                            			var integer y
-                            		Concept:{1..1} Stride
-                            			var integer x
-                            			var integer y
-                            		Concept:{1..1} Padding
-                            			var integer x
-                            			var integer y
-								Concept:{0..1} OutChannels
-									var integer z
-                        	sub Pool
-                        		sub:CheckIsDefinedEitherOutputOrKernel MaxPool
-                        			Concept:{0..1} Output
-                            			var integer x
-                            			var integer y
-                            		Concept:{0..1} Kernel
-                            			Concept:{1..1} Size
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Stride
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Padding
-                            				var integer x
-                            				var integer y
-                            	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
-                                	Concept:{0..1} Output
-                                    	var integer x
-                        				var integer y
-                            		Concept:{0..1} Kernel
-                            			Concept:{1..1} Size
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Stride
-                            				var integer x
-                            				var integer y
-                            			Concept:{1..1} Padding
-                            				var integer x
-                            				var integer y
-                        	sub Normalization
-                        		var double eps = 0.00001
-                        		var double momentum = 0.1
+						sub LayerNormalization
+							var double eps=0.00001
         sub RecurrentSection
 			Concept:{0..1} Input
             	var integer x
 			Concept:{1..*} Block
+				Facet:CheckCustomDownSampling Residual
+                	var word:{Bottleneck Custom } downSampling = Bottleneck
+                	Concept:{0..1} CustomDownSampling
         		Concept:{1..*} Layer
 					sub VLayer
                     	var string id
@@ -452,9 +315,11 @@ Concept Section is component
         					sub RNN
             	        sub Dropout
             	        	var double probability = 0.8
-            	        sub Normalization
+            	        sub BatchNormalization
             	            var double eps = 0.00001
             	            var double momentum = 0.1
+            	        sub LayerNormalization
+                        	var double eps=0.00001
             	    sub ActivationLayer
             	        sub ReLU
             	        sub ELU > var integer alpha=1
@@ -467,3 +332,4 @@ Concept Section is component
             	        sub Sigmoid
             	        sub Tanh
             	        sub Mish
+						sub Softmax

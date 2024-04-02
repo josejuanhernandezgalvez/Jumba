@@ -12,23 +12,10 @@ Laboratory
 
 
 Architecture CustomResnet
-	ResidualSection
-		Input(300, 300, 3)
-		CustomFirstStage
-			Convolutional > Output(224,224,64)
-			ReLU
-			MaxPool > Output(192, 192)
-		ResidualLayer
-			repeat=2
-			expansion=1
-		ResidualLayer
-        	repeat=3
-        	expansion=1
-        ResidualLayer
-        	repeat=2
-        	expansion=1
-        CustomLastStage
-        	Convolutional > Output(4, 4, 3)
+	ConvolutionalSection
+		Input(224, 224, 3)
+		Block
+			Convolutional
 
     FlattenSection
 
@@ -42,5 +29,4 @@ Architecture CustomResnet
 		Block
 			Linear > Output(200)
 			ReLU
-
-	SoftmaxSection
+			Softmax

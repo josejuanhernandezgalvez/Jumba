@@ -1,5 +1,5 @@
 def.file
-$PROJECT_DIRECTORY/demo/src/io/flogo/demo/ConvolutionalNeuralNetwork.tara#true
+$PROJECT_DIRECTORY/demo/src/io/flogo/demo/ClassificationLinearNeuralNetwork.tara#true
 
 project
 dsl-flogo

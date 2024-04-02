@@ -7,22 +7,22 @@ import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
-public final class DropoutLayerView implements ProcessingLayerView {
-    public final double probability;
+public class LayerNormalizationLayerView implements ProcessingLayerView {
     public final OutputView output;
+    public final double eps;
 
-    public DropoutLayerView(double probability, OutputView output) {
-        this.probability = probability;
+    public LayerNormalizationLayerView(OutputView output, double eps) {
         this.output = output;
+        this.eps = eps;
     }
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
-        return new DropoutLayerView(probability(layer), previousOutput);
+        return new LayerNormalizationLayerView(previousOutput, eps(layer));
     }
 
-    private static double probability(Layer layer) {
+    private static double eps(Layer layer) {
         try {
-            return (double) layer.getClass().getDeclaredMethod("probability").invoke(layer);
+            return (double) layer.getClass().getDeclaredMethod("eps").invoke(layer);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -25,11 +25,9 @@ Architecture LinearNeuralNetwork
 			Linear > Output(x=800)
 			VLayer(id = "01")
 		Block
-			Normalization
 			Linear > Output(x=200)
 			ReLU
 		Block
 			Linear > Output(x=10)
 			ReLU
-
-	SoftmaxSection
+			Softmax

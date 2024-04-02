@@ -21,12 +21,12 @@ public class ArchitectureTest {
                 List.of(new LinearSectionView(
                         List.of(new BlockView(List.of(
                                         new LinearLayerView(new OneDimensionOutputView(12), new OneDimensionOutputView(30)),
-                                        new NormalizationLayerView(new OneDimensionOutputView(30), 0.1, 1.0E-5),
+                                        new BatchNormalizationLayerView(new OneDimensionOutputView(30), 0.1, 1.0E-5),
                                         new ReLULayerView(new OneDimensionOutputView(30)),
                                         new DropoutLayerView(0.8, new OneDimensionOutputView(30)))),
                                 new BlockView(List.of(
                                         new LinearLayerView(new OneDimensionOutputView(30), new OneDimensionOutputView(10)),
-                                        new NormalizationLayerView(new OneDimensionOutputView(10), 0.1, 1.0E-5),
+                                        new BatchNormalizationLayerView(new OneDimensionOutputView(10), 0.1, 1.0E-5),
                                         new ReLULayerView(new OneDimensionOutputView(10)),
                                         new DropoutLayerView(0.8, new OneDimensionOutputView(10)))
                                 ),

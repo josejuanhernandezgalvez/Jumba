@@ -3,6 +3,7 @@ package io.flogo.builder.model.architecture.layers;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
+import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
 public class VLayerView implements LayerView {
@@ -19,6 +20,16 @@ public class VLayerView implements LayerView {
     @Override
     public OutputView getOutputView() {
         return thisLayerOutput;
+    }
+
+    @Override
+    public LayerView from(VLayerView vLayerView, SubstituteView substituteView) {
+        return null;
+    }
+
+    @Override
+    public LayerView from(LayerView previous) {
+        return null;
     }
 
     public static VLayerView from(Layer layer, OutputView outputView) {

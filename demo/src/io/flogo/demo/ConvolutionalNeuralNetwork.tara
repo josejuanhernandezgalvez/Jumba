@@ -21,7 +21,9 @@ Architecture ConvolutionalNeuralNetwork
 					Stride(x=1, y=1)
 					Padding(x=0, y=0)
 				OutChannels(z = 10)
-			Normalization(eps=0.0001, momentum=0.1)
+				Output(x=10, y=10, z=10)
+			BatchNormalization(eps=0.0001, momentum=0.1)
+			LayerNormalization(eps=0.0001)
 			MaxPool
 				Kernel
 					Size(x=2, y=2)
@@ -35,7 +37,7 @@ Architecture ConvolutionalNeuralNetwork
 					Stride(x=1, y=1)
 					Padding(x=0, y=0)
 				OutChannels(z = 10)
-			Normalization(eps=0.0001, momentum=0.1)
+			BatchNormalization(eps=0.0001, momentum=0.1)
         	AvgPool > Output(x = 22, y = 22)
 			ReLU
 
@@ -51,5 +53,4 @@ Architecture ConvolutionalNeuralNetwork
 		Block
 			Linear > Output(x=10)
 			VLayer(id = "02")
-
-	SoftmaxSection
+			Softmax
