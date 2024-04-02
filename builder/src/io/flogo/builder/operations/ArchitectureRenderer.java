@@ -5,11 +5,13 @@ import io.flogo.builder.model.architecture.BlockView;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.SectionView;
 import io.flogo.builder.model.architecture.layers.activation.ReLULayerView;
+import io.flogo.builder.model.architecture.layers.link.FlattenLayerView;
 import io.flogo.builder.model.architecture.layers.link.SoftmaxLayerView;
 import io.flogo.builder.model.architecture.layers.processing.*;
 import io.flogo.builder.model.architecture.sections.link.FlattenSectionView;
 import io.intino.itrules.FrameBuilder;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,8 +37,20 @@ public class ArchitectureRenderer {
 
     private FrameBuilder[] componentsOf(ArchitectureView architecture, String library) {
         return architecture.sections().stream()
-                .map(section -> buildSectionFrame(library, section))
+                .map(section -> isUniLayer(section) ? buildComponentFrame(library, section) : frameFromUni(library, section))
                 .toArray(FrameBuilder[]::new);
+    }
+
+    private FrameBuilder buildComponentFrame(String library, SectionView section) {
+        return new FrameBuilder("component").add("section", buildSectionFrame(library, section));
+    }
+
+    private FrameBuilder frameFromUni(String library, SectionView section) {
+        return new FrameBuilder("component").add("layer", buildLayerFrame(library, section.blocks().stream().map(BlockView::layerViews).flatMap(List::stream).toList().getFirst()));
+    }
+
+    private static boolean isUniLayer(SectionView section) {
+        return section.blocks().stream().map(BlockView::layerViews).mapToLong(List::size).sum() > 1;
     }
 
     private FrameBuilder[] sectionsOf(ArchitectureView architecture, String library) {
@@ -79,12 +93,17 @@ public class ArchitectureRenderer {
     }
 
     private FrameBuilder buildBlockFrame(String library, BlockView block) {
-        FrameBuilder fb = new FrameBuilder("block").add("library", library).add("type", "Linear");
+        FrameBuilder fb = new FrameBuilder("block").add("library", library);
+        if (!isSimpleBlock(block)) fb.add("type", typeOf(block.getClass().getSimpleName()));
         FrameBuilder[] layers = block.layerViews().stream()
                 .map(layer -> buildLayerFrame(library, layer))
                 .toArray(FrameBuilder[]::new);
         fb.add("layer", layers);
         return fb;
+    }
+
+    private static boolean isSimpleBlock(BlockView block) {
+        return block.getClass().getSimpleName().substring(0, block.getClass().getSimpleName().indexOf("View")).equals("Block");
     }
 
     private FrameBuilder buildLayerFrame(String library, LayerView layer) {
@@ -93,25 +112,20 @@ public class ArchitectureRenderer {
                 .add("type", typeOf(layer.getClass().getSimpleName()));
         switch (layer) {
             case LinearLayerView linear ->
-                    builder.add("in_features", linear.previousLayerOutput.dimensions())
-                            .add("out_features", linear.getOutputView().dimensions())
+                    builder.add("in_features", dimensionOf(linear.previousLayerOutput.asArray()))
+                            .add("out_features", dimensionOf(linear.thisLayerOutput.asArray()))
                             .add("bias", "True");
             case ConvolutionalLayerView convolutional ->
-                builder.add("in_channels", convolutional.previousLayerOutput.dimensions())
-                        .add("out_channels", convolutional.thisLayerOutput.dimensions())
-                        .add("kernel", convolutional.kernel.size())
-                        .add("stride", convolutional.kernel.stride())
-                        .add("padding", convolutional.kernel.padding());
-            case MaxPoolLayerView maxPool ->
+                builder.add("in_channels", convolutional.previousLayerOutput.asArray()[2])
+                        .add("out_channels", convolutional.thisLayerOutput.asArray()[2])
+                        .add("kernel", new FrameBuilder("kernel").add("dimension", convolutional.kernel.size().asArray()))
+                        .add("stride", new FrameBuilder("stride").add("dimension", convolutional.kernel.stride().asArray()))
+                        .add("padding", new FrameBuilder("padding").add("dimension", convolutional.kernel.padding().asArray()));
+            case PoolLayerView pool ->
                     builder.add("package", "poolings")
-                            .add("kernel", maxPool.kernel.size())
-                            .add("stride", maxPool.kernel.stride())
-                            .add("padding", maxPool.kernel.padding());
-            case AvgPoolLayerView avgPool ->
-                    builder.add("package", "poolings")
-                            .add("kernel", avgPool.kernel.size())
-                            .add("stride", avgPool.kernel.stride())
-                            .add("padding", avgPool.kernel.padding());
+                            .add("kernel", new FrameBuilder("kernel").add("dimension", pool.kernel.size().asArray()))
+                            .add("stride", new FrameBuilder("stride").add("dimension", pool.kernel.stride().asArray()))
+                            .add("padding", new FrameBuilder("padding").add("dimension", pool.kernel.padding().asArray()));
             case ReLULayerView ignored ->
                     builder.add("package", "activations");
             case DropoutLayerView dropout ->
@@ -119,12 +133,15 @@ public class ArchitectureRenderer {
                             .add("package", "regularizations");
             case NormalizationLayerView batchNormalization ->
                     builder.add("package", "regularizations")
-                            .add("num_features", batchNormalization.output.dimensions())
+                            .add("num_features", dimensionOf(batchNormalization.output.asArray()))
                             .add("eps", batchNormalization.eps)
                             .add("momentum", batchNormalization.momentum);
             case SoftmaxLayerView softmax ->
                     builder.add("package", "activations")
                             .add("n_dimensions", softmax.getOutputView().dimensions());
+            case FlattenLayerView flatten ->
+                    builder.add("from_dim", flatten.fromDimension)
+                            .add("to_dim", flatten.toDimension);
             default -> {}
         }
         return builder;
@@ -136,6 +153,10 @@ public class ArchitectureRenderer {
             if (Character.isUpperCase(component.charAt(i))) return component.substring(0, i);
         }
         return component;
+    }
+
+    private int dimensionOf(int[] dimensions) {
+        return Arrays.stream(dimensions).reduce(1, (a, b) -> a * b);
     }
 
     public static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {

@@ -1,9 +1,9 @@
 def type(architecture)
 	from implementations.$library.architecture.architecture import $library+FirstUppercase~Architecture as Architecture
-	$import...[$NL]
+	$import
 
     architecture = (Architecture("$name")
-                        .attach($component)
+                        $component...[$NL])
 end
 
 def type(import)
@@ -12,28 +12,24 @@ def type(import)
     $layer+import...[$NL]
 end
 
-def type(architecture)
-    $section...[,$NL]
+def type(component) attribute(section)
+    .attach($section)
+end
+
+def type(component) attribute(layer)
+    .attach($layer)
 end
 
 def type(section) trigger(import)
     from implementations.$library.architecture.sections.$type+Lowercase import $library+FirstUppercase~$type+CamelCase~Section as $type+CamelCase~Section
 end
 
-def type(section)
-    $type+CamelCase~Section($[
-        $block...[, $NL]
-    $])
+def type(block) trigger(import) attribute(type)
+    from implementations.$library.architecture.blocks.$type+Lowercase import $library+FirstUppercase~$type+CamelCase~Block as $type+CamelCaseBlock
 end
 
 def type(block) trigger(import)
-    from implementations.$library.architecture.blocks.$type+Lowercase import $library+FirstUppercase~$type+CamelCase~Block as $type+CamelCase
-end
-
-def type(block)
-    $type+CamelCase~Block($[
-        $layer...[, $NL]
-    $])
+    from implementations.$library.architecture.block import $library+FirstUppercase~Block as Block
 end
 
 def type(layer) trigger(import) attribute(package)
@@ -42,6 +38,28 @@ end
 
 def type(layer) trigger(import)
     from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
+end
+
+def type(section)
+    $type+CamelCase~Section($[
+        $block...[, $NL]
+    $])
+end
+
+def type(block) attribute(type)
+    $type+CamelCase~Block($[
+        $layer...[, $NL]
+    $])
+end
+
+def type(block)
+    Block($[
+        $layer...[, $NL]
+    $])
+end
+
+def type(kernel | stride | padding)
+    ($dimension...[, ])
 end
 
 def type(Linear) type(layer)
@@ -53,7 +71,7 @@ def type(Convolutional) type(layer)
 end
 
 def type(MaxPool | AvgPool) type(layer)
-    $type~Layer(kernel_size=$kernel_size, stride=$stride, padding=$padding)
+    $type~Layer(kernel=$kernel, stride=$stride, padding=$padding)
 end
 
 def type(Normalization) type(layer)
@@ -66,6 +84,10 @@ end
 
 def type(Softmax) type(layer)
     $type~Layer(n_dimensions=$n_dimensions)
+end
+
+def type(Flatten) type(layer)
+    $type~Layer(from_dim=$from_dim, to_dim=$to_dim)
 end
 
 def type(layer)

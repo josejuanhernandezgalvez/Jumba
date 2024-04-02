@@ -8,11 +8,14 @@ public interface Kernel {
     Padding padding();
 
     interface Size {
+        Integer[] asArray();
     }
 
     interface Stride {
+        Integer[] asArray();
     }
 
     interface Padding {
+        Integer[] asArray();
     }
 }

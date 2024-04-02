@@ -6,7 +6,6 @@ import io.flogo.builder.model.architecture.layers.link.SoftmaxLayerView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.processing.*;
-import io.flogo.builder.model.architecture.sections.link.ClassificationSectionView;
 import io.flogo.builder.model.architecture.sections.link.FlattenSectionView;
 import io.flogo.builder.model.architecture.sections.processing.ConvolutionalSectionView;
 import io.flogo.builder.model.architecture.sections.processing.LinearSectionView;
@@ -63,10 +62,7 @@ public class ArchitectureTest {
                                                 new ReLULayerView(new OneDimensionOutputView(10)),
                                                 new SoftmaxLayerView(new OneDimensionOutputView(10))
                                         )))
-                        ),
-                        new ClassificationSectionView(new BlockView(List.of(
-                                new SoftmaxLayerView(new OneDimensionOutputView(10))
-                        )))));
+                        )));
         System.out.println(new ArchitectureRenderer().render(architecture, "ConvolutionalArchitecture", "pytorch"));
     }
 }
