@@ -12,9 +12,10 @@ Laboratory
 
 Architecture
 	RecurrentSection
-    	Input(x=1000)
-    	Block
-			GRU > Output(x=100)
+		Input(x = 300, seqLength = 4)
+		Block
+			LSTM
+				EndSequence > Output(x=100)
 
 	FlattenSection
 

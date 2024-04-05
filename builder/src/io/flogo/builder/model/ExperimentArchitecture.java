@@ -1,16 +1,17 @@
 package io.flogo.builder.model;
 
 import io.flogo.builder.model.architecture.*;
+import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
+import io.intino.magritte.framework.Layer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.flogo.builder.model.renderers.architecture.SectionRenderer.LayerRenderer.ActivationLayersViewPackage;
+import static io.flogo.builder.model.renderers.architecture.SectionRenderer.LayerRenderer.ProcessingLayersViewPackage;
+
 public class ExperimentArchitecture extends ArchitectureView {
-    private OutputView previousLayerOutputView = null;
 
     public ExperimentArchitecture(ArchitectureView architectureView, List<SubstituteView> substitutes) {
         super(createSections(architectureView, substitutes));
@@ -36,18 +37,43 @@ public class ExperimentArchitecture extends ArchitectureView {
 
     private static List<BlockView> collapsedBlockViewList(Iterator<BlockView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<BlockView> result) {
         if (!iterator.hasNext()) return result;
-        result.add(collapsedBlockView(iterator.next().layerViews().iterator(), substitutes, new ArrayList<>()));
+        result.add(collapsedBlockView(iterator.next().layerViews().iterator(), substitutes, new ArrayList<>(), result.isEmpty() ? null : result.getLast().layerViews().getLast()));
         return collapsedBlockViewList(iterator, substitutes, result);
     }
 
-    private static BlockView collapsedBlockView(Iterator<LayerView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result) {
+    private static BlockView collapsedBlockView(Iterator<LayerView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
         if (!iterator.hasNext()) return new BlockView(result);
-        result.add(collapsedLayerView(iterator.next(), substitutes, result.isEmpty() ? null : result.getLast()));
-        return collapsedBlockView(iterator, substitutes, result);
+        result.add(collapsedLayerView(iterator.next(), substitutes, previous));
+        return collapsedBlockView(iterator, substitutes, result, result.getLast());
     }
 
     private static LayerView collapsedLayerView(LayerView layerView, Map<String, List<SubstituteView>> substitutes, LayerView previous) {
-        return null; //TODO
+        try {
+            if (layerView instanceof VLayerView vLayerView) {
+                return (LayerView) Class.forName(viewClassName(substitutes.get(vLayerView.id).getFirst()))
+                        .getMethod("createFromSubstitute", LayerView.class, SubstituteView.class)
+                        .invoke(null, previous, substitutes.get(vLayerView.id).getFirst());
+            }
+            return layerView.from(previous);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String viewClassName(SubstituteView substitute) {
+        return packageName(substitute.layer) + layerName(substitute.layer) + "LayerView";
+    }
+
+    public static String packageName(Layer layer) {
+        return isActivationLayer(layer) ? ActivationLayersViewPackage : ProcessingLayersViewPackage;
+    }
+
+    private static String layerName(Layer substitute) {
+        return Arrays.stream(substitute.getClass().getName().split("\\$")).toList().getLast();
+    }
+
+    private static boolean isActivationLayer(Layer layer) {
+        return layer.core$().conceptList().get(1).toString().split("\\$")[3].startsWith("ActivationLayer");
     }
 
 

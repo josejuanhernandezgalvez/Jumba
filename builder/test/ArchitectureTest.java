@@ -1,8 +1,8 @@
 import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.architecture.BlockView;
 import io.flogo.builder.model.architecture.layers.activation.ReLULayerView;
+import io.flogo.builder.model.architecture.layers.activation.SoftmaxLayerView;
 import io.flogo.builder.model.architecture.layers.link.FlattenLayerView;
-import io.flogo.builder.model.architecture.layers.link.SoftmaxLayerView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.processing.*;
@@ -23,12 +23,12 @@ public class ArchitectureTest {
                                         new LinearLayerView(new OneDimensionOutputView(12), new OneDimensionOutputView(30)),
                                         new BatchNormalizationLayerView(new OneDimensionOutputView(30), 0.1, 1.0E-5),
                                         new ReLULayerView(new OneDimensionOutputView(30)),
-                                        new DropoutLayerView(0.8, new OneDimensionOutputView(30)))),
+                                        new DropoutLayerView(new OneDimensionOutputView(30), 0.8))),
                                 new BlockView(List.of(
                                         new LinearLayerView(new OneDimensionOutputView(30), new OneDimensionOutputView(10)),
                                         new BatchNormalizationLayerView(new OneDimensionOutputView(10), 0.1, 1.0E-5),
                                         new ReLULayerView(new OneDimensionOutputView(10)),
-                                        new DropoutLayerView(0.8, new OneDimensionOutputView(10)))
+                                        new DropoutLayerView(new OneDimensionOutputView(10), 0.8))
                                 ),
                                 new BlockView(List.of(
                                         new LinearLayerView(new OneDimensionOutputView(10), new OneDimensionOutputView(1)),

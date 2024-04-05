@@ -2,42 +2,43 @@ package io.flogo.builder.model.architecture.layers.processing;
 
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
-import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
+import io.flogo.builder.model.architecture.layers.output.TwoDimensionsOutputView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.flogo.model.RecurrentSection;
 import io.intino.magritte.framework.Layer;
 
+import java.util.Arrays;
+
 public class LSTMLayerView extends RecurrentLayerView {
-    public LSTMLayerView(OutputView previousLayerOutput, OneDimensionOutputView thisLayerOutput, int numLayers, OutputType outputType, boolean bidirectional) {
-        super(previousLayerOutput, thisLayerOutput, numLayers, outputType, bidirectional);
+    public LSTMLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int numLayers, OutputTypeView outputTypeView, boolean bidirectional, double dropout) {
+        super(previousLayerOutput, thisLayerOutput, numLayers, outputTypeView, bidirectional, dropout);
     }
 
     public static LSTMLayerView from(Layer layer, OutputView previousOutput) {
         RecurrentSection.Block.LSTM lstm = (RecurrentSection.Block.LSTM) layer;
-        return new LSTMLayerView(previousOutput, output(lstm), lstm.stackedRecurrentSections(), outputType(lstm), lstm.bidirectional());
+        return new LSTMLayerView(previousOutput, output(lstm, previousOutput), lstm.numLayers(), outputType(lstm), lstm.bidirectional(), lstm.dropout());
     }
 
-    private static OutputType outputType(RecurrentSection.Block.LSTM lstm) {
-        return OutputType.valueOf(lstm.outputType().toString());
+    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
+        return null;
     }
 
-    private static OneDimensionOutputView output(RecurrentSection.Block.LSTM lstm) {
-        return new OneDimensionOutputView(lstm.output().x());
+    private static OutputTypeView outputType(RecurrentSection.Block.LSTM lstm) {
+        return OutputTypeView.valueOf(Arrays.stream(lstm.outputType().getClass().getName().split("\\$")).toList().getLast());
+    }
+
+    private static OutputView output(RecurrentSection.Block.LSTM lstm, OutputView previousOutput) {
+        return outputType(lstm).output(lstm, previousOutput);
     }
 
     @Override
     public OutputView getOutputView() {
-        return thisLayerOutput;
-    }
-
-    @Override
-    public LayerView from(VLayerView vLayerView, SubstituteView substituteViews) {
-        return null;
+        return thisLayerOutput instanceof OneDimensionOutputView ? thisLayerOutput : new OneDimensionOutputView(((TwoDimensionsOutputView) thisLayerOutput).x());
     }
 
     @Override
     public LayerView from(LayerView previous) {
-        return null;
+        return new LSTMLayerView(previous.getOutputView(), thisLayerOutput, numLayers, outputTypeView, bidirectional, dropout);
     }
 }

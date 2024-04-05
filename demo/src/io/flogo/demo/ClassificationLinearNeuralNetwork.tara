@@ -9,7 +9,7 @@ Laboratory
 
 	Experiment e626
 		Adagrad
-		Substitute(id = "01") > LeakyReLU
+		Substitute(id = "01") > BatchNormalization(eps = 0.1)
 
 
 Architecture LinearNeuralNetwork

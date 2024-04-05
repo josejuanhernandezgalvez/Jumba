@@ -3,7 +3,6 @@ package io.flogo.builder.model.architecture.layers.processing;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
-import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
 import io.flogo.builder.model.architecture.layers.processing.kernels.ConvolutionTwoDimensionsKernel;
@@ -21,6 +20,7 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     public final Kernel kernel;
     public final OutputView previousLayerOutput;
     public final OutputView thisLayerOutput;
+    private int outChannels;
 
     public ConvolutionalLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
         this.previousLayerOutput = previousLayerOutput;
@@ -36,6 +36,7 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
         this.thisLayerOutput = isDetermined(previousLayerOutput) ?
                 calculateLayerOutput((ThreeDimensionsOutputView) previousLayerOutput, outChannels) :
                 new UndeterminedOutputView();
+        this.outChannels = outChannels;
     }
 
     @Override
@@ -44,13 +45,10 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     }
 
     @Override
-    public LayerView from(VLayerView vLayerView, SubstituteView substituteViews) {
-        return null;
-    }
-
-    @Override
     public LayerView from(LayerView previous) {
-        return null;
+        return this.kernel instanceof UndeterminedKernel ?
+                new ConvolutionalLayerView(previous.getOutputView(), thisLayerOutput) :
+                new ConvolutionalLayerView((ConvolutionTwoDimensionsKernel) this.kernel, previous.getOutputView(), outChannels);
     }
 
     private ThreeDimensionsOutputView calculateLayerOutput(ThreeDimensionsOutputView previousLayerOutput, int outChannels) {
@@ -61,6 +59,10 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
         if (hasNotOutput(layer))
             return new ConvolutionalLayerView(kernel(layer), previousOutput, ((Convolutional) layer).outChannels().z());
         return new ConvolutionalLayerView(previousOutput, thisOutput(layer));
+    }
+
+    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
+        return null;
     }
 
     private static ConvolutionTwoDimensionsKernel kernel(Layer layer) {

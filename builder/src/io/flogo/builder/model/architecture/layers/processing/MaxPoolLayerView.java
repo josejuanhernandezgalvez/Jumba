@@ -3,7 +3,6 @@ package io.flogo.builder.model.architecture.layers.processing;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
-import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
 import io.flogo.builder.model.architecture.layers.processing.kernels.PoolTwoDimensionsKernel;
@@ -20,7 +19,7 @@ public class MaxPoolLayerView extends PoolLayerView {
         super(previousLayerOutput, thisLayerOutput);
     }
 
-    public MaxPoolLayerView(PoolTwoDimensionsKernel kernel, OutputView previousLayerOutput) {
+    public MaxPoolLayerView(Kernel kernel, OutputView previousLayerOutput) {
         super(kernel, previousLayerOutput);
     }
 
@@ -30,19 +29,20 @@ public class MaxPoolLayerView extends PoolLayerView {
     }
 
     @Override
-    public LayerView from(VLayerView vLayerView, SubstituteView substituteViews) {
-        return null;
-    }
-
-    @Override
     public LayerView from(LayerView previous) {
-        return null;
+        return thisLayerOutput instanceof UndeterminedOutputView ?
+                new MaxPoolLayerView(previous.getOutputView(), thisLayerOutput) :
+                new MaxPoolLayerView(this.kernel, previous.getOutputView());
     }
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
         if (hasNotOutput(layer))
             return new MaxPoolLayerView(kernel(layer), previousOutput);
         return new MaxPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
+    }
+
+    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
+        return null;
     }
 
     private static PoolTwoDimensionsKernel kernel(Layer layer) {

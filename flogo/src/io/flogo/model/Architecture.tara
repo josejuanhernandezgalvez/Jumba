@@ -175,7 +175,6 @@ Concept LossFunction is component
     sub CrossEntropyLoss
     sub MAELoss
     sub MSELoss
-    sub NLLLoss
     sub MarginRankingLoss
     sub KullbackLeiblerDivergenceLoss
     sub TripletMarginLossWithSwap
@@ -200,6 +199,9 @@ Concept Section is component
 				var integer y
 				var integer z
 			Concept:{1..*} Block
+				Facet:CheckCustomDownSampling Residual
+            		var word:{Bottleneck Custom } downSampling = Bottleneck
+					Concept:{0..1} CustomDownSampling
 				Concept:{1..*} Layer
 					sub VLayer
                     	var string id
@@ -274,6 +276,9 @@ Concept Section is component
 			Concept:{0..1} Input
             	var integer x
 			Concept:{1..*} Block
+				Facet:CheckCustomDownSampling Residual
+					var word:{Bottleneck Custom } downSampling = Bottleneck
+                    Concept:{0..1} CustomDownSampling
             	Concept:{1..*} Layer
 					sub VLayer
                     	var string id
@@ -303,30 +308,44 @@ Concept Section is component
         sub RecurrentSection
 			Concept:{0..1} Input
             	var integer x
+            	var integer seqLength
 			Concept:{1..*} Block
-				Facet:CheckCustomDownSampling Residual
-                	var word:{Bottleneck Custom } downSampling = Bottleneck
-                	Concept:{0..1} CustomDownSampling
         		Concept:{1..*} Layer
 					sub VLayer
                     	var string id
 					sub ProcessingLayer
         				sub Recurrent
+							var integer numLayers = 1
+							var boolean bidirectional = false
+							var double dropout = 0
         					sub LSTM
-        						var integer stackedRecurrentSections = 1
-        						var boolean bidirectional = false
-        						var word:{LastHiddenState HiddenStates LastCellState CellStates} outputType
-        						Concept:{1..1} Output > var integer x
+        						Concept:{1..1} OutputType
+        							sub EndSequence
+        								Concept:{1..1} Output > var integer x
+        							sub HiddenStates
+        							    Concept:{1..1} Output > var integer x
+									sub CellStates
+        							    Concept:{1..1} Output > var integer x
+        							sub LastHiddenState
+        								Concept:{1..1} Output > var integer x
+        							sub LastCellState
+        								Concept:{1..1} Output > var integer x
         					sub GRU
-        						var integer stackedRecurrentSections = 1
-        						var boolean bidirectional = false
-        						var word:{LastHiddenState HiddenStates} outputType
-        						Concept:{1..1} Output > var integer x
+        						Concept:{1..1} OutputType
+        							sub EndSequence
+        								Concept:{1..1} Output > var integer x
+        							sub HiddenStates
+        							    Concept:{1..1} Output > var integer x
+        							sub LastHiddenState
+        								Concept:{1..1} Output > var integer x
         					sub RNN
-        						var integer stackedRecurrentSections = 1
-        						var boolean bidirectional = false
-        						var word:{LastHiddenState HiddenStates} outputType
-								Concept:{1..1} Output > var integer x
+        						Concept:{1..1} OutputType
+        							sub EndSequence
+        								Concept:{1..1} Output > var integer x
+        							sub HiddenStates
+        							    Concept:{1..1} Output > var integer x
+        							sub LastHiddenState
+        								Concept:{1..1} Output > var integer x
             	        sub Dropout
             	        	var double probability = 0.8
             	        sub BatchNormalization

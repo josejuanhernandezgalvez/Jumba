@@ -21,10 +21,10 @@ public abstract class SectionRenderer<U extends SectionView> {
         return layerRenderer.render(layer, previousOutput);
     }
 
-    private static class LayerRenderer {
-        private static final String ActivationLayersViewPackage = "io.flogo.builder.model.architecture.layers.activation.";
-        private static final String ProcessingLayersViewPackage = "io.flogo.builder.model.architecture.layers.processing.";
-        private static final String LayersViewPackage = "io.flogo.builder.model.architecture.layers.";
+    public static class LayerRenderer {
+        public static final String ActivationLayersViewPackage = "io.flogo.builder.model.architecture.layers.activation.";
+        public static final String ProcessingLayersViewPackage = "io.flogo.builder.model.architecture.layers.processing.";
+        public static final String LayersViewPackage = "io.flogo.builder.model.architecture.layers.";
 
         public LayerView render(Layer layer, OutputView previousOutput) {
             return layer(layer, previousOutput);
@@ -38,7 +38,7 @@ public abstract class SectionRenderer<U extends SectionView> {
             }
         }
 
-        private static Method getMethodToCreateView(Layer layer) throws Exception {
+        public static Method getMethodToCreateView(Layer layer) throws Exception {
             return Class.forName(className(layer)).getDeclaredMethod("from", Layer.class, OutputView.class);
         }
 
@@ -50,7 +50,7 @@ public abstract class SectionRenderer<U extends SectionView> {
             return layer.getClass().toString().split("\\$")[2];
         }
 
-        private static String packageName(Layer layer) {
+        public static String packageName(Layer layer) {
             return isActivationLayer(layer) ? ActivationLayersViewPackage : ProcessingLayersViewPackage;
         }
 

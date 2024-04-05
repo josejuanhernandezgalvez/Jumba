@@ -3,7 +3,6 @@ package io.flogo.builder.model.architecture.layers.activation;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
-import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
@@ -23,6 +22,10 @@ public final class ELULayerView implements ActivationLayerView {
         return new ELULayerView(getAlphaFrom(layer), outputView);
     }
 
+    public static ActivationLayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
+        return new ELULayerView(getAlphaFrom(substituteView.layer), previous.getOutputView());
+    }
+
     private static int getAlphaFrom(Layer layer) {
         try {
             Field alpha = layer.getClass().getDeclaredField("alpha");
@@ -39,13 +42,8 @@ public final class ELULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(VLayerView vLayerView, SubstituteView substituteViews) {
-        return null;
-    }
-
-    @Override
     public LayerView from(LayerView previous) {
-        return null;
+        return new ELULayerView(this.alpha, previous == null ? this.outputView : previous.getOutputView());
     }
 
     @Override
@@ -68,5 +66,4 @@ public final class ELULayerView implements ActivationLayerView {
                 "alpha=" + alpha + ", " +
                 "outputView=" + outputView + ']';
     }
-
 }

@@ -9,17 +9,13 @@ Laboratory
 
 	Experiment e626
 		Adagrad
-		Substitute(id = "01") > BatchNormalization(eps = 0.1)
-
+		Substitute(id = "01") > Linear > Output(x=10)
 Architecture RecurrentNeuralNetwork
 	RecurrentSection
-		Input(x=1000)
-		Block as Residual
-			CustomDownSampling
-
+		Input(x=300, seqLength = 4)
+		Block
+			RNN(numLayers = 5, bidirectional = true, dropout = 0.1)
+				HiddenStates > Output(x = 20)
 			VLayer > id = "01"
-			LSTM(outputType=LastHiddenState) > Output(x=10)
 			BatchNormalization
 			Dropout
-
-

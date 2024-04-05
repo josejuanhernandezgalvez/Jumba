@@ -3,7 +3,6 @@ package io.flogo.builder.model.architecture.layers.processing;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
-import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
 import io.flogo.builder.model.architecture.layers.processing.kernels.PoolTwoDimensionsKernel;
@@ -30,12 +29,13 @@ public class AvgPoolLayerView extends PoolLayerView {
     }
 
     @Override
-    public LayerView from(VLayerView vLayerView, SubstituteView substituteViews) {
-        return null;
+    public LayerView from(LayerView previous) {
+        return thisLayerOutput instanceof UndeterminedOutputView ?
+                new AvgPoolLayerView(previous.getOutputView(), thisLayerOutput) :
+                new AvgPoolLayerView(this.kernel, previous.getOutputView());
     }
 
-    @Override
-    public LayerView from(LayerView previous) {
+    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
         return null;
     }
 
