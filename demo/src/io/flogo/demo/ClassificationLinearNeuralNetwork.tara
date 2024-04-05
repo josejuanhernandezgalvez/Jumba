@@ -9,14 +9,14 @@ Laboratory
 
 	Experiment e626
 		Adagrad
-		Substitute(id = "01") > BatchNormalization(eps = 0.1)
+		Substitute(id = "01") > LayerNormalization(eps = 0.01)
 
 
 Architecture LinearNeuralNetwork
 	LinearSection
 		Input(x=10000)
 		Block
-			Linear > Output(x=5000)
+			VLayer(id = "01")
 			ReLU
 		Block
 			Linear > Output(x=2000)

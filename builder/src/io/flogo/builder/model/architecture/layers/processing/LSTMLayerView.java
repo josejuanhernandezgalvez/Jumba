@@ -2,6 +2,7 @@ package io.flogo.builder.model.architecture.layers.processing;
 
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
+import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
 import io.flogo.builder.model.architecture.layers.output.TwoDimensionsOutputView;
 import io.flogo.builder.model.laboratory.SubstituteView;
@@ -17,19 +18,38 @@ public class LSTMLayerView extends RecurrentLayerView {
 
     public static LSTMLayerView from(Layer layer, OutputView previousOutput) {
         RecurrentSection.Block.LSTM lstm = (RecurrentSection.Block.LSTM) layer;
-        return new LSTMLayerView(previousOutput, output(lstm, previousOutput), lstm.numLayers(), outputType(lstm), lstm.bidirectional(), lstm.dropout());
+        return new LSTMLayerView(previousOutput, output(lstm, previousOutput, lstm.bidirectional()), lstm.numLayers(), outputType(lstm), lstm.bidirectional(), lstm.dropout());
     }
 
     public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return null;
+        try {
+            return new LSTMLayerView(previous(previous), output(substituteView.layer, previous(previous),
+                    (Boolean) substituteView.layer.getClass().getMethod("bidirectional").invoke(substituteView.layer)),
+                    (Integer) substituteView.layer.getClass().getMethod("numLayers").invoke(substituteView.layer),
+                    outputType(substituteView.layer),
+                    (Boolean) substituteView.layer.getClass().getMethod("bidirectional").invoke(substituteView.layer),
+                    (Double) substituteView.layer.getClass().getMethod("dropout").invoke(substituteView.layer));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static OutputTypeView outputType(RecurrentSection.Block.LSTM lstm) {
-        return OutputTypeView.valueOf(Arrays.stream(lstm.outputType().getClass().getName().split("\\$")).toList().getLast());
+    private static OutputView previous(LayerView previous) {
+        if (previous instanceof VLayerView vLayerView)
+            return vLayerView.previousLayerOutput;
+        return previous.getOutputView();
     }
 
-    private static OutputView output(RecurrentSection.Block.LSTM lstm, OutputView previousOutput) {
-        return outputType(lstm).output(lstm, previousOutput);
+    private static OutputTypeView outputType(Layer lstm) {
+        try {
+            return OutputTypeView.valueOf(Arrays.stream(lstm.getClass().getMethod("outputType").invoke(lstm).getClass().getName().split("\\$")).toList().getLast());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static OutputView output(Layer lstm, OutputView previousOutput, boolean bidirectional) {
+        return outputType(lstm).output(lstm, previousOutput, bidirectional);
     }
 
     @Override
@@ -39,6 +59,6 @@ public class LSTMLayerView extends RecurrentLayerView {
 
     @Override
     public LayerView from(LayerView previous) {
-        return new LSTMLayerView(previous.getOutputView(), thisLayerOutput, numLayers, outputTypeView, bidirectional, dropout);
+        return new LSTMLayerView(previous == null ? previousLayerOutput : previous.getOutputView(), thisLayerOutput, numLayers, outputTypeView, bidirectional, dropout);
     }
 }

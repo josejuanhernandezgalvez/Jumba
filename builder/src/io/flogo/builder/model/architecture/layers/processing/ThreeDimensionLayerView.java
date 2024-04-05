@@ -35,7 +35,11 @@ public abstract class ThreeDimensionLayerView implements ProcessingLayerView {
         }
     }
 
-    protected static int getValue(Object output, String argument) throws Exception {
-        return (int) output.getClass().getMethod(argument).invoke(output);
+    protected static int getValue(Object output, String argument) {
+        try {
+            return (int) output.getClass().getMethod(argument).invoke(output);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

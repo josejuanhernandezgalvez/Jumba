@@ -12,16 +12,10 @@ public class FlattenSectionView implements SectionView {
     public final List<BlockView> blocks;
     public final List<LayerView> layerViews;
 
-    public FlattenSectionView(BlockView block) {
-        this.blocks = List.of(block);
-        this.layerViews = layers();
-    }
-
     public FlattenSectionView(List<BlockView> block) {
         this.blocks = block;
         this.layerViews = layers();
     }
-
 
     private List<LayerView> layers() {
         return blocks.getFirst().layerViews();

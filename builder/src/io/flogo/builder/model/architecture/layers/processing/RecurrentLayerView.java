@@ -28,32 +28,32 @@ public abstract class RecurrentLayerView implements LayerView {
     public enum OutputTypeView {
         EndSequence {
             @Override
-            OutputView output(Layer lstm, OutputView input) {
-                return new TwoDimensionsOutputView(OutputTypeView.getX(lstm), ((TwoDimensionsOutputView) input).y());
+            OutputView output(Layer lstm, OutputView input, boolean bidirectional) {
+                return new TwoDimensionsOutputView(bidirectional ? OutputTypeView.getX(lstm) * 2 : OutputTypeView.getX(lstm), ((TwoDimensionsOutputView) input).y());
             }
         }, CellStates {
             @Override
-            OutputView output(Layer layer, OutputView previousOutput) {
-                return new TwoDimensionsOutputView(OutputTypeView.getX(layer), OutputTypeView.getNumberLayers(layer));
+            OutputView output(Layer layer, OutputView previousOutput, boolean bidirectional) {
+                return new TwoDimensionsOutputView(OutputTypeView.getX(layer), bidirectional ? OutputTypeView.getNumberLayers(layer) * 2 : OutputTypeView.getNumberLayers(layer));
             }
         }, HiddenStates {
             @Override
-            OutputView output(Layer layer, OutputView previousOutput) {
-                return new TwoDimensionsOutputView(OutputTypeView.getX(layer), OutputTypeView.getNumberLayers(layer));
+            OutputView output(Layer layer, OutputView previousOutput, boolean bidirectional) {
+                return new TwoDimensionsOutputView(OutputTypeView.getX(layer), bidirectional ? OutputTypeView.getNumberLayers(layer) * 2 : OutputTypeView.getNumberLayers(layer));
             }
         }, LastHiddenState {
             @Override
-            OutputView output(Layer lstm, OutputView previousOutput) {
-                return new OneDimensionOutputView(OutputTypeView.getX(lstm));
+            OutputView output(Layer layer, OutputView previousOutput, boolean bidirectional) {
+                return new OneDimensionOutputView(bidirectional ? OutputTypeView.getX(layer) * 2 : OutputTypeView.getX(layer));
             }
         }, LastCellState {
             @Override
-            OutputView output(Layer lstm, OutputView previousOutput) {
-                return new OneDimensionOutputView(OutputTypeView.getX(lstm));
+            OutputView output(Layer layer, OutputView previousOutput, boolean bidirectional) {
+                return new OneDimensionOutputView(bidirectional ? OutputTypeView.getX(layer) * 2 : OutputTypeView.getX(layer));
             }
         };
 
-        abstract OutputView output(Layer lstm, OutputView previousOutput);
+        abstract OutputView output(Layer lstm, OutputView previousOutput, boolean bidirectional);
 
         private static int getX(Layer layer){
             try {

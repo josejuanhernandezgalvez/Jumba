@@ -51,7 +51,7 @@ public class ArchitectureTest {
                                         new ReLULayerView(new ThreeDimensionsOutputView(25, 25, 80)),
                                         new MaxPoolLayerView(new ThreeDimensionsOutputView(25, 25, 80), new ThreeDimensionsOutputView(10, 10, 80))))
                         )),
-                        new FlattenSectionView(new BlockView(List.of(new FlattenLayerView(new ThreeDimensionsOutputView(10, 10, 80), new OneDimensionOutputView(8000))))),
+                        new FlattenSectionView(List.of(new BlockView(List.of(new FlattenLayerView(new ThreeDimensionsOutputView(10, 10, 80), new OneDimensionOutputView(8000)))))),
                         new LinearSectionView(
                                 List.of(new BlockView(List.of(
                                         new LinearLayerView(new OneDimensionOutputView(8000), new OneDimensionOutputView(150)),

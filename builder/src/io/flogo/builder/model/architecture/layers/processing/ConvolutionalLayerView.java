@@ -3,6 +3,7 @@ package io.flogo.builder.model.architecture.layers.processing;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
+import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
 import io.flogo.builder.model.architecture.layers.processing.kernels.ConvolutionTwoDimensionsKernel;
@@ -12,6 +13,7 @@ import io.flogo.builder.model.architecture.layers.processing.kernels.size.TwoDim
 import io.flogo.builder.model.architecture.layers.processing.kernels.strides.TwoDimensionsStride;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.flogo.model.ConvolutionalSection.Block.Convolutional;
+import io.flogo.model.Laboratory;
 import io.intino.magritte.framework.Layer;
 
 import static io.flogo.builder.model.architecture.layers.processing.kernels.ConvolutionTwoDimensionsKernel.kernelFor;
@@ -57,19 +59,41 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
         if (hasNotOutput(layer))
-            return new ConvolutionalLayerView(kernel(layer), previousOutput, ((Convolutional) layer).outChannels().z());
+            return new ConvolutionalLayerView(kernel((Convolutional) layer), previousOutput, ((Convolutional) layer).outChannels().z());
         return new ConvolutionalLayerView(previousOutput, thisOutput(layer));
     }
 
     public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return null;
+        return ((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output() == null ?
+                new ConvolutionalLayerView(
+                        kernel(substituteView.layer),
+                        previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(),
+                        ((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).outChannels().z()) :
+                new ConvolutionalLayerView(
+                        new ThreeDimensionsOutputView(
+                                previous instanceof VLayerView ? getValue(((VLayerView) previous).previousLayerOutput, "x") : getValue(previous.getOutputView(), "x"),
+                                previous instanceof VLayerView ? getValue(((VLayerView) previous).previousLayerOutput, "y") : getValue(previous.getOutputView(), "y"),
+                                previous instanceof VLayerView ? getValue(((VLayerView) previous).previousLayerOutput, "z") : getValue(previous.getOutputView(), "z")),
+                        new ThreeDimensionsOutputView(
+                                getValue(((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output(), "x"),
+                                getValue(((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output(), "y"),
+                                getValue(((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output(), "z")
+                        ));
     }
 
-    private static ConvolutionTwoDimensionsKernel kernel(Layer layer) {
+    private static ConvolutionTwoDimensionsKernel kernel(Laboratory.Experiment.Substitute.Layer layer) {
+        Laboratory.Experiment.Substitute.Convolutional.Kernel kernel = ((Laboratory.Experiment.Substitute.Convolutional) layer).kernel();
         return new ConvolutionTwoDimensionsKernel(
-                new TwoDimensionsSize(((Convolutional) layer).kernel().size().x(), ((Convolutional) layer).kernel().size().y()),
-                new TwoDimensionsStride(((Convolutional) layer).kernel().stride().x(), ((Convolutional) layer).kernel().stride().y()),
-                new TwoDimensionsPadding(((Convolutional) layer).kernel().padding().x(), ((Convolutional) layer).kernel().padding().y()));
+                new TwoDimensionsSize(kernel.size().x(), kernel.size().y()),
+                new TwoDimensionsStride(kernel.stride().x(), kernel.stride().y()),
+                new TwoDimensionsPadding(kernel.padding().x(), kernel.padding().y()));
+    }
+
+    private static ConvolutionTwoDimensionsKernel kernel(Convolutional layer) {
+        return new ConvolutionTwoDimensionsKernel(
+                new TwoDimensionsSize(layer.kernel().size().x(), layer.kernel().size().y()),
+                new TwoDimensionsStride(layer.kernel().stride().x(), layer.kernel().stride().y()),
+                new TwoDimensionsPadding(layer.kernel().padding().x(), layer.kernel().padding().y()));
     }
 
     private static ThreeDimensionsOutputView thisOutput(Layer layer) {

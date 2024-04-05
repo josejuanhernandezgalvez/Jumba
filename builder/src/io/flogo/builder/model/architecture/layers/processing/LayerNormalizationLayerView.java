@@ -3,6 +3,7 @@ package io.flogo.builder.model.architecture.layers.processing;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
+import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
@@ -20,7 +21,7 @@ public class LayerNormalizationLayerView implements ProcessingLayerView {
     }
 
     public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return new LayerNormalizationLayerView(previous.getOutputView(), eps(substituteView.layer));
+        return new LayerNormalizationLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), eps(substituteView.layer));
     }
 
     private static double eps(Layer layer) {

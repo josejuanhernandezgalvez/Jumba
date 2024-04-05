@@ -33,6 +33,38 @@ Concept:{1..1} Laboratory
             		sub Mish
             		sub Softmax
             	sub ProcessingLayer
+            		sub Recurrent
+                    	var integer numLayers = 1
+                    	var boolean bidirectional = false
+                    	var double dropout = 0
+                    	sub LSTM
+                    		Concept:{1..1} OutputType
+                    			sub EndSequence
+                    				Concept:{1..1} Output > var integer x
+                    			sub HiddenStates
+                    			    Concept:{1..1} Output > var integer x
+                    			sub CellStates
+                    			    Concept:{1..1} Output > var integer x
+                    			sub LastHiddenState
+                    				Concept:{1..1} Output > var integer x
+                    			sub LastCellState
+                    				Concept:{1..1} Output > var integer x
+                    	sub GRU
+                    		Concept:{1..1} OutputType
+                    			sub EndSequence
+                    				Concept:{1..1} Output > var integer x
+                    			sub HiddenStates
+                    			    Concept:{1..1} Output > var integer x
+                    			sub LastHiddenState
+                    				Concept:{1..1} Output > var integer x
+                    	sub RNN
+                    		Concept:{1..1} OutputType
+                    			sub EndSequence
+                    				Concept:{1..1} Output > var integer x
+                    			sub HiddenStates
+                    			    Concept:{1..1} Output > var integer x
+                    			sub LastHiddenState
+                    				Concept:{1..1} Output > var integer x
             		sub BatchNormalization
                     	var double eps = 0.00001
                     	var double momentum = 0.1
@@ -88,20 +120,6 @@ Concept:{1..1} Laboratory
                         		Concept:{1..1} Padding
                         			var integer x
                         			var integer y
-        				sub Recurrent
-        					Concept:{1..1} Output > var integer x
-        					sub LSTM
-        						var integer stackedRecurrentSections = 1
-								var boolean bidirectional = false
-        						var word:{LastHiddenState HiddenStates LastCellState CellStates} outputType
-        					sub GRU
-        						var integer stackedRecurrentSections = 1
-								var boolean bidirectional = false
-        						var word:{LastHiddenState HiddenStates} outputType
-        					sub RNN
-        						var integer stackedRecurrentSections = 1
-								var boolean bidirectional = false
-        						var word:{LastHiddenState HiddenStates} outputType
 
 
 
@@ -353,6 +371,8 @@ Concept Section is component
             	            var double momentum = 0.1
             	        sub LayerNormalization
                         	var double eps=0.00001
+                        sub Linear
+            				Concept:{1..1} Output > var integer x
             	    sub ActivationLayer
             	        sub ReLU
             	        sub ELU > var integer alpha=1

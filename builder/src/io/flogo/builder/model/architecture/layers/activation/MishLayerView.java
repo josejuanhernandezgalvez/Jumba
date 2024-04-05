@@ -3,6 +3,7 @@ package io.flogo.builder.model.architecture.layers.activation;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
+import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
@@ -14,7 +15,7 @@ public class MishLayerView implements ActivationLayerView {
     }
 
     public static ActivationLayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return new MishLayerView(previous.getOutputView());
+        return new MishLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 
     public static ActivationLayerView from(Layer layer, OutputView outputView) {

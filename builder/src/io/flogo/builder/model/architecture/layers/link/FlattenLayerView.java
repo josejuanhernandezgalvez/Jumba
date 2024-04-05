@@ -3,6 +3,10 @@ package io.flogo.builder.model.architecture.layers.link;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.LinkLayerView;
+import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 public class FlattenLayerView implements LinkLayerView {
     public final int fromDimension;
@@ -17,14 +21,29 @@ public class FlattenLayerView implements LinkLayerView {
         this.thisLayerOutput = thisLayerOutput;
     }
 
+    public static  OneDimensionOutputView toOneDimension(OutputView previousLayerOutput) {
+        return new OneDimensionOutputView(
+                Arrays.stream(previousLayerOutput.getClass().getDeclaredFields())
+                        .map(field -> getValue(field, previousLayerOutput))
+                        .reduce(1, (a, b) -> a * b));
+    }
+
+    private static int getValue(Field field, OutputView previousLayerOutput) {
+        try {
+            field.setAccessible(true);
+            return (int) field.get(previousLayerOutput);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public OutputView getOutputView() {
         return thisLayerOutput;
     }
 
-
     @Override
     public LayerView from(LayerView previous) {
-        return null;
+        return new FlattenLayerView(previous.getOutputView(), toOneDimension(previous.getOutputView()));
     }
 }
