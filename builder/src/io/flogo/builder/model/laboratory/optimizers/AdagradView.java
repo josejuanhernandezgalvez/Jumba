@@ -19,7 +19,6 @@ public class AdagradView implements OptimizerView {
         this.initialAccumulator = initialAccumulator;
     }
 
-
     public static OptimizerView from(Optimizer optimizer) {
         return new AdagradView(((Adagrad) optimizer).lr(),
                 ((Adagrad) optimizer).lrDecay(),

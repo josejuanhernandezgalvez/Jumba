@@ -139,6 +139,57 @@ Concept Optimizer is component
 		var double rho=0.9
 		var double eps=0.000001
 		var double weightDecay=0
+	sub Adamax
+		var double lr=0.002
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
+		var double weightDecay=0
+	sub AdamW
+		var double lr=0.001
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double weightDecay=0.01
+		var boolean amsgrad=false
+	sub LBFGS
+		var double lr=1
+		var integer maxIter=20
+		var double toleranceGrad=0.0000001
+		var double toleranceChange=0.000000001
+		var integer historySize=100
+	sub NAdam
+		var double lr=0.002
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
+		var double weightDecay=0
+		var double momentumDecay=0.004
+		var boolean decoupledWeightDecay=false
+	sub RAdam
+		var double lr=0.001
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
+		var double weightDecay=0
+		var boolean decoupledWeightDecay=false
+	sub RProp
+		var double lr=0.01
+		Concept:{0..1} Etas
+			var double eta0=0.5
+			var double eta1=1.2
+		Concept:{0..1} StepSizes
+			var double step0=0.000001
+			var double step1=50
+	sub SparseAdam
+		var double lr=0.001
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
     sub Adam
     	var double lr=0.0001
     	var double beta0=0.9
@@ -193,6 +244,8 @@ Concept LossFunction is component
     sub CrossEntropyLoss
     sub MAELoss
     sub MSELoss
+    sub HuberLoss
+    sub CTCLoss
     sub MarginRankingLoss
     sub KullbackLeiblerDivergenceLoss
     sub TripletMarginLossWithSwap
