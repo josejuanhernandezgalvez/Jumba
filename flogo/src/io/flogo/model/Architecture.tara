@@ -40,30 +40,59 @@ Concept:{1..1} Laboratory
                     	sub LSTM
                     		Concept:{1..1} OutputType
                     			sub EndSequence
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
                     			sub HiddenStates
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     			    Concept:{1..1} Output > var integer x
                     			sub CellStates
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     			    Concept:{1..1} Output > var integer x
                     			sub LastHiddenState
+                    				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
                     			sub LastCellState
+                    				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
                     	sub GRU
                     		Concept:{1..1} OutputType
                     			sub EndSequence
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
                     			sub HiddenStates
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     			    Concept:{1..1} Output > var integer x
                     			sub LastHiddenState
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
                     	sub RNN
                     		Concept:{1..1} OutputType
                     			sub EndSequence
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
                     			sub HiddenStates
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     			    Concept:{1..1} Output > var integer x
                     			sub LastHiddenState
+                    				var integer from=0
+                                    var integer to=0
+                    				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
             		sub BatchNormalization
                     	var double eps = 0.00001
@@ -348,7 +377,7 @@ Concept Section is component
             	var integer x
 			Concept:{1..*} Block
 				Facet:CheckCustomDownSampling Residual
-					var word:{Bottleneck Custom } downSampling = Bottleneck
+					var word:{Bottleneck Custom} downSampling = Bottleneck
                     Concept:{0..1} CustomDownSampling
             	Concept:{1..*} Layer
 					sub VLayer
@@ -378,8 +407,8 @@ Concept Section is component
 							var double eps=0.00001
         sub RecurrentSection
 			Concept:{0..1} Input
-            	var integer x
             	var integer seqLength
+            	var integer x
 			Concept:{1..*} Block
         		Concept:{1..*} Layer
 					sub VLayer
@@ -392,30 +421,57 @@ Concept Section is component
         					sub LSTM
         						Concept:{1..1} OutputType
         							sub EndSequence
+        								var integer from=0
+        								var integer to=0
+        								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
         							sub HiddenStates
+        								var integer from=0
+										var integer to=0
+        								var word:{flatten linear} reduce=flatten
         							    Concept:{1..1} Output > var integer x
 									sub CellStates
+										var integer from=0
+										var integer to=0
+										var word:{flatten linear} reduce=flatten
         							    Concept:{1..1} Output > var integer x
         							sub LastHiddenState
+        								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
         							sub LastCellState
+        								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
         					sub GRU
         						Concept:{1..1} OutputType
         							sub EndSequence
+										var integer from=0
+										var integer to=0
+										var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
         							sub HiddenStates
+        								var integer from=0
+                                        var integer to=0
+										var word:{flatten linear} reduce=flatten
         							    Concept:{1..1} Output > var integer x
         							sub LastHiddenState
+        								var integer from=0
+                                    	var integer to=0
+        								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
         					sub RNN
         						Concept:{1..1} OutputType
         							sub EndSequence
+        								var integer from=0
+                                        var integer to=0
+        								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
         							sub HiddenStates
+        								var integer from=0
+                                        var integer to=0
+        								var word:{flatten linear} reduce=flatten
         							    Concept:{1..1} Output > var integer x
         							sub LastHiddenState
+        								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
             	        sub Dropout
             	        	var double probability = 0.8

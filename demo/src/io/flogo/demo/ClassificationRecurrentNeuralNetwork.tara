@@ -12,10 +12,10 @@ Laboratory
 
 Architecture
 	RecurrentSection
-		Input(x = 300, seqLength = 4)
+		Input(seqLength = 6, x = 300)
 		Block
-			LSTM
-				EndSequence > Output(x=100)
+			LSTM(bidirectional = true, numLayers = 4)
+				EndSequence(reduce = linear, from=4) > Output(x=20)
 
 	FlattenSection
 
