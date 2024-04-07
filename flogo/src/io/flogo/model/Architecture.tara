@@ -405,7 +405,7 @@ Concept Section is component
                         	var double momentum = 0.1
 						sub LayerNormalization
 							var double eps=0.00001
-        sub RecurrentSection
+        sub:CheckFirstLayerIsARecurrentLayerAndIsFirstSection RecurrentSection
 			Concept:{0..1} Input
             	var integer seqLength
             	var integer x

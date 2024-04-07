@@ -17,7 +17,7 @@ Architecture RecurrentNeuralNetwork
 	RecurrentSection
 		Input(x=300, seqLength = 4)
 		Block
-			LSTM(bidirectional = true, numLayers = 4)
+			LSTM(bidirectional  = true, numLayers = 4)
             	HiddenStates > Output(x=20)
 			VLayer(id = "01")
 			BatchNormalization

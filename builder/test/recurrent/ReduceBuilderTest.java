@@ -121,7 +121,6 @@ public class ReduceBuilderTest {
         Assert.assertEquals(expected.getFirst(), result.getFirst());
     }
 
-
     @Test
     public void last_cell_state_bidirectional_false_linear() {
         List<RecurrentLayerView.Reduce> result = new RecurrentLayerView.Reduce.Builder(
@@ -210,7 +209,6 @@ public class ReduceBuilderTest {
         Assert.assertEquals(expected.get(1), result.get(1));
     }
 
-
     @Test
     public void hidden_states_bidirectional_true_linear_with_slice() {
         List<RecurrentLayerView.Reduce> result = new RecurrentLayerView.Reduce.Builder(
@@ -243,7 +241,6 @@ public class ReduceBuilderTest {
         Assert.assertEquals(expected.get(1), result.get(1));
     }
 
-
     @Test
     public void hidden_states_bidirectional_false_linear_with_slice() {
         List<RecurrentLayerView.Reduce> result = new RecurrentLayerView.Reduce.Builder(
@@ -259,7 +256,6 @@ public class ReduceBuilderTest {
         Assert.assertEquals(expected.getFirst(), result.getFirst());
         Assert.assertEquals(expected.get(1), result.get(1));
     }
-
 
     @Test
     public void cell_states_bidirectional_true_flatten() {
@@ -441,7 +437,6 @@ public class ReduceBuilderTest {
         Assert.assertEquals(expected.getFirst(), result.getFirst());
     }
 
-    // --------
     @Test
     public void end_sequence_bidirectional_true_flatten_with_slice() {
         List<RecurrentLayerView.Reduce> result = new RecurrentLayerView.Reduce.Builder(
