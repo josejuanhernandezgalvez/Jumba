@@ -4,13 +4,17 @@ import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.architecture.BlockView;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.SectionView;
-import io.flogo.builder.model.architecture.layers.activation.ReLULayerView;
+import io.flogo.builder.model.architecture.layers.ActivationLayerView;
+import io.flogo.builder.model.architecture.layers.activation.ELULayerView;
+import io.flogo.builder.model.architecture.layers.activation.LeakyReLULayerView;
 import io.flogo.builder.model.architecture.layers.activation.SoftmaxLayerView;
 import io.flogo.builder.model.architecture.layers.link.FlattenLayerView;
+import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
 import io.flogo.builder.model.architecture.layers.processing.*;
 import io.flogo.builder.model.architecture.sections.link.FlattenSectionView;
 import io.intino.itrules.FrameBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -37,20 +41,20 @@ public class ArchitectureRenderer {
 
     private FrameBuilder[] componentsOf(ArchitectureView architecture, String library) {
         return architecture.sections().stream()
-                .map(section -> isUniLayer(section) ? buildComponentFrame(library, section) : frameFromUni(library, section))
+                .map(section -> isFlattenSection(section) ? buildFlattenFrame(section, library) : sectionOf(section, library))
                 .toArray(FrameBuilder[]::new);
     }
 
-    private FrameBuilder buildComponentFrame(String library, SectionView section) {
-        return new FrameBuilder("component").add("section", buildSectionFrame(library, section));
+    private static boolean isFlattenSection(SectionView section) {
+        return section instanceof FlattenSectionView;
     }
 
-    private FrameBuilder frameFromUni(String library, SectionView section) {
+    private FrameBuilder buildFlattenFrame(SectionView section, String library) {
         return new FrameBuilder("component").add("layer", buildLayerFrame(library, section.blocks().stream().map(BlockView::layerViews).flatMap(List::stream).toList().getFirst()));
     }
 
-    private static boolean isUniLayer(SectionView section) {
-        return section.blocks().stream().map(BlockView::layerViews).mapToLong(List::size).sum() > 1;
+    private FrameBuilder sectionOf(SectionView section, String library) {
+        return new FrameBuilder("component").add("section", buildSectionFrame(library, section));
     }
 
     private FrameBuilder[] sectionsOf(ArchitectureView architecture, String library) {
@@ -76,9 +80,21 @@ public class ArchitectureRenderer {
                 .flatMap(List::stream)
                 .map(BlockView::layerViews)
                 .flatMap(List::stream)
+                .map(layerView -> layerView instanceof RecurrentLayerView ? layersOf((RecurrentLayerView) layerView) : List.of(layerView))
+                .flatMap(List::stream)
                 .filter(distinctBy(LayerView::getClass))
                 .map(layer -> buildLayerFrame(library, layer))
                 .toArray(FrameBuilder[]::new);
+    }
+
+    private List<LayerView> layersOf(RecurrentLayerView recurrent) {
+        ArrayList<LayerView> layers = new ArrayList<>();
+        for (RecurrentLayerView.Reduce reduce : recurrent.reduce) {
+            if (reduce instanceof RecurrentLayerView.Reduce.LinearReduce) layers.add(new LinearLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1)));
+            if (reduce instanceof RecurrentLayerView.Reduce.FlattenReduce) layers.add(new FlattenLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1)));
+        }
+        layers.add(recurrent);
+        return layers;
     }
 
     private FrameBuilder buildSectionFrame(String library, SectionView section) {
@@ -114,37 +130,88 @@ public class ArchitectureRenderer {
             case LinearLayerView linear ->
                     builder.add("in_features", dimensionOf(linear.previousLayerOutput.asArray()))
                             .add("out_features", dimensionOf(linear.thisLayerOutput.asArray()))
+                            .add("dimension", -1)
                             .add("bias", "True");
             case ConvolutionalLayerView convolutional ->
-                builder.add("in_channels", convolutional.previousLayerOutput.asArray()[2])
-                        .add("out_channels", convolutional.thisLayerOutput.asArray()[2])
-                        .add("kernel", new FrameBuilder("kernel").add("dimension", convolutional.kernel.size().asArray()))
-                        .add("stride", new FrameBuilder("stride").add("dimension", convolutional.kernel.stride().asArray()))
-                        .add("padding", new FrameBuilder("padding").add("dimension", convolutional.kernel.padding().asArray()));
+                    builder.add("dimensionality", convolutional.previousLayerOutput.dimensions() - 1)
+                            .add("in_channels", convolutional.previousLayerOutput.asArray()[2])
+                            .add("out_channels", convolutional.thisLayerOutput.asArray()[2])
+                            .add("kernel", new FrameBuilder("kernel").add("dimension", convolutional.kernel.size().asArray()))
+                            .add("stride", new FrameBuilder("stride").add("dimension", convolutional.kernel.stride().asArray()))
+                            .add("padding", new FrameBuilder("padding").add("dimension", convolutional.kernel.padding().asArray()));
+            case RecurrentLayerView recurrent ->
+                    builder.add("package", "recurrents")
+                            .add("input", recurrent.previousLayerOutput.asArray()[1])
+                            .add("hidden", recurrent.getOutputView().asArray()[0])
+                            .add("num_layers", recurrent.numLayers)
+                            .add("bidirectional", recurrent.bidirectional)
+                            .add("dropout", recurrent.dropout)
+                            .add("reduce", reductionsOf(recurrent, library));
             case PoolLayerView pool ->
                     builder.add("package", "poolings")
+                            .add("dimensionality", pool.getOutputView().dimensions() - 1)
                             .add("kernel", new FrameBuilder("kernel").add("dimension", pool.kernel.size().asArray()))
                             .add("stride", new FrameBuilder("stride").add("dimension", pool.kernel.stride().asArray()))
                             .add("padding", new FrameBuilder("padding").add("dimension", pool.kernel.padding().asArray()));
-            case ReLULayerView ignored ->
-                    builder.add("package", "activations");
-            case DropoutLayerView dropout ->
-                    builder.add("probability", dropout.probability)
-                            .add("package", "regularizations");
-            case BatchNormalizationLayerView batchNormalization ->
-                    builder.add("package", "regularizations")
-                            .add("num_features", dimensionOf(batchNormalization.output.asArray()))
-                            .add("eps", batchNormalization.eps)
-                            .add("momentum", batchNormalization.momentum);
+            case ELULayerView elu ->
+                    builder.add("package", "activations")
+                            .add("alpha", elu.alpha);
+            case LeakyReLULayerView leaky ->
+                    builder.add("package", "activations")
+                            .add("slope", leaky.alpha);
             case SoftmaxLayerView softmax ->
                     builder.add("package", "activations")
                             .add("n_dimensions", softmax.getOutputView().dimensions());
+            case ActivationLayerView activation ->
+                    builder.add("package", "activations");
+            case DropoutLayerView dropout ->
+                    builder.add("package", "regularizations")
+                            .add("probability", dropout.probability);
+            case LayerNormalizationLayerView layerNormalization ->
+                    builder.add("package", "regularizations")
+                            .add("shape", dimensionOf(layerNormalization.output.asArray()))
+                            .add("eps", layerNormalization.eps);
+            case BatchNormalizationLayerView batchNormalization ->
+                    builder.add("package", "regularizations")
+                            .add("dimensionality", batchNormalization.getOutputView().dimensions())
+                            .add("num_features", dimensionOf(batchNormalization.output.asArray()))
+                            .add("eps", batchNormalization.eps)
+                            .add("momentum", batchNormalization.momentum);
             case FlattenLayerView flatten ->
                     builder.add("from_dim", flatten.fromDimension)
                             .add("to_dim", flatten.toDimension);
             default -> {}
         }
         return builder;
+    }
+
+    private FrameBuilder[] reductionsOf(RecurrentLayerView recurrent, String library) {
+        return recurrent.reduce.stream()
+                .map(reduce -> buildReduceFrame(reduce, recurrent.outputType, library))
+                .toArray(FrameBuilder[]::new);
+    }
+
+    private FrameBuilder buildReduceFrame(RecurrentLayerView.Reduce reduce, RecurrentLayerView.OutputType output, String library) {
+        FrameBuilder fb = new FrameBuilder("reduce").add("library", library);
+        switch (reduce) {
+            case RecurrentLayerView.Reduce.SliceReduce slicing ->
+                        fb.add("slicing", true)
+                            .add("output", output)
+                            .add("from", slicing.from)
+                            .add("to", slicing.to + 1);
+            case RecurrentLayerView.Reduce.LinearReduce linear ->
+                        fb.add("linear", true)
+                            .add("in_features", dimensionOf(linear.previousOutputView.asArray()))
+                            .add("out_features", dimensionOf(linear.outputView.asArray()))
+                            .add("dimension", linear.dimensionToActOn - 1)
+                            .add("bias", "True");
+            case RecurrentLayerView.Reduce.FlattenReduce flatten ->
+                        fb.add("flatten", true)
+                            .add("from", flatten.startDimension)
+                            .add("to", flatten.endDimension);
+            default -> {}
+        }
+        return fb;
     }
 
     private String typeOf(String view) {

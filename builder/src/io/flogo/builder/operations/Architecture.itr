@@ -32,12 +32,35 @@ def type(block) trigger(import)
     from implementations.$library.architecture.block import $library+FirstUppercase~Block as Block
 end
 
+def type(layer) trigger(import) attribute(package) attribute(dimensionality)
+    from implementations.$library.architecture.layers.$package.$type+SnakeCase import $library+FirstUppercase~$dimensionality~Dimensional~$type~Layer as $type~Layer
+end
+
+def type(layer) trigger(import) attribute(package) attribute(reduce)
+    from implementations.$library.architecture.layers.$package.$type+SnakeCase import $library+FirstUppercase~$type~Layer as $type~Layer
+    $reduce+import...[]
+end
+
 def type(layer) trigger(import) attribute(package)
     from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
 end
 
+def type(layer) trigger(import) attribute(dimensionality)
+    from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$dimensionality~Dimensional~$type~Layer as $type~Layer
+end
+
 def type(layer) trigger(import)
     from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
+end
+
+def type(reduce) trigger(import) attribute(slicing)
+    from implementations.$library.architecture.layers.slicing import $library+FirstUppercase~SlicingLayer as SlicingLayer
+end
+
+def type(reduce) trigger(import) attribute(linear)
+end
+
+def type(reduce) trigger(import) attribute(flatten)
 end
 
 def type(section)
@@ -63,7 +86,7 @@ def type(kernel | stride | padding)
 end
 
 def type(Linear) type(layer)
-    $type~Layer(in_features=$in_features, out_features=$out_features, bias=$bias)
+    $type~Layer(in_features=$in_features, out_features=$out_features, dimension=$dimension, bias=$bias)
 end
 
 def type(Convolutional) type(layer)
@@ -74,16 +97,45 @@ def type(MaxPool | AvgPool) type(layer)
     $type~Layer(kernel=$kernel, stride=$stride, padding=$padding)
 end
 
-def type(Normalization) type(layer)
-    $type~Layer(num_features=$num_features, eps=$eps, momentum=$momentum)
+def type(LSTM | RNN | GRU) type(layer)
+    $type~Layer(input_size=$input, hidden_size=$hidden, num_layer=$num_layers, bidirectional=$bidirectional+FirstUpperCase, dropout=$dropout),
+    $reduce...[, $NL]
 end
 
-def type(Dropout) type(layer)
-    $type~Layer(probability=$probability)
+def type(reduce) attribute(slicing)
+    SlicingLayer(output=SlicingLayer.OutputType.$output, start=$from, end=$to)
+end
+
+def type(reduce) attribute(linear)
+    LinearLayer(in_features=$in_features, out_features=$out_features, dimension=$dimension, bias=$bias)
+end
+
+def type(reduce) attribute(flatten)
+    FlattenLayer(from_dim=$from, to_dim=$to)
+end
+
+def type(ELU) type(layer)
+    $type~Layer(alpha=$alpha)
+end
+
+def type(LeakyReLU) type(layer)
+    $type~Layer(negative_slope=$slope)
 end
 
 def type(Softmax) type(layer)
     $type~Layer(n_dimensions=$n_dimensions)
+end
+
+def type(BatchNormalization) type(layer)
+    $type~Layer(num_features=$num_features, eps=$eps, momentum=$momentum)
+end
+
+def type(LayerNormalization) type(layer)
+    $type~Layer(normalized_shape=$shape, eps=$eps)
+end
+
+def type(Dropout) type(layer)
+    $type~Layer(probability=$probability)
 end
 
 def type(Flatten) type(layer)
