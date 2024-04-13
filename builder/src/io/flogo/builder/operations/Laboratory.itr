@@ -3,11 +3,11 @@ def type(main)
     from framework.toolbox.laboratory import Laboratory
     from framework.toolbox.logger import Logger
     from framework.toolbox.stopper import EarlyStopper
-    from implementations.$library.toolbox.experiment import $library+FirstUppercase~Experiment
+    from implementations.$library.toolbox.experiment import $library+FirstUppercase~Experiment as Experiment
     $optimizer+import
     $loss+import
     [$dataset+import]
-    from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelSaver
+    from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelSaver as ModelSaver
     $strategy+import
 
     dataset = $dataset
@@ -20,19 +20,19 @@ def type(main)
 end
 
 def type(strategy) trigger(import)
-    from implementations.$library.toolbox.strategies.$name+Lowercase import $library+FirstUppercase$name+FirstUppercase~Strategy
+    from implementations.$library.toolbox.strategies.$name+Lowercase import $library+FirstUppercase$name+FirstUppercase~Strategy as $name+FirstUppercase~Strategy
 end
 
 def type(optimizer) trigger(import)
-    from implementations.$library.toolbox.optimizers.$name+Lowercase import $library+FirstUppercase$name~Optimizer
+    from implementations.$library.toolbox.optimizers.$name+Lowercase import $library+FirstUppercase$name~Optimizer as $name~Optimizer
 end
 
 def type(loss) trigger(import)
-    from implementations.$library.toolbox.losses.$name+Lowercase import $library+FirstUppercase$name~LossFunction
+    from implementations.$library.toolbox.losses.$name+Lowercase import $library+FirstUppercase$name~LossFunction as $name~LossFunction
 end
 
 def type(dataset) trigger(import)
-    from implementations.$library.toolbox.loaders.$name+Lowercase import $library+FirstUppercase$name+FirstUppercase~DatasetLoader
+    from implementations.$library.toolbox.loaders.$name+Lowercase import $library+FirstUppercase$name+FirstUppercase~DatasetLoader as $name+FirstUppercase~DatasetLoader
 end
 
 def type(laboratory)
@@ -47,23 +47,23 @@ def type(laboratory)
 end
 
 def type(strategy)
-    $library+FirstUppercase$name+FirstUppercase~Strategy($loss)
+    $name+FirstUppercase~Strategy($loss)
 end
 
 def type(experiment)
-    $library+FirstUppercase~Experiment("$experimentName",
-                                       $optimizer,
-                                       $loss,
-                                       EarlyStopper($epochs, $patience),
-                                       $library+FirstUppercase~ModelSaver("$path"))
+    Experiment("$experimentName",
+            $optimizer,
+            $loss,
+            EarlyStopper($epochs, $patience),
+            ModelSaver("$path"))
 end
 
 def type(loss)
-    $library+FirstUppercase$name~LossFunction()
+    $name~LossFunction()
 end
 
 def type(dataset)
-    $library+FirstUppercase$name+FirstUppercase~DatasetLoader("$datasetName", PATH, $batchSize, 42).load($trainProportion, $valProportion, $testProportion)
+    $name+FirstUppercase~DatasetLoader("$datasetName", PATH, $batchSize, 42).load($trainProportion, $valProportion, $testProportion)
 end
 
 def type(stopper)
@@ -75,57 +75,57 @@ end
 
 
 def type(optimizer) type(SGD)
-    $library+FirstUppercase~SGDOptimizerOptimizer(architecture.architecture.parameters(), $lr, $momentum, $dampening, $weight_decay)
+    SGDOptimizer(architecture.architecture.parameters(), $lr, $momentum, $dampening, $weight_decay)
 end
 
 def type(optimizer) type(Adadelta)
-    $library+FirstUppercase~AdadeltaOptimizerOptimizer(architecture.architecture.parameters(), $lr, $rho, $eps, $weight_decay)
+    AdadeltaOptimizer(architecture.architecture.parameters(), $lr, $rho, $eps, $weight_decay)
 end
 
 def type(optimizer) type(Adagrad)
-    $library+FirstUppercase~AdagradOptimizerOptimizer(architecture.architecture.parameters(), $lr, $lr_decay, $eps, $weight_decay)
+    AdagradOptimizer(architecture.architecture.parameters(), $lr, $lr_decay, $eps, $weight_decay)
 end
 
 def type(optimizer) type(Adam)
-    $library+FirstUppercase~AdamOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
+    AdamOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
 end
 
 def type(optimizer) type(Adamax)
-    $library+FirstUppercase~AdamaxOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
+    AdamaxOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
 end
 
 def type(optimizer) type(AdamW)
-    $library+FirstUppercase~AdamWOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
+    AdamWOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
 end
 
 def type(optimizer) type(AMSGrad)
-    $library+FirstUppercase~AMSGradOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
+    AMSGradOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
 end
 
 def type(optimizer) type(ASGD)
-    $library+FirstUppercase~ASGDOptimizerOptimizer(architecture.architecture.parameters(), $lr, $alpha, $t0, $weight_decay)
+    ASGDOptimizer(architecture.architecture.parameters(), $lr, $alpha, $t0, $weight_decay)
 end
 
 def type(optimizer) type(NAdam)
-    $library+FirstUppercase~NAdamOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
+    NAdamOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
 end
 
 def type(optimizer) type(RProp)
-    $library+FirstUppercase~RPropOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($eta0, $eta1), ($step0, $step1))
+    RPropOptimizer(architecture.architecture.parameters(), $lr, ($eta0, $eta1), ($step0, $step1))
 end
 
 def type(optimizer) type(RAdam)
-    $library+FirstUppercase~RAdamOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
+    RAdamOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps, $weight_decay)
 end
 
 def type(optimizer) type(RMSProp)
-    $library+FirstUppercase~RMSPropOptimizerOptimizer(architecture.architecture.parameters(), $lr, $alpha, $eps, $weight_decay, $momentum)
+    RMSPropOptimizer(architecture.architecture.parameters(), $lr, $alpha, $eps, $weight_decay, $momentum)
 end
 
 def type(optimizer) type(SparseAdam)
-    $library+FirstUppercase~SparseAdamOptimizerOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps)
+    SparseAdamOptimizer(architecture.architecture.parameters(), $lr, ($b0, $b1), $eps)
 end
 
 def type(optimizer) type(LBFGS)
-    $library+FirstUppercase~LBFGSOptimizerOptimizer(architecture.architecture.parameters(), $lr, $rho, $eps, $weight_decay)
+    LBFGSOptimizer(architecture.architecture.parameters(), $lr, $rho, $eps, $weight_decay)
 end
