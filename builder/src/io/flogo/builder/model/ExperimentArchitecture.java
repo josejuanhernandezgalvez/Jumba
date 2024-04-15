@@ -18,8 +18,8 @@ import static io.flogo.builder.model.renderers.architecture.SectionRenderer.Laye
 public class ExperimentArchitecture extends ArchitectureView {
     static OutputView sectionInput;
 
-    public ExperimentArchitecture(ArchitectureView architectureView, List<SubstituteView> substitutes) {
-        super(collapesedSectionList(architectureView.sections().iterator(), substitutes, new ArrayList<>()));
+    public ExperimentArchitecture(ArchitectureView architectureView, List<SubstituteView> substitutes, String name) {
+        super(collapesedSectionList(architectureView.sections().iterator(), substitutes, new ArrayList<>()), name);
     }
 
     private static List<SectionView> collapesedSectionList(Iterator<SectionView> iterator, List<SubstituteView> substitutes, ArrayList<SectionView> result) {
@@ -113,6 +113,7 @@ public class ExperimentArchitecture extends ArchitectureView {
     public static class Builder {
         private ArchitectureView architectureView;
         private List<SubstituteView> substitutes;
+        private String name;
 
         public Builder from(ArchitectureView architectureView) {
             this.architectureView = architectureView;
@@ -124,8 +125,13 @@ public class ExperimentArchitecture extends ArchitectureView {
             return this;
         }
 
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
         public ArchitectureView collapse() {
-            return new ExperimentArchitecture(this.architectureView, this.substitutes);
+            return new ExperimentArchitecture(this.architectureView, this.substitutes, this.name);
         }
     }
 }

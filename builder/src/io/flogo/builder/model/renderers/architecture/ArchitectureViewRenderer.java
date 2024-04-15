@@ -24,7 +24,7 @@ public class ArchitectureViewRenderer implements Renderer<Architecture, Architec
 
     public ArchitectureView render(Architecture architecture) {
         OutputView input = inputRenderer.render(architecture.section(0));
-        return new ArchitectureView(render(architecture.sectionList().iterator(), input, new ArrayList<>()));
+        return new ArchitectureView(render(architecture.sectionList().iterator(), input, new ArrayList<>()), architecture.name$());
     }
 
     private List<SectionView> render(Iterator<Section> iterator, OutputView input, List<SectionView> sectionViews) {

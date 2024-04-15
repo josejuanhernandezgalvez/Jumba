@@ -36,8 +36,8 @@ public class ArchitectureTest {
                                         new LinearLayerView(new OneDimensionOutputView(10), new OneDimensionOutputView(1)),
                                         new ReLULayerView(new OneDimensionOutputView(1))
                                 ))
-                        ), new OneDimensionOutputView(8)))); //TODO
-        System.out.println(new ArchitectureRenderer().render(architecture, "LinearArchitecture", "pytorch"));
+                        ), new OneDimensionOutputView(8))), "8"); //TODO
+        System.out.println(new ArchitectureRenderer().render(architecture, "pytorch"));
     }
 
     @Test
@@ -64,8 +64,8 @@ public class ArchitectureTest {
                                                 new ReLULayerView(new OneDimensionOutputView(10)),
                                                 new SoftmaxLayerView(new OneDimensionOutputView(10))
                                         ))),
-                                new OneDimensionOutputView(8)))); //TODO
-        System.out.println(new ArchitectureRenderer().render(architecture, "ConvolutionalArchitecture", "pytorch"));
+                                new OneDimensionOutputView(8))), "8"); //TODO
+        System.out.println(new ArchitectureRenderer().render(architecture,  "pytorch"));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ArchitectureTest {
                                                 new ReLULayerView(new OneDimensionOutputView(10)),
                                                 new SoftmaxLayerView(new OneDimensionOutputView(10))
                                         )))
-                        , new OneDimensionOutputView(8)))); //TODO
-        System.out.println(new ArchitectureRenderer().render(architecture, "RecurrentArchitecture", "pytorch"));
+                        , new OneDimensionOutputView(8))), "8"); //TODO
+        System.out.println(new ArchitectureRenderer().render(architecture,  "pytorch"));
     }
 }
