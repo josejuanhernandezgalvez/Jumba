@@ -36,8 +36,8 @@ public final class LinearLayerView implements ProcessingLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new LinearLayerView(previous == null ? previousLayerOutput: previous.getOutputView(), thisLayerOutput);
+    public LayerView from(OutputView previous) {
+        return new LinearLayerView(previous == null ? previousLayerOutput: previous, thisLayerOutput);
     }
 
     @Override

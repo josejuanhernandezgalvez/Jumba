@@ -32,20 +32,20 @@ public class MaxPoolLayerView extends PoolLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
+    public LayerView from(OutputView previous) {
         return thisLayerOutput instanceof UndeterminedOutputView ?
-                new MaxPoolLayerView(this.kernel, previous.getOutputView()) :
+                new MaxPoolLayerView(this.kernel, previous) :
                 kernel instanceof UndeterminedKernel ?
                         new MaxPoolLayerView(
                                 new ThreeDimensionsOutputView(
-                                        getValue(previous.getOutputView(), "x"),
-                                        getValue(previous.getOutputView(), "y"),
-                                        getValue(previous.getOutputView(), "z")),
+                                        getValue(previous, "x"),
+                                        getValue(previous, "y"),
+                                        getValue(previous, "z")),
                                 new ThreeDimensionsOutputView(
                                         getValue(thisLayerOutput, "x"),
                                         getValue(thisLayerOutput, "y"),
-                                        getValue(previous.getOutputView(), "z"))) :
-                        new MaxPoolLayerView(this.kernel, previous.getOutputView());
+                                        getValue(previous, "z"))) :
+                        new MaxPoolLayerView(this.kernel, previous);
     }
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {

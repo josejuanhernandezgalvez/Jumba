@@ -47,7 +47,7 @@ public abstract class SectionRenderer<U extends SectionView> {
         }
 
         private static String layerName(Layer layer) {
-            return layer.getClass().toString().split("\\$")[2];
+            return layer.getClass().getSimpleName();
         }
 
         public static String packageName(Layer layer) {
@@ -55,10 +55,9 @@ public abstract class SectionRenderer<U extends SectionView> {
         }
 
         private static boolean isActivationLayer(Layer layer) {
-            return layer.core$().conceptList().get(1).toString().split("\\$")[2].startsWith("ActivationLayer");
+            return layer.core$().conceptList().get(1).toString().contains("ActivationLayer");
         }
     }
-
 
     public static class SectionOrchestratorRenderer extends SectionRenderer<SectionView> {
 

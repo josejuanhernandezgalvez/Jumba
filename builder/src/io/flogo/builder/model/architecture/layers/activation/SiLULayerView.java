@@ -28,7 +28,7 @@ public class SiLULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new SiLULayerView(previous == null ? this.outputView : previous.getOutputView());
+    public LayerView from(OutputView previous) {
+        return new SiLULayerView(previous == null ? this.outputView : previous);
     }
 }

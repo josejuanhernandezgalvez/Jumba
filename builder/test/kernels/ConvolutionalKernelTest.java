@@ -86,4 +86,15 @@ public class ConvolutionalKernelTest {
     }
 
 
+    @Test
+    public void should_return_kernel_of_size_1_by_1_and_stride_1_by_1_and_padding_9_by_9() {
+        ConvolutionTwoDimensionsKernel kernel = ConvolutionTwoDimensionsKernel.kernelFor(
+                new ThreeDimensionsOutputView(40, 40, 3),
+                new ThreeDimensionsOutputView(49, 49, 6));
+        ConvolutionTwoDimensionsKernel expected = new ConvolutionTwoDimensionsKernel(
+                new TwoDimensionsSize(1, 1),
+                new TwoDimensionsStride(1, 1),
+                new TwoDimensionsPadding(9, 9));
+        assertThat(kernel).isEqualTo(expected);
+    }
 }

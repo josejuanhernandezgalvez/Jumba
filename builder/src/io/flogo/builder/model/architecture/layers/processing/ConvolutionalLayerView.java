@@ -22,7 +22,7 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     public final Kernel kernel;
     public final OutputView previousLayerOutput;
     public final OutputView thisLayerOutput;
-    private int outChannels;
+    private final int outChannels;
 
     public ConvolutionalLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
         this.previousLayerOutput = previousLayerOutput;
@@ -30,6 +30,7 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
         this.kernel = isDetermined(previousLayerOutput) ?
                 kernelFor((ThreeDimensionsOutputView) previousLayerOutput, (ThreeDimensionsOutputView) thisLayerOutput) :
                 new UndeterminedKernel();
+        this.outChannels = thisLayerOutput.asArray()[2];
     }
 
     public ConvolutionalLayerView(ConvolutionTwoDimensionsKernel kernel, OutputView previousLayerOutput, int outChannels) {
@@ -47,10 +48,10 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
+    public LayerView from(OutputView previous) {
         return this.kernel instanceof UndeterminedKernel ?
-                new ConvolutionalLayerView(previous.getOutputView(), thisLayerOutput) :
-                new ConvolutionalLayerView((ConvolutionTwoDimensionsKernel) this.kernel, previous.getOutputView(), outChannels);
+                new ConvolutionalLayerView(previous, thisLayerOutput) :
+                new ConvolutionalLayerView((ConvolutionTwoDimensionsKernel) this.kernel, previous, outChannels);
     }
 
     private ThreeDimensionsOutputView calculateLayerOutput(ThreeDimensionsOutputView previousLayerOutput, int outChannels) {

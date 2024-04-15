@@ -13,11 +13,11 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ArchitectureRenderer implements Renderer<Architecture, ArchitectureView> {
+public class ArchitectureViewRenderer implements Renderer<Architecture, ArchitectureView> {
     private final InputRenderer inputRenderer;
     private final SectionRenderer<SectionView> sectionRenderer;
 
-    public ArchitectureRenderer() {
+    public ArchitectureViewRenderer() {
         this.inputRenderer = new InputRenderer();
         this.sectionRenderer = new SectionRenderer.SectionOrchestratorRenderer();
     }

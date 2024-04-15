@@ -1,10 +1,11 @@
 package io.flogo.builder.model;
 
-import io.flogo.builder.model.architecture.ArchitectureView;
-import io.flogo.builder.model.architecture.BlockView;
-import io.flogo.builder.model.architecture.LayerView;
-import io.flogo.builder.model.architecture.SectionView;
+import io.flogo.builder.model.architecture.*;
+import io.flogo.builder.model.architecture.blocks.ResidualBlockView;
+import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
+import io.flogo.builder.model.architecture.layers.processing.ConvolutionalLayerView;
+import io.flogo.builder.model.architecture.layers.processing.LinearLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
@@ -15,6 +16,7 @@ import static io.flogo.builder.model.renderers.architecture.SectionRenderer.Laye
 import static io.flogo.builder.model.renderers.architecture.SectionRenderer.LayerRenderer.ProcessingLayersViewPackage;
 
 public class ExperimentArchitecture extends ArchitectureView {
+    static OutputView sectionInput;
 
     public ExperimentArchitecture(ArchitectureView architectureView, List<SubstituteView> substitutes) {
         super(collapesedSectionList(architectureView.sections().iterator(), substitutes, new ArrayList<>()));
@@ -33,8 +35,9 @@ public class ExperimentArchitecture extends ArchitectureView {
 
     private static SectionView collapseSectionView(SectionView sectionView, Map<String, List<SubstituteView>> substitutes, LayerView previous) {
         try {
+            sectionInput = sectionView.input();
             return (SectionView) sectionView.getClass().getConstructors()[0].newInstance(
-                    collapsedBlockViewList(sectionView.blocks().iterator(), substitutes, new ArrayList<>(), previous));
+                    collapsedBlockViewList(sectionView.blocks().iterator(), substitutes, new ArrayList<>(), previous), sectionView.input());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -42,14 +45,39 @@ public class ExperimentArchitecture extends ArchitectureView {
 
     private static List<BlockView> collapsedBlockViewList(Iterator<BlockView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<BlockView> result, LayerView previous) {
         if (!iterator.hasNext()) return result;
-        result.add(collapsedBlockView(iterator.next().layerViews().iterator(), substitutes, new ArrayList<>(), previous));
+        BlockView nextBlock = iterator.next();
+        result.add(isSimple(nextBlock) ?
+                collapsedSimpleBlockView(nextBlock.layerViews().iterator(), substitutes, new ArrayList<>(), previous) :
+                collapsedResidualBlockView(nextBlock.layerViews().iterator(), ((ResidualBlockView) nextBlock).residualConnection, substitutes, new ArrayList<>(), previous));
         return collapsedBlockViewList(iterator, substitutes, result, result.getLast().layerViews().getLast());
     }
 
-    private static BlockView collapsedBlockView(Iterator<LayerView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
-        if (!iterator.hasNext()) return new BlockView(result);
+    private static boolean isSimple(BlockView nextBlock) {
+        return !(nextBlock instanceof ResidualBlockView);
+    }
+
+    private static BlockView collapsedSimpleBlockView(Iterator<LayerView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
+        if (!iterator.hasNext()) return new SimpleBlockView(result);
         result.add(collapsedLayerView(iterator.next(), substitutes, previous));
-        return collapsedBlockView(iterator, substitutes, result, result.getLast());
+        return collapsedSimpleBlockView(iterator, substitutes, result, result.getLast());
+    }
+
+    private static BlockView collapsedResidualBlockView(Iterator<LayerView> iterator, List<LayerView> residualConnection, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
+        if (!iterator.hasNext()) return new ResidualBlockView(result, residualConnection(residualConnection.iterator(), substitutes, new ArrayList<>(), null, result.getLast()));
+        result.add(collapsedLayerView(iterator.next(), substitutes, previous));
+        return collapsedResidualBlockView(iterator, residualConnection, substitutes, result, result.getLast());
+    }
+
+    private static List<LayerView> residualConnection(Iterator<LayerView> iterator, Map<String, List<SubstituteView>> substitutes, List<LayerView> result, LayerView previous, LayerView blockLastLayer) {
+        if (!iterator.hasNext()) return blockLastLayer.getOutputView().equals(result.getLast().getOutputView()) ? result : addLinearLayerView(result, blockLastLayer.getOutputView());
+        result.add(collapsedLayerView(iterator.next(), substitutes, previous));
+        return residualConnection(iterator, substitutes, result, result.getLast(), blockLastLayer);
+    }
+
+    private static List<LayerView> addLinearLayerView(List<LayerView> result, OutputView outputView) {
+        if (sectionInput.dimensions() == 1) result.add(new LinearLayerView(result.getLast().getOutputView(), outputView));
+        if (sectionInput.dimensions() == 3) result.add(new ConvolutionalLayerView(result.getLast().getOutputView(), outputView));
+        return result;
     }
 
     private static LayerView collapsedLayerView(LayerView layerView, Map<String, List<SubstituteView>> substitutes, LayerView previous) {
@@ -59,7 +87,7 @@ public class ExperimentArchitecture extends ArchitectureView {
                         .getMethod("createFromSubstitute", LayerView.class, SubstituteView.class)
                         .invoke(null, previous == null ? vLayerView : previous, substitutes.get(vLayerView.id).getFirst());
             }
-            return layerView.from(previous);
+            return layerView.from(previous != null ? previous.getOutputView() : sectionInput);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

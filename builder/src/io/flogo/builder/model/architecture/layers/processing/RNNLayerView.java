@@ -52,8 +52,8 @@ public class RNNLayerView extends RecurrentLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new RNNLayerView(previous == null ? previousLayerOutput : previous.getOutputView(),
+    public LayerView from(OutputView previous) {
+        return new RNNLayerView(previous == null ? previousLayerOutput : getOutputView(),
                 thisLayerOutput,
                 numLayers,
                 outputType,

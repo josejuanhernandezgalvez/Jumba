@@ -43,7 +43,7 @@ public class FlattenLayerView implements LinkLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new FlattenLayerView(previous.getOutputView(), toOneDimension(previous.getOutputView()));
+    public LayerView from(OutputView previous) {
+        return new FlattenLayerView(previous, toOneDimension(previous));
     }
 }

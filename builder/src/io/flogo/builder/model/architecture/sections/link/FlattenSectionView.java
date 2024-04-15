@@ -11,10 +11,12 @@ import java.util.List;
 public class FlattenSectionView implements SectionView {
     public final List<BlockView> blocks;
     public final List<LayerView> layerViews;
+    public final OutputView input;
 
-    public FlattenSectionView(List<BlockView> block) {
+    public FlattenSectionView(List<BlockView> block, OutputView input) {
         this.blocks = block;
         this.layerViews = layers();
+        this.input = input;
     }
 
     private List<LayerView> layers() {
@@ -29,5 +31,10 @@ public class FlattenSectionView implements SectionView {
     @Override
     public OutputView output() {
         return blocks.getLast().output();
+    }
+
+    @Override
+    public OutputView input() {
+        return input;
     }
 }

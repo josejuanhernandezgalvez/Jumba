@@ -54,7 +54,7 @@ public class GRULayerView extends RecurrentLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new GRULayerView(previous.getOutputView(), thisLayerOutput, numLayers, outputType, bidirectional, dropout, reduce);
+    public LayerView from(OutputView previous) {
+        return new GRULayerView(previous, thisLayerOutput, numLayers, outputType, bidirectional, dropout, reduce);
     }
 }

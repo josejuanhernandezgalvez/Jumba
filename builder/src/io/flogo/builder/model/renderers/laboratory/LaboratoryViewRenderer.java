@@ -7,7 +7,7 @@ import io.intino.magritte.framework.Layer;
 
 import java.lang.reflect.Method;
 
-public class LaboratoryRenderer implements Renderer<Laboratory, LaboratoryView> {
+public class LaboratoryViewRenderer implements Renderer<Laboratory, LaboratoryView> {
     private static final LossFunctionRenderer lossFunctionRenderer = new LossFunctionRenderer();
     private static final OptimizerRenderer optimizerRenderer = new OptimizerRenderer();
     private static final CheckPointSaverRenderer checkPointSaverRenderer = new CheckPointSaverRenderer();

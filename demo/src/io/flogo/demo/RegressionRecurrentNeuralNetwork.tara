@@ -18,7 +18,7 @@ Architecture RecurrentNeuralNetwork
 		Input(x=300, seqLength = 4)
 		Block
 			LSTM(bidirectional  = true, numLayers = 4)
-            	HiddenStates > Output(x=20)
+            	LastCellState > Output(x=20)
 			VLayer(id = "01")
 			BatchNormalization
 			Dropout

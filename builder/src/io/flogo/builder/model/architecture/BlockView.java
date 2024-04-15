@@ -2,8 +2,8 @@ package io.flogo.builder.model.architecture;
 
 import java.util.List;
 
-public record BlockView(List<LayerView> layerViews) {
-    public OutputView output() {
-        return layerViews.getLast().getOutputView();
-    }
+public interface BlockView {
+
+    public OutputView output();
+    List<LayerView> layerViews();
 }

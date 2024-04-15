@@ -16,13 +16,19 @@ public class VLayerView implements LayerView {
         this.thisLayerOutput = thisLayerOutput;
     }
 
+    public VLayerView(VLayerView vLayerView) {
+        this.id = vLayerView.id;
+        this.previousLayerOutput = vLayerView.previousLayerOutput;
+        this.thisLayerOutput = vLayerView.thisLayerOutput;
+    }
+
     @Override
     public OutputView getOutputView() {
         return thisLayerOutput;
     }
 
     @Override
-    public LayerView from(LayerView previous) {
+    public LayerView from(OutputView previous) {
         return null;
     }
 

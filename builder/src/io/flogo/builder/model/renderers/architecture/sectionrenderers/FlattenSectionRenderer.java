@@ -1,7 +1,7 @@
 package io.flogo.builder.model.renderers.architecture.sectionrenderers;
 
-import io.flogo.builder.model.architecture.BlockView;
 import io.flogo.builder.model.architecture.OutputView;
+import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
 import io.flogo.builder.model.architecture.layers.link.FlattenLayerView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
 import io.flogo.builder.model.architecture.sections.link.FlattenSectionView;
@@ -17,10 +17,10 @@ public class FlattenSectionRenderer extends SectionRenderer<FlattenSectionView> 
     @Override
     public FlattenSectionView render(Section section, OutputView previousLayerOutput) {
         return new FlattenSectionView(
-                List.of(new BlockView(List.of(
+                List.of(new SimpleBlockView(List.of(
                         isDetermined(previousLayerOutput) ?
                                 new FlattenLayerView(previousLayerOutput, toOneDimension(previousLayerOutput)) :
-                                new FlattenLayerView(previousLayerOutput, new UndeterminedOutputView())))));
+                                new FlattenLayerView(previousLayerOutput, new UndeterminedOutputView())))), previousLayerOutput);
     }
 
     private static boolean isDetermined(OutputView previousLayerOutput) {

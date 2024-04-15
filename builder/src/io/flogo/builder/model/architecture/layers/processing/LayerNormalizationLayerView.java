@@ -38,7 +38,7 @@ public class LayerNormalizationLayerView implements ProcessingLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new LayerNormalizationLayerView(previous == null ? this.output: previous.getOutputView(), this.eps);
+    public LayerView from(OutputView previous) {
+        return new LayerNormalizationLayerView(previous == null ? this.output: previous, this.eps);
     }
 }

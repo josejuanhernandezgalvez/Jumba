@@ -25,8 +25,8 @@ public final class DropoutLayerView implements ProcessingLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new DropoutLayerView(previous == null ? this.output: previous.getOutputView(), this.probability);
+    public LayerView from(OutputView previous) {
+        return new DropoutLayerView(previous == null ? this.output: previous, this.probability);
     }
 
     private static double probability(Layer layer) {
