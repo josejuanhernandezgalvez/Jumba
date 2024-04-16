@@ -27,8 +27,8 @@ public class BatchNormalizationLayerView implements ProcessingLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new BatchNormalizationLayerView(previous == null ? this.output: previous.getOutputView(), this.momentum, this.eps);
+    public LayerView from(OutputView previous) {
+        return new BatchNormalizationLayerView(previous == null ? this.output: previous, this.momentum, this.eps);
     }
 
     private static double momentum(Layer layer) {

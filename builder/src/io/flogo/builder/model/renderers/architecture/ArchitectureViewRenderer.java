@@ -13,18 +13,18 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ArchitectureRenderer implements Renderer<Architecture, ArchitectureView> {
+public class ArchitectureViewRenderer implements Renderer<Architecture, ArchitectureView> {
     private final InputRenderer inputRenderer;
     private final SectionRenderer<SectionView> sectionRenderer;
 
-    public ArchitectureRenderer() {
+    public ArchitectureViewRenderer() {
         this.inputRenderer = new InputRenderer();
         this.sectionRenderer = new SectionRenderer.SectionOrchestratorRenderer();
     }
 
     public ArchitectureView render(Architecture architecture) {
         OutputView input = inputRenderer.render(architecture.section(0));
-        return new ArchitectureView(render(architecture.sectionList().iterator(), input, new ArrayList<>()));
+        return new ArchitectureView(render(architecture.sectionList().iterator(), input, new ArrayList<>()), architecture.name$());
     }
 
     private List<SectionView> render(Iterator<Section> iterator, OutputView input, List<SectionView> sectionViews) {

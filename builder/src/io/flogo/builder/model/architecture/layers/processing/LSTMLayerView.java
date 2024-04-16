@@ -53,8 +53,8 @@ public class LSTMLayerView extends RecurrentLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new LSTMLayerView(previous == null ? previousLayerOutput : previous.getOutputView(),
+    public LayerView from(OutputView previous) {
+        return new LSTMLayerView(previous == null ? previousLayerOutput : previous,
                 thisLayerOutput,
                 numLayers,
                 outputType,

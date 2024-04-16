@@ -28,7 +28,7 @@ public class ReLULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new ReLULayerView(previous == null ? this.outputView : previous.getOutputView());
+    public LayerView from(OutputView previous) {
+        return new ReLULayerView(previous == null ? this.outputView : previous);
     }
 }

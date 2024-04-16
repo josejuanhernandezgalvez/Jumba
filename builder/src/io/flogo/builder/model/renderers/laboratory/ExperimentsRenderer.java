@@ -9,8 +9,8 @@ import io.flogo.model.Laboratory.Experiment.Substitute;
 
 import java.util.List;
 
-import static io.flogo.builder.model.renderers.laboratory.LaboratoryRenderer.LossFunctionRenderer;
-import static io.flogo.builder.model.renderers.laboratory.LaboratoryRenderer.OptimizerRenderer;
+import static io.flogo.builder.model.renderers.laboratory.LaboratoryViewRenderer.LossFunctionRenderer;
+import static io.flogo.builder.model.renderers.laboratory.LaboratoryViewRenderer.OptimizerRenderer;
 
 public class ExperimentsRenderer {
     private final ExperimentRenderer experimentRenderer;

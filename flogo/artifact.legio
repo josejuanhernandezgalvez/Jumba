@@ -1,7 +1,7 @@
 dsl Legio
 
 Artifact("io.flogo", "1.0.0") flogo
-	Model("Proteo", "5.1.0", "6.1.2")
+	Model("Proteo", "5.1.0", "6.1.4")
 	Code("io.flogo")
 	Package(mode = ModulesAndLibrariesLinkedByManifest)
 

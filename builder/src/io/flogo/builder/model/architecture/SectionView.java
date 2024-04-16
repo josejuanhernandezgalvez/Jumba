@@ -7,4 +7,6 @@ public interface SectionView {
 
     OutputView output();
 
+    OutputView input();
+
 }

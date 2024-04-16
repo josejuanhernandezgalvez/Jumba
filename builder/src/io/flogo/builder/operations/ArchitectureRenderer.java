@@ -23,9 +23,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ArchitectureRenderer {
-    public String render(ArchitectureView architecture, String name, String library) {
+    public String render(ArchitectureView architecture, String library) {
         FrameBuilder builder = new FrameBuilder("architecture").add("library", library);
-        builder.add("name", name);
+        builder.add("name", architecture.name);
         builder.add("import", importsOf(architecture, library));
         builder.add("component", componentsOf(architecture, library));
         return new ArchitectureTemplate().render(builder);

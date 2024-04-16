@@ -23,8 +23,8 @@ public final class ELULayerView implements ActivationLayerView {
         return new ELULayerView(getAlphaFrom(layer), outputView);
     }
 
-    public static ActivationLayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return new ELULayerView(getAlphaFrom(substituteView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
+    public static ActivationLayerView createFromSubstitute(OutputView previous, SubstituteView substituteView) {
+        return new ELULayerView(getAlphaFrom(substituteView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous);
     }
 
     private static int getAlphaFrom(Layer layer) {
@@ -43,8 +43,8 @@ public final class ELULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new ELULayerView(this.alpha, previous == null ? this.outputView : previous.getOutputView());
+    public LayerView from(OutputView previous) {
+        return new ELULayerView(this.alpha, previous == null ? this.outputView : previous);
     }
 
     @Override

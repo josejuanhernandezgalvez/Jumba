@@ -32,20 +32,20 @@ public class AvgPoolLayerView extends PoolLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
+    public LayerView from(OutputView previous) {
         return thisLayerOutput instanceof UndeterminedOutputView ?
-                new AvgPoolLayerView(this.kernel, previous.getOutputView()) :
+                new AvgPoolLayerView(this.kernel, previous) :
                 kernel instanceof UndeterminedKernel ?
                         new AvgPoolLayerView(
                                 new ThreeDimensionsOutputView(
-                                        getValue(previous.getOutputView(), "x"),
-                                        getValue(previous.getOutputView(), "y"),
-                                        getValue(previous.getOutputView(), "z")),
+                                        getValue(previous, "x"),
+                                        getValue(previous, "y"),
+                                        getValue(previous, "z")),
                                 new ThreeDimensionsOutputView(
                                         getValue(thisLayerOutput, "x"),
                                         getValue(thisLayerOutput, "y"),
-                                        getValue(previous.getOutputView(), "z"))) :
-                        new AvgPoolLayerView(this.kernel, previous.getOutputView());
+                                        getValue(previous, "z"))) :
+                        new AvgPoolLayerView(this.kernel, previous);
     }
 
     public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {

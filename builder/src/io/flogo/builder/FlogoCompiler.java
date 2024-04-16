@@ -5,8 +5,9 @@ import io.flogo.builder.model.FlogoDTO;
 import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.laboratory.ExperimentView;
 import io.flogo.builder.model.laboratory.LaboratoryView;
-import io.flogo.builder.model.renderers.architecture.ArchitectureRenderer;
-import io.flogo.builder.model.renderers.laboratory.LaboratoryRenderer;
+import io.flogo.builder.model.renderers.architecture.ArchitectureViewRenderer;
+import io.flogo.builder.model.renderers.laboratory.LaboratoryViewRenderer;
+import io.flogo.builder.operations.FlogoRenderer;
 import io.flogo.model.FlogoGraph;
 
 import java.io.File;
@@ -74,17 +75,20 @@ public class FlogoCompiler {
     }
 
     private void render(FlogoGraph graph, CompilationContext context) {
-        ArchitectureView architectureView = new ArchitectureRenderer().render(graph.architecture());
-        LaboratoryView laboratoryView = new LaboratoryRenderer().render(graph.laboratory());
-        for (ExperimentView experimentView : laboratoryView.experimentViews())
-            new FlogoDTO(
+        ArchitectureView architectureView = new ArchitectureViewRenderer().render(graph.architecture());
+        LaboratoryView laboratoryView = new LaboratoryViewRenderer().render(graph.laboratory());
+        FlogoRenderer flogoRenderer = new FlogoRenderer("", ""); //TODO add your path
+        for (ExperimentView experimentView : laboratoryView.experimentViews()) {
+            FlogoDTO flogoDTO = new FlogoDTO(
                     architectureView,
                     laboratoryView,
                     new ExperimentArchitecture.Builder()
                             .from(architectureView)
                             .substitutes(experimentView.substitutes)
-                            .collapse()
-            );
+                            .name(experimentView.name)
+                            .collapse());
+            flogoRenderer.render(flogoDTO);
+        }
         System.out.println(laboratoryView);
         System.out.println(architectureView.sections());
     }

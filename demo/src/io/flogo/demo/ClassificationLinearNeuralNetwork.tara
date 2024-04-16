@@ -8,9 +8,7 @@ Laboratory
 		Split(train=0.7, test=0.2, validation=0.1)
 
 	Experiment e626
-		Adagrad
-		Substitute(id = "01") > LayerNormalization(eps = 0.01)
-
+		Substitute(id = "01") > Linear > Output(x=5000)
 
 Architecture LinearNeuralNetwork
 	LinearSection

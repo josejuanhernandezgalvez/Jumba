@@ -18,8 +18,8 @@ public class GELULayerView implements ActivationLayerView {
         return new GELULayerView(outputView);
     }
 
-    public static ActivationLayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return new GELULayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
+    public static ActivationLayerView createFromSubstitute(OutputView previous, SubstituteView substituteView) {
+        return new GELULayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous);
     }
 
         @Override
@@ -28,7 +28,7 @@ public class GELULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new GELULayerView(previous == null ? this.outputView : previous.getOutputView());
+    public LayerView from(OutputView previous) {
+        return new GELULayerView(previous == null ? this.outputView : previous);
     }
 }

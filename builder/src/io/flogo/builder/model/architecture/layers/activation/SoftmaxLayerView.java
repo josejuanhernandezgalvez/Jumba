@@ -28,7 +28,7 @@ public class SoftmaxLayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(LayerView previous) {
-        return new SoftmaxLayerView(previous == null ? this.outputView : previous.getOutputView());
+    public LayerView from(OutputView previous) {
+        return new SoftmaxLayerView(previous == null ? this.outputView : previous);
     }
 }

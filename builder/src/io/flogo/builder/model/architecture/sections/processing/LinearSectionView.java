@@ -11,10 +11,12 @@ import java.util.List;
 public class LinearSectionView implements SectionView {
     public final List<BlockView> blocks;
     public List<LayerView> layerViews;
+    public final OutputView input;
 
-    public LinearSectionView(List<BlockView> blocks) {
+    public LinearSectionView(List<BlockView> blocks, OutputView input) {
         this.blocks = blocks;
         this.layerViews = null;
+        this.input = input;
     }
 
     public List<LayerView> layers() {
@@ -34,5 +36,10 @@ public class LinearSectionView implements SectionView {
     @Override
     public OutputView output() {
         return blocks.getLast().output();
+    }
+
+    @Override
+    public OutputView input() {
+        return input;
     }
 }

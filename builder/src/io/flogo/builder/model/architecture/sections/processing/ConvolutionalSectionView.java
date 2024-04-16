@@ -10,10 +10,12 @@ import java.util.List;
 
 public class ConvolutionalSectionView implements SectionView {
     public final List<BlockView> blocks;
+    private final OutputView input;
     public List<LayerView> layerViews;
 
-    public ConvolutionalSectionView(List<BlockView> blocks) {
+    public ConvolutionalSectionView(List<BlockView> blocks, OutputView input) {
         this.blocks = blocks;
+        this.input = input;
         this.layerViews = null;
     }
 
@@ -34,5 +36,10 @@ public class ConvolutionalSectionView implements SectionView {
     @Override
     public OutputView output() {
         return blocks.getLast().output();
+    }
+
+    @Override
+    public OutputView input() {
+        return input;
     }
 }
