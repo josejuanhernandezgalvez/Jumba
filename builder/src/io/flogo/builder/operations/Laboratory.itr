@@ -4,9 +4,9 @@ def type(main)
     from framework.toolbox.logger import Logger
     from framework.toolbox.stopper import EarlyStopper
     from implementations.$library.toolbox.experiment import $library+FirstUppercase~Experiment as Experiment
+    from implementations.$library.toolbox.loaders.$name+Lowercase import $library+FirstUppercase~DatasetGenerator as DatasetGenerator
     $optimizer+import
     $loss+import
-    [$dataset+import]
     from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelSaver as ModelSaver
     $strategy+import
 
@@ -31,12 +31,9 @@ def type(loss) trigger(import)
     from implementations.$library.toolbox.losses.$name+Lowercase import $library+FirstUppercase$name~LossFunction as $name~LossFunction
 end
 
-def type(dataset) trigger(import)
-    from implementations.$library.toolbox.loaders.$name+Lowercase import $library+FirstUppercaseDatasetGenerator as DatasetGenerator
-end
-
 def type(laboratory)
     loss = Laboratory(name="$laboratoryName",
+                       eras=$eras,
                        epochs=$epochs,
                        dataset=dataset,
                        architecture=architecture.architecture,

@@ -47,6 +47,7 @@ public class LaboratoryRenderer {
     private FrameBuilder laboratoryBuilder(LaboratoryView laboratoryView) {
         return initFrameBuilder("laboratory")
                 .add("laboratoryName", "LaboratoryName") // view.name
+                .add("eras", 1)
                 .add("epochs", 10) // view.epochs
                 .add("path", "C:/Users/juanc/Downloads/folder/result.tsv")
                 .add("strategy", strategyFrame(laboratoryView.strategyView()));
