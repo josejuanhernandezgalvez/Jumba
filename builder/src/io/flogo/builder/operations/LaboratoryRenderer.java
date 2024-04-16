@@ -63,7 +63,6 @@ public class LaboratoryRenderer {
 
     private FrameBuilder datasetBuilder(DatasetView datasetView) {
         return initFrameBuilder("dataset")
-                .add("name", "numeric")
                 .add("datasetName", datasetView.name())
                 .add("batchSize", datasetView.batchSize())
                 .add("trainProportion", datasetView.split().train)

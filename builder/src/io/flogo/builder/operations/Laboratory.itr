@@ -32,18 +32,17 @@ def type(loss) trigger(import)
 end
 
 def type(dataset) trigger(import)
-    from implementations.$library.toolbox.loaders.$name+Lowercase import $library+FirstUppercase$name+FirstUppercase~DatasetLoader as $name+FirstUppercase~DatasetLoader
+    from implementations.$library.toolbox.loaders.$name+Lowercase import $library+FirstUppercaseDatasetGenerator as DatasetGenerator
 end
 
 def type(laboratory)
-    loss = (Laboratory(name="$laboratoryName",
-                           epochs=$epochs,
-                           dataset=dataset,
-                           architecture=architecture.architecture,
-                           experiments=experiments,
-                           strategy=$strategy,
-                           logger=Logger("$path"))
-                .explore())
+    loss = Laboratory(name="$laboratoryName",
+                       epochs=$epochs,
+                       dataset=dataset,
+                       architecture=architecture.architecture,
+                       experiments=experiments,
+                       strategy=$strategy,
+                       logger=Logger("$path")).explore()
 end
 
 def type(strategy)
@@ -52,10 +51,10 @@ end
 
 def type(experiment)
     Experiment(name="$experimentName",
-            optimizer=$optimizer,
-            loss_function=$loss,
-            stopper=EarlyStopper($epochs, $patience),
-            saver=ModelSaver("$path"))
+                              optimizer=$optimizer,
+                              loss_function=$loss,
+                              stopper=EarlyStopper($epochs, $patience),
+                              saver=ModelSaver("$path"))
 end
 
 def type(loss)
@@ -63,7 +62,11 @@ def type(loss)
 end
 
 def type(dataset)
-    $name+FirstUppercase~DatasetLoader("$datasetName", PATH, $batchSize, 42).load($trainProportion, $valProportion, $testProportion)
+    $name+FirstUppercase~DatasetGenerator(name="$datasetName",
+                                path=PATH,
+                                batch_size=$batchSize,
+                                random_state=$seed)
+        .load(train_proportion=$trainProportion, validation_proportion=$valProportion, test_proportion=$testProportion)
 end
 
 def type(stopper)
