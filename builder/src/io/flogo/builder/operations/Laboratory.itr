@@ -4,7 +4,7 @@ def type(main)
     from framework.toolbox.logger import Logger
     from framework.toolbox.stopper import EarlyStopper
     from implementations.$library.toolbox.experiment import $library+FirstUppercase~Experiment as Experiment
-    from implementations.$library.toolbox.loaders.$name+Lowercase import $library+FirstUppercase~DatasetGenerator as DatasetGenerator
+    from implementations.$library.toolbox.generator import $library+FirstUppercase~DatasetGenerator as DatasetGenerator
     $optimizer+import
     $loss+import
     from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelSaver as ModelSaver
@@ -42,10 +42,6 @@ def type(laboratory)
                        logger=Logger("$path")).explore()
 end
 
-def type(strategy)
-    $name+FirstUppercase~Strategy($loss)
-end
-
 def type(experiment)
     Experiment(name="$experimentName",
                               optimizer=$optimizer,
@@ -66,10 +62,9 @@ def type(dataset)
         .load(train_proportion=$trainProportion, validation_proportion=$valProportion, test_proportion=$testProportion)
 end
 
-def type(stopper)
-    EarlyStopper($epochs, $patiente)
+def type(strategy)
+    $name+FirstUppercase~Strategy($loss)
 end
-
 
 
 

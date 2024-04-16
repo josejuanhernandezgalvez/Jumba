@@ -7,6 +7,7 @@ import io.flogo.builder.model.laboratory.lossfunctions.MSELossView;
 import io.flogo.builder.model.laboratory.optimizers.AdadeltaView;
 import io.flogo.builder.model.laboratory.optimizers.SGDView;
 import io.flogo.builder.model.laboratory.strategies.ClassificationStrategyView;
+import io.flogo.builder.model.laboratory.strategies.RegressionStrategyView;
 import io.flogo.builder.operations.LaboratoryRenderer;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class LaboratoryTest {
                 new LossDrivenEarlyStopperView(10, 0.01),
                 new DatasetView("TestDataset", new DatasetView.SplitView(0.7, 0.2, 0.1), 50),
                 experiments,
-                new ClassificationStrategyView());
+                new RegressionStrategyView());
         System.out.println(new LaboratoryRenderer().render(laboratoryView));
     }
 }

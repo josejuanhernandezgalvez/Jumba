@@ -2,6 +2,7 @@ package io.flogo.builder.operations;
 
 import io.flogo.builder.model.laboratory.*;
 import io.flogo.builder.model.laboratory.optimizers.*;
+import io.flogo.builder.model.laboratory.strategies.RegressionStrategyView;
 import io.flogo.model.RAdam;
 import io.intino.itrules.FrameBuilder;
 
@@ -14,7 +15,7 @@ public class LaboratoryRenderer {
                 .add("laboratory", laboratoryBuilder(view))
                 .add("experiment", experimentsBuilder(view.experimentViews()))
                 .add("optimizer", optimizerFrame(view.optimizerView()))
-                .add("strategy", strategyFrame(view.strategyView()))
+                .add("strategy", strategyFrame(view.strategyView(), view.lossFunctionView()))
                 .add("loss", lossBuilder(view.lossFunctionView()))
                 .add("dataset", datasetBuilder(view.datasetView()))
                 .add("stopper", stopperBuilder(view.earlyStopperView()));
@@ -50,16 +51,18 @@ public class LaboratoryRenderer {
                 .add("eras", 1)
                 .add("epochs", 10) // view.epochs
                 .add("path", "C:/Users/juanc/Downloads/folder/result.tsv")
-                .add("strategy", strategyFrame(laboratoryView.strategyView()));
+                .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()));
     }
 
     private FrameBuilder initFrameBuilder(String ... type) {
         return new FrameBuilder(type).add("library", "pytorch");
     }
 
-    private FrameBuilder strategyFrame(StrategyView strategyView) {
-        return initFrameBuilder("strategy")
+    private FrameBuilder strategyFrame(StrategyView strategyView, LossFunctionView lossFunctionView) {
+        FrameBuilder builder = initFrameBuilder("strategy")
                 .add("name", strategyName(strategyView));
+        if (strategyView instanceof RegressionStrategyView) builder.add("loss", lossBuilder(lossFunctionView));
+        return builder;
     }
 
     private FrameBuilder datasetBuilder(DatasetView datasetView) {
@@ -72,7 +75,8 @@ public class LaboratoryRenderer {
     }
 
     private FrameBuilder optimizerFrame(OptimizerView optimizerView) {
-        FrameBuilder builder = initFrameBuilder("optimizer", optimizerName(optimizerView));
+        FrameBuilder builder = initFrameBuilder("optimizer", optimizerName(optimizerView))
+                .add("name", optimizerName(optimizerView));
         switch (optimizerView){
             case SGDView sgdView -> builder.add("lr", sgdView.learningRate)
                         .add("momentum", sgdView.momentum)
