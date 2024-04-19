@@ -22,7 +22,7 @@ public class ArchitectureTemplate extends Template {
 			rule().condition((type("reduce")), (trigger("import")), (attribute("slicing"))).output(literal("from implementations.")).output(mark("library")).output(literal(".architecture.layers.slicing import ")).output(mark("library", "FirstUppercase")).output(literal("SlicingLayer as SlicingLayer")),
 			rule().condition((type("reduce")), (trigger("import")), (attribute("linear"))),
 			rule().condition((type("reduce")), (trigger("import")), (attribute("flatten"))),
-			rule().condition((type("section"))).output(mark("type", "CamelCase")).output(literal("Section([\n    ")).output(mark("block").multiple(", \n")).output(literal("\n])")),
+			rule().condition((type("section"))).output(mark("type", "CamelCase")).output(literal("Section([\n            ")).output(mark("block").multiple(", \n")).output(literal("\n])")),
 			rule().condition((type("block")), (attribute("type"))).output(mark("type", "CamelCase")).output(literal("Block([\n    ")).output(mark("layer").multiple(", \n")).output(literal("\n])")),
 			rule().condition((type("block"))).output(literal("Block([\n    ")).output(mark("layer").multiple(", \n")).output(literal("\n])")),
 			rule().condition((anyTypes("kernel","stride","padding"))).output(literal("(")).output(mark("dimension").multiple(", ")).output(literal(")")),

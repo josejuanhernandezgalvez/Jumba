@@ -65,7 +65,7 @@ end
 
 def type(section)
     $type+CamelCase~Section($[
-        $block...[, $NL]
+                $block...[, $NL]
     $])
 end
 

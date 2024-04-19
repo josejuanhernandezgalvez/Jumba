@@ -7,6 +7,7 @@ import io.flogo.model.RAdam;
 import io.intino.itrules.FrameBuilder;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LaboratoryRenderer {
 
@@ -34,24 +35,25 @@ public class LaboratoryRenderer {
                 .add("experimentName", experimentView.name)
                 .add("optimizer", optimizerFrame(experimentView.optimizerView))
                 .add("loss", lossBuilder(experimentView.lossFunctionView))
-                .add("epochs", 10) // earlyStopperView.stopperEpochs
-                .add("patience", 0.01)
-                .add("path", "C:/Users/juanc/Downloads/folder/test.pt");
+                .add("patience", 10) //TODO earlyStopperView.stopperEpochs
+                .add("delta", 0.01) //TODO
+                .add("path", "/root/test.pt"); //TODO
     }
 
-    private FrameBuilder stopperBuilder(EarlyStopperView earlyStopperView) {
+    private FrameBuilder stopperBuilder(EarlyStopperView earlyStopperView) { //TODO stopper is repeated in line 196?
         return initFrameBuilder("stopper")
-                .add("epochs", 10) // earlyStopperView.stopperEpochs
-                .add("patience", 0.01);
+                .add("patience", 10) //TODO earlyStopperView.stopperEpochs
+                .add("delta", 0.01); //TODO
     }
 
     private FrameBuilder laboratoryBuilder(LaboratoryView laboratoryView) {
         return initFrameBuilder("laboratory")
-                .add("laboratoryName", "LaboratoryName") // view.name
+                .add("laboratoryName", "LaboratoryName") //TODO Obtain lab name view.name
                 .add("eras", 1)
-                .add("epochs", 10) // view.epochs
-                .add("path", "C:/Users/juanc/Downloads/folder/result.tsv")
-                .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()));
+                .add("epochs", 10) //TODO obtain epochs view.epochs
+                .add("path", "/root/results.tsv") //TODO add path
+                .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
+                .add("device", 1); //TODO obtain device
     }
 
     private FrameBuilder initFrameBuilder(String ... type) {
@@ -69,6 +71,8 @@ public class LaboratoryRenderer {
         return initFrameBuilder("dataset")
                 .add("datasetName", datasetView.name())
                 .add("batchSize", datasetView.batchSize())
+                .add("path", "/root") //TODO add path
+                .add("seed", ThreadLocalRandom.current().nextInt(0, 1000 + 1))
                 .add("trainProportion", datasetView.split().train)
                 .add("valProportion", datasetView.split().validation)
                 .add("testProportion", datasetView.split().test);
@@ -190,8 +194,8 @@ public class LaboratoryRenderer {
     }
 
     private void createEarlyStopper(EarlyStopperView earlyStopperView, FrameBuilder builder) {
-        builder.add("stopperEpochs", 10); // earlyStopperView.stopperEpochs
-        builder.add("patiente", 0.01); // earlyStopperView.patience
+        builder.add("patience", 10); //TODO earlyStopperView.stopperEpochs
+        builder.add("delta", 0.01); //TODO earlyStopperView.patience
     }
 
     public String className(Object object){
