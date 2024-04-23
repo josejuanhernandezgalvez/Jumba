@@ -1,5 +1,5 @@
 def type(main)
-    from architecture import architecture
+    $architecture+import...[$NL]
     from framework.toolbox.laboratory import Laboratory
     from framework.toolbox.logger import Logger
     from framework.toolbox.stopper import EarlyStopper
@@ -19,6 +19,10 @@ def type(main)
     $laboratory
 end
 
+def type(architecture) trigger(import)
+    from $architecture_name.$experiment_name+Lowercase import $experiment_name
+end
+
 def type(strategy) trigger(import)
     from implementations.$library.toolbox.strategies.$name+Lowercase import $library+FirstUppercase$name+FirstUppercase~Strategy as $name+FirstUppercase~Strategy
 end
@@ -36,20 +40,20 @@ def type(laboratory)
                eras=$eras,
                epochs=$epochs,
                dataset=dataset,
-               architecture=architecture,
                experiments=experiments,
                strategy=$strategy,
-               logger=Logger("$path"),
+               logger=Logger("C:/Users/Joel/Desktop/test_api/flogo/executions/logger/test.tsv"),
                loader=ModelLoader(),
                device=Device($device)).explore()
 end
 
 def type(experiment)
-    Experiment(name="$experimentName",
+    Experiment(name="$experiment_name",
+                              architecture=$architecture_name
                               optimizer=$optimizer,
                               loss_function=$loss,
-                              stopper=EarlyStopper(patience=$patience, delta=$delta),
-                              saver=ModelSaver("$path"))
+                              stopper=$early_stopper,
+                              saver=ModelSaver("C:/Users/Joel/Desktop/test_api/flogo/test"))
 end
 
 def type(loss)
@@ -58,7 +62,7 @@ end
 
 def type(dataset)
     DatasetGenerator(name="$datasetName",
-                               path="$path",
+                               path="C:/Users/Joel/Desktop/test_api/flogo/execute/files/dataset/",
                                batch_size=$batchSize,
                                random_state=$seed).generate(train_proportion=$trainProportion,
                                                           validation_proportion=$valProportion,
@@ -68,6 +72,14 @@ end
 def type(strategy)
     $name+FirstUppercase~Strategy($loss)
 end
+
+def type(early_stopper)
+    EarlyStopper(patience=$patience, delta=$delta)
+end
+
+
+
+
 
 def type(optimizer) type(SGD)
     SGDOptimizer(parameters=architecture.parameters(), learning_rate=$lr, $momentum, $dampening, weight_decay=$weight_decay)

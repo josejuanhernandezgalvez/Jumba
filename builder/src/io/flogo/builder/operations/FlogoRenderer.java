@@ -23,7 +23,7 @@ public class FlogoRenderer {
 
     public void render(FlogoDTO flogoDTO) {
         if (!Files.exists(Path.of(pathForArchitecture + flogoDTO.architectureView().name))) mkdir(flogoDTO.architectureView().name);
-        write(pathForLaboratory + flogoDTO.collapsedArchitectureView().name + "-laboratory.py", laboratoryRenderer.render(flogoDTO.laboratoryView()));
+        write(pathForLaboratory + flogoDTO.collapsedArchitectureView().name + "-laboratory.py", laboratoryRenderer.render(flogoDTO.laboratoryView(), flogoDTO.architectureView().name));
         write(pathForArchitecture + flogoDTO.architectureView().name + "/" + flogoDTO.collapsedArchitectureView().name + ".py", architectureRenderer.render(flogoDTO.collapsedArchitectureView(), "pytorch"));
     }
 

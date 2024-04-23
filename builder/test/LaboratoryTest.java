@@ -19,7 +19,7 @@ public class LaboratoryTest {
     @Test
     public void should_render_laboratory() {
         List<ExperimentView> experiments = new ArrayList<>();
-        ExperimentView experimentTest = new ExperimentView("Experiment test", new MSELossView(), new AdadeltaView(0.01, 0.05, 0.0001, 0.5),
+        ExperimentView experimentTest = new ExperimentView("ExperimentTest", new MSELossView(), new AdadeltaView(0.01, 0.05, 0.0001, 0.5),
                 new ArrayList<>());
         experiments.add(experimentTest);
         LaboratoryView laboratoryView = new LaboratoryView(new MSELossView(),
@@ -29,6 +29,6 @@ public class LaboratoryTest {
                 new DatasetView("TestDataset", new DatasetView.SplitView(0.7, 0.2, 0.1), 50),
                 experiments,
                 new RegressionStrategyView());
-        System.out.println(new LaboratoryRenderer().render(laboratoryView));
+        System.out.println(new LaboratoryRenderer().render(laboratoryView, "testing"));
     }
 }

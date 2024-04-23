@@ -1,5 +1,6 @@
 package io.flogo.builder.operations;
 
+import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.laboratory.*;
 import io.flogo.builder.model.laboratory.optimizers.*;
 import io.flogo.builder.model.laboratory.strategies.RegressionStrategyView;
@@ -11,37 +12,49 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LaboratoryRenderer {
 
-    public String render(LaboratoryView view){
+    public String render(LaboratoryView laboratoryView, String architecture){
+
         FrameBuilder builder = initFrameBuilder("main")
-                .add("laboratory", laboratoryBuilder(view))
-                .add("experiment", experimentsBuilder(view.experimentViews()))
-                .add("optimizer", optimizerFrame(view.optimizerView()))
-                .add("strategy", strategyFrame(view.strategyView(), view.lossFunctionView()))
-                .add("loss", lossBuilder(view.lossFunctionView()))
-                .add("dataset", datasetBuilder(view.datasetView()))
-                .add("stopper", stopperBuilder(view.earlyStopperView()));
-        createExperiment(view, builder);
+                .add("architecture", architecturesBuilder(architecture, laboratoryView.experimentViews()))
+                .add("laboratory", laboratoryBuilder(laboratoryView))
+                .add("experiment", experimentsBuilder(laboratoryView.experimentViews(), laboratoryView.earlyStopperView()))
+                .add("optimizer", optimizerFrame(laboratoryView.optimizerView()))
+                .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
+                .add("loss", lossBuilder(laboratoryView.lossFunctionView()))
+                .add("dataset", datasetBuilder(laboratoryView.datasetView()));
+        createExperiment(laboratoryView, builder);
         return new LaboratoryTemplate().render(builder);
     }
 
-    private FrameBuilder[] experimentsBuilder(List<ExperimentView> experimentViews) {
+    private FrameBuilder[] architecturesBuilder(String architectureName, List<ExperimentView> experimentViews) {
         return experimentViews.stream()
-                .map(this::experimentBuilder)
+                .map(experimentView -> architectureBuilder(architectureName, experimentView))
                 .toArray(FrameBuilder[]::new);
     }
 
-    private FrameBuilder experimentBuilder(ExperimentView experimentView) {
-        return initFrameBuilder("experiment")
-                .add("experimentName", experimentView.name)
-                .add("optimizer", optimizerFrame(experimentView.optimizerView))
-                .add("loss", lossBuilder(experimentView.lossFunctionView))
-                .add("patience", 10) //TODO earlyStopperView.stopperEpochs
-                .add("delta", 0.01) //TODO
-                .add("path", "/root/test.pt"); //TODO
+    private FrameBuilder architectureBuilder(String architectureName, ExperimentView experimentView) {
+        return initFrameBuilder("architecture")
+                .add("architecture_name", architectureName.toLowerCase())
+                .add("experiment_name", experimentView.name);
     }
 
-    private FrameBuilder stopperBuilder(EarlyStopperView earlyStopperView) { //TODO stopper is repeated in line 196?
-        return initFrameBuilder("stopper")
+    private FrameBuilder[] experimentsBuilder(List<ExperimentView> experimentViews, EarlyStopperView earlyStopperView) {
+        return experimentViews.stream()
+                .map(experimentView -> experimentBuilder(experimentView, earlyStopperView))
+                .toArray(FrameBuilder[]::new);
+    }
+
+    private FrameBuilder experimentBuilder(ExperimentView experimentView, EarlyStopperView earlyStopperView) {
+        return initFrameBuilder("experiment")
+                .add("experiment_name", experimentView.name)
+                .add("architecture_name", experimentView.name)
+                .add("optimizer", optimizerFrame(experimentView.optimizerView))
+                .add("loss", lossBuilder(experimentView.lossFunctionView))
+                .add("early_stopper", stopperBuilder(earlyStopperView));
+    }
+
+    private FrameBuilder stopperBuilder(EarlyStopperView earlyStopperView) {
+        return initFrameBuilder("early_stopper")
                 .add("patience", 10) //TODO earlyStopperView.stopperEpochs
                 .add("delta", 0.01); //TODO
     }
@@ -51,9 +64,8 @@ public class LaboratoryRenderer {
                 .add("laboratoryName", "LaboratoryName") //TODO Obtain lab name view.name
                 .add("eras", 1)
                 .add("epochs", 10) //TODO obtain epochs view.epochs
-                .add("path", "/root/results.tsv") //TODO add path
                 .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
-                .add("device", 1); //TODO obtain device
+                .add("device", 0); //TODO obtain device
     }
 
     private FrameBuilder initFrameBuilder(String ... type) {
@@ -71,7 +83,6 @@ public class LaboratoryRenderer {
         return initFrameBuilder("dataset")
                 .add("datasetName", datasetView.name())
                 .add("batchSize", datasetView.batchSize())
-                .add("path", "/root") //TODO add path
                 .add("seed", ThreadLocalRandom.current().nextInt(0, 1000 + 1))
                 .add("trainProportion", datasetView.split().train)
                 .add("valProportion", datasetView.split().validation)
@@ -190,12 +201,6 @@ public class LaboratoryRenderer {
 
     private void createExperiment(LaboratoryView laboratoryView, FrameBuilder builder) {
         builder.add("experimentName", laboratoryView.experimentViews().getFirst().name);
-        createEarlyStopper(laboratoryView.earlyStopperView(), builder);
-    }
-
-    private void createEarlyStopper(EarlyStopperView earlyStopperView, FrameBuilder builder) {
-        builder.add("patience", 10); //TODO earlyStopperView.stopperEpochs
-        builder.add("delta", 0.01); //TODO earlyStopperView.patience
     }
 
     public String className(Object object){
