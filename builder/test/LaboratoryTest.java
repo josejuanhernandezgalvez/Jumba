@@ -28,6 +28,6 @@ public class LaboratoryTest {
                 new DatasetView("TestDataset", new DatasetView.SplitView(0.7, 0.2, 0.1), 50),
                 experiments,
                 new ClassificationStrategyView(), LaboratoryView.DeviceView.GPU);
-        System.out.println(new LaboratoryRenderer().render(laboratoryView));
+        System.out.println(new LaboratoryRenderer().render(laboratoryView, ""));
     }
 }
