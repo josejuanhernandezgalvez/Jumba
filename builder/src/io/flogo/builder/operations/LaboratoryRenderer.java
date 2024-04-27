@@ -1,7 +1,7 @@
 package io.flogo.builder.operations;
 
-import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.laboratory.*;
+import io.flogo.builder.model.laboratory.earlystoppers.LossDrivenEarlyStopperView;
 import io.flogo.builder.model.laboratory.optimizers.*;
 import io.flogo.builder.model.laboratory.strategies.RegressionStrategyView;
 import io.flogo.model.RAdam;
@@ -54,16 +54,21 @@ public class LaboratoryRenderer {
     }
 
     private FrameBuilder stopperBuilder(EarlyStopperView earlyStopperView) {
-        return initFrameBuilder("early_stopper")
-                .add("patience", 10) //TODO earlyStopperView.stopperEpochs
-                .add("delta", 0.01); //TODO
+        FrameBuilder builder = initFrameBuilder("early_stopper");
+        switch (earlyStopperView){
+            case LossDrivenEarlyStopperView lossDrivenEarlyStopperView -> builder
+                    .add("patience", lossDrivenEarlyStopperView.patience)
+                    .add("delta", lossDrivenEarlyStopperView.threshold);
+            default -> {}
+        }
+        return builder;
     }
 
     private FrameBuilder laboratoryBuilder(LaboratoryView laboratoryView) {
         return initFrameBuilder("laboratory")
-                .add("laboratoryName", "LaboratoryName") //TODO Obtain lab name view.name
-                .add("eras", 1)
-                .add("epochs", 10) //TODO obtain epochs view.epochs
+                .add("laboratoryName", laboratoryView.name())
+                .add("eras", laboratoryView.eras())
+                .add("epochs", laboratoryView.epochs())
                 .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
                 .add("device", 0); //TODO obtain device
     }
@@ -111,7 +116,7 @@ public class LaboratoryRenderer {
                 builder.add("lr", adam.learningRate)
                         .add("b0", adam.beta0)
                         .add("b1", adam.beta1)
-                        .add("eps", "00.1") //TODO
+                        .add("eps", adam.eps)
                         .add("weight_decay", adam.weightDecay);
             case AdamaxView adamax ->
                     builder.add("lr", adamax.learningRate)
@@ -129,7 +134,7 @@ public class LaboratoryRenderer {
                     builder.add("lr", amsGrad.learningRate)
                             .add("b0", amsGrad.beta0)
                             .add("b1", amsGrad.beta1)
-                            .add("eps",  0.01)//TODO
+                            .add("eps",  amsGrad.eps)
                             .add("weight_decay", amsGrad.weightDecay);
             case ASGDView asgdView ->
                     builder.add("lr", asgdView.learningRate)
