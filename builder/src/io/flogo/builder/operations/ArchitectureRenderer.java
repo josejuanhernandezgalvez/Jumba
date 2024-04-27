@@ -119,7 +119,7 @@ public class ArchitectureRenderer {
     }
 
     private static boolean isSimpleBlock(BlockView block) {
-        return block.getClass().getSimpleName().substring(0, block.getClass().getSimpleName().indexOf("View")).equals("Block");
+        return block.getClass().getSimpleName().substring(0, block.getClass().getSimpleName().indexOf("View")).startsWith("Simple");
     }
 
     private FrameBuilder buildLayerFrame(String library, LayerView layer) {

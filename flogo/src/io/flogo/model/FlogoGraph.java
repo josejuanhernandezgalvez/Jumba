@@ -9,7 +9,7 @@ public class FlogoGraph extends io.flogo.model.AbstractGraph {
 	}
 
 	public FlogoGraph(io.intino.magritte.framework.Graph graph, FlogoGraph wrapper) {
-		super(graph, wrapper);
+	    super(graph, wrapper);
 	}
 
 

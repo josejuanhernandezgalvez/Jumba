@@ -1,78 +1,97 @@
 package io.flogo.builder.operations;
 
+import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.laboratory.*;
 import io.flogo.builder.model.laboratory.optimizers.*;
+import io.flogo.builder.model.laboratory.strategies.RegressionStrategyView;
 import io.flogo.model.RAdam;
 import io.intino.itrules.FrameBuilder;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LaboratoryRenderer {
 
-    public String render(LaboratoryView view){
+    public String render(LaboratoryView laboratoryView, String architecture){
+
         FrameBuilder builder = initFrameBuilder("main")
-                .add("laboratory", laboratoryBuilder(view))
-                .add("experiment", experimentsBuilder(view.experimentViews()))
-                .add("optimizer", optimizerFrame(view.optimizerView()))
-                .add("strategy", strategyFrame(view.strategyView()))
-                .add("loss", lossBuilder(view.lossFunctionView()))
-                .add("dataset", datasetBuilder(view.datasetView()))
-                .add("stopper", stopperBuilder(view.earlyStopperView()));
-        createExperiment(view, builder);
+                .add("architecture", architecturesBuilder(architecture, laboratoryView.experimentViews()))
+                .add("laboratory", laboratoryBuilder(laboratoryView))
+                .add("experiment", experimentsBuilder(laboratoryView.experimentViews(), laboratoryView.earlyStopperView()))
+                .add("optimizer", optimizerFrame(laboratoryView.optimizerView()))
+                .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
+                .add("loss", lossBuilder(laboratoryView.lossFunctionView()))
+                .add("dataset", datasetBuilder(laboratoryView.datasetView()));
+        createExperiment(laboratoryView, builder);
         return new LaboratoryTemplate().render(builder);
     }
 
-    private FrameBuilder[] experimentsBuilder(List<ExperimentView> experimentViews) {
+    private FrameBuilder[] architecturesBuilder(String architectureName, List<ExperimentView> experimentViews) {
         return experimentViews.stream()
-                .map(this::experimentBuilder)
+                .map(experimentView -> architectureBuilder(architectureName, experimentView))
                 .toArray(FrameBuilder[]::new);
     }
 
-    private FrameBuilder experimentBuilder(ExperimentView experimentView) {
+    private FrameBuilder architectureBuilder(String architectureName, ExperimentView experimentView) {
+        return initFrameBuilder("architecture")
+                .add("architecture_name", architectureName.toLowerCase())
+                .add("experiment_name", experimentView.name);
+    }
+
+    private FrameBuilder[] experimentsBuilder(List<ExperimentView> experimentViews, EarlyStopperView earlyStopperView) {
+        return experimentViews.stream()
+                .map(experimentView -> experimentBuilder(experimentView, earlyStopperView))
+                .toArray(FrameBuilder[]::new);
+    }
+
+    private FrameBuilder experimentBuilder(ExperimentView experimentView, EarlyStopperView earlyStopperView) {
         return initFrameBuilder("experiment")
-                .add("experimentName", experimentView.name)
+                .add("experiment_name", experimentView.name)
+                .add("architecture_name", experimentView.name)
                 .add("optimizer", optimizerFrame(experimentView.optimizerView))
                 .add("loss", lossBuilder(experimentView.lossFunctionView))
-                .add("epochs", 10) // earlyStopperView.stopperEpochs
-                .add("patience", 0.01)
-                .add("path", "C:/Users/juanc/Downloads/folder/test.pt");
+                .add("early_stopper", stopperBuilder(earlyStopperView));
     }
 
     private FrameBuilder stopperBuilder(EarlyStopperView earlyStopperView) {
-        return initFrameBuilder("stopper")
-                .add("epochs", 10) // earlyStopperView.stopperEpochs
-                .add("patience", 0.01);
+        return initFrameBuilder("early_stopper")
+                .add("patience", 10) //TODO earlyStopperView.stopperEpochs
+                .add("delta", 0.01); //TODO
     }
 
     private FrameBuilder laboratoryBuilder(LaboratoryView laboratoryView) {
         return initFrameBuilder("laboratory")
-                .add("laboratoryName", "LaboratoryName") // view.name
-                .add("epochs", 10) // view.epochs
-                .add("path", "C:/Users/juanc/Downloads/folder/result.tsv")
-                .add("strategy", strategyFrame(laboratoryView.strategyView()));
+                .add("laboratoryName", "LaboratoryName") //TODO Obtain lab name view.name
+                .add("eras", 1)
+                .add("epochs", 10) //TODO obtain epochs view.epochs
+                .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
+                .add("device", 0); //TODO obtain device
     }
 
     private FrameBuilder initFrameBuilder(String ... type) {
         return new FrameBuilder(type).add("library", "pytorch");
     }
 
-    private FrameBuilder strategyFrame(StrategyView strategyView) {
-        return initFrameBuilder("strategy")
+    private FrameBuilder strategyFrame(StrategyView strategyView, LossFunctionView lossFunctionView) {
+        FrameBuilder builder = initFrameBuilder("strategy")
                 .add("name", strategyName(strategyView));
+        if (strategyView instanceof RegressionStrategyView) builder.add("loss", lossBuilder(lossFunctionView));
+        return builder;
     }
 
     private FrameBuilder datasetBuilder(DatasetView datasetView) {
         return initFrameBuilder("dataset")
-                .add("name", "numeric")
                 .add("datasetName", datasetView.name())
                 .add("batchSize", datasetView.batchSize())
+                .add("seed", ThreadLocalRandom.current().nextInt(0, 1000 + 1))
                 .add("trainProportion", datasetView.split().train)
                 .add("valProportion", datasetView.split().validation)
                 .add("testProportion", datasetView.split().test);
     }
 
     private FrameBuilder optimizerFrame(OptimizerView optimizerView) {
-        FrameBuilder builder = initFrameBuilder("optimizer", optimizerName(optimizerView));
+        FrameBuilder builder = initFrameBuilder("optimizer", optimizerName(optimizerView))
+                .add("name", optimizerName(optimizerView));
         switch (optimizerView){
             case SGDView sgdView -> builder.add("lr", sgdView.learningRate)
                         .add("momentum", sgdView.momentum)
@@ -182,12 +201,6 @@ public class LaboratoryRenderer {
 
     private void createExperiment(LaboratoryView laboratoryView, FrameBuilder builder) {
         builder.add("experimentName", laboratoryView.experimentViews().getFirst().name);
-        createEarlyStopper(laboratoryView.earlyStopperView(), builder);
-    }
-
-    private void createEarlyStopper(EarlyStopperView earlyStopperView, FrameBuilder builder) {
-        builder.add("stopperEpochs", 10); // earlyStopperView.stopperEpochs
-        builder.add("patiente", 0.01); // earlyStopperView.patience
     }
 
     public String className(Object object){
