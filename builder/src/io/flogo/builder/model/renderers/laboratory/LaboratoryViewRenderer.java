@@ -18,19 +18,23 @@ public class LaboratoryViewRenderer implements Renderer<Laboratory, LaboratoryVi
             lossFunctionRenderer,
             optimizerRenderer);
 
+
     public LaboratoryView render(Laboratory laboratory) {
         try {
             LossFunctionView lossFunctionView = lossFunctionRenderer.render(laboratory.lossFunction());
             OptimizerView optimizerView = optimizerRenderer.render(laboratory.optimizer());
             return new LaboratoryView(
+                    laboratory.name(),
+                    laboratory.eras(),
+                    laboratory.epochs(),
                     lossFunctionView,
                     optimizerView,
                     checkPointSaverRenderer.render(laboratory.checkPointSaver()),
                     earlyStopperRenderer.render(laboratory.earlyStopper()),
                     datasetRenderer.render(laboratory.dataset()),
                     experimentsRenderer.render(laboratory.experimentList(), lossFunctionView, optimizerView),
-                    strategyRenderer.render(laboratory.strategy())
-
+                    strategyRenderer.render(laboratory.strategy()),
+                    LaboratoryView.DeviceView.valueOf(String.valueOf(laboratory.device()))
             );
         } catch (Exception e) {
             throw new RuntimeException(e);

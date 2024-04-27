@@ -21,13 +21,13 @@ public class LaboratoryTest {
         ExperimentView experimentTest = new ExperimentView("Experiment test", new MSELossView(), new AdadeltaView(0.01, 0.05, 0.0001, 0.5),
                 new ArrayList<>());
         experiments.add(experimentTest);
-        LaboratoryView laboratoryView = new LaboratoryView(new MSELossView(),
+        LaboratoryView laboratoryView = new LaboratoryView("Laboratory Test", 1, 10, new MSELossView(),
                 new SGDView(0.01, 0.05, 0.0001, 0.5),
                 new MaxCheckPointSaverView(),
                 new LossDrivenEarlyStopperView(10, 0.01),
                 new DatasetView("TestDataset", new DatasetView.SplitView(0.7, 0.2, 0.1), 50),
                 experiments,
-                new ClassificationStrategyView());
+                new ClassificationStrategyView(), LaboratoryView.DeviceView.GPU);
         System.out.println(new LaboratoryRenderer().render(laboratoryView));
     }
 }

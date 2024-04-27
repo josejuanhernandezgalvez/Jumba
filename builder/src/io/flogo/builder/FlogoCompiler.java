@@ -87,7 +87,7 @@ public class FlogoCompiler {
                             .substitutes(experimentView.substitutes)
                             .name(experimentView.name)
                             .collapse());
-            flogoRenderer.render(flogoDTO);
+            // flogoRenderer.render(flogoDTO);
         }
         System.out.println(laboratoryView);
         System.out.println(architectureView.sections());

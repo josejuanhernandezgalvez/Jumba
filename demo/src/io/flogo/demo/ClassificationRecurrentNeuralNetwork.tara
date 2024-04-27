@@ -1,6 +1,6 @@
 dsl Flogo
 
-Laboratory
+Laboratory(epochs = 10, name = "CatsAndDogs")
 	Adam
 	MAELoss
 	ClassificationStrategy

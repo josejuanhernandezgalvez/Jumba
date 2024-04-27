@@ -4,8 +4,6 @@ import io.flogo.builder.model.architecture.*;
 import io.flogo.builder.model.architecture.blocks.ResidualBlockView;
 import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
-import io.flogo.builder.model.architecture.layers.processing.ConvolutionalLayerView;
-import io.flogo.builder.model.architecture.layers.processing.LinearLayerView;
 import io.flogo.builder.model.laboratory.SubstituteView;
 import io.intino.magritte.framework.Layer;
 
@@ -48,7 +46,7 @@ public class ExperimentArchitecture extends ArchitectureView {
         BlockView nextBlock = iterator.next();
         result.add(isSimple(nextBlock) ?
                 collapsedSimpleBlockView(nextBlock.layerViews().iterator(), substitutes, new ArrayList<>(), previous) :
-                collapsedResidualBlockView(nextBlock.layerViews().iterator(), ((ResidualBlockView) nextBlock).residualConnection, substitutes, new ArrayList<>(), previous));
+                collapsedResidualBlockView(nextBlock.layerViews().iterator(), ((ResidualBlockView) nextBlock).shortCut, substitutes, new ArrayList<>(), previous));
         return collapsedBlockViewList(iterator, substitutes, result, result.getLast().layerViews().getLast());
     }
 
@@ -62,22 +60,10 @@ public class ExperimentArchitecture extends ArchitectureView {
         return collapsedSimpleBlockView(iterator, substitutes, result, result.getLast());
     }
 
-    private static BlockView collapsedResidualBlockView(Iterator<LayerView> iterator, List<LayerView> residualConnection, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
-        if (!iterator.hasNext()) return new ResidualBlockView(result, residualConnection(residualConnection.iterator(), substitutes, new ArrayList<>(), null, result.getLast()));
+    private static BlockView collapsedResidualBlockView(Iterator<LayerView> iterator, ResidualBlockView.ShorcutView residualConnection, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
+        if (!iterator.hasNext()) return new ResidualBlockView(result, residualConnection);
         result.add(collapsedLayerView(iterator.next(), substitutes, previous));
         return collapsedResidualBlockView(iterator, residualConnection, substitutes, result, result.getLast());
-    }
-
-    private static List<LayerView> residualConnection(Iterator<LayerView> iterator, Map<String, List<SubstituteView>> substitutes, List<LayerView> result, LayerView previous, LayerView blockLastLayer) {
-        if (!iterator.hasNext()) return blockLastLayer.getOutputView().equals(result.getLast().getOutputView()) ? result : addLinearLayerView(result, blockLastLayer.getOutputView());
-        result.add(collapsedLayerView(iterator.next(), substitutes, previous));
-        return residualConnection(iterator, substitutes, result, result.getLast(), blockLastLayer);
-    }
-
-    private static List<LayerView> addLinearLayerView(List<LayerView> result, OutputView outputView) {
-        if (sectionInput.dimensions() == 1) result.add(new LinearLayerView(result.getLast().getOutputView(), outputView));
-        if (sectionInput.dimensions() == 3) result.add(new ConvolutionalLayerView(result.getLast().getOutputView(), outputView));
-        return result;
     }
 
     private static LayerView collapsedLayerView(LayerView layerView, Map<String, List<SubstituteView>> substitutes, LayerView previous) {

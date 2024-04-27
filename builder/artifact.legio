@@ -5,6 +5,7 @@ Artifact("io.flogo", "1.0.0") builder
 		Test("junit", "junit", "4.13.2")
 		Test("org.assertj", "assertj-core", "3.25.3")
 		Compile("io.flogo", "flogo", "1.0.0")
+			Exclude("io.intino.tara", "language")
 		Compile("io.intino.magritte", "builder", "6.1.4")
 		Compile("io.intino", "configuration", "1.5.0")
 		Compile("commons-io", "commons-io", "2.16.0")

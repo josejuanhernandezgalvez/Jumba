@@ -4,10 +4,8 @@ import io.flogo.builder.model.architecture.BlockView;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.blocks.ResidualBlockView;
+import io.flogo.builder.model.architecture.blocks.ResidualBlockView.ShorcutView;
 import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
-import io.flogo.builder.model.architecture.layers.VLayerView;
-import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
-import io.flogo.builder.model.architecture.layers.processing.LinearLayerView;
 import io.flogo.builder.model.architecture.sections.processing.LinearSectionView;
 import io.flogo.builder.model.renderers.architecture.SectionRenderer;
 import io.flogo.model.LinearSection;
@@ -36,47 +34,32 @@ public class LinearSectionRenderer extends SectionRenderer<LinearSectionView> {
         return blockViews(blockIterator, blockViews.getLast().output(), blockViews);
     }
 
-    private BlockView blockViewFor(List<LayerView> layerViewList, Block block, OutputView input) {
-        try {
-            return (BlockView) (block.isResidual() ? ResidualBlockView.class : SimpleBlockView.class).getMethod("from", List.class, List.class)
-                    .invoke(null, layerViewList, facetLayerViews(input, block, layerViewList.getLast()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private List<LayerView> facetLayerViews(OutputView input, Block block, LayerView layerView) {
-        if (block.isResidual()) return residualConnection(input, block, layerView);
-        return null;
-    }
-
-    private ArrayList<LayerView> residualConnection(OutputView previousOutput, Block block, LayerView layerView) {
-        ArrayList<LayerView> result = new ArrayList<>();
-        if (isDefaultResidualConnection(block)) {
-            result.add((layerView instanceof VLayerView vLayerView) ? new VLayerView(vLayerView.id, previousOutput, vLayerView.getOutputView()) : new LinearLayerView(previousOutput, layerView.getOutputView()));
-            return result;
-        }
-        for (Block.Residual.CustomDownSampling.Layer layer : block.asResidual().customDownSampling().layerList()) {
-            LayerView renderedLayerView = render(layer, previousOutput);
-            result.add(renderedLayerView);
-            previousOutput = renderedLayerView.getOutputView();
-        }
-        if (result.getLast().getOutputView().equals(layerView.getOutputView()) || result.getLast().getOutputView() instanceof UndeterminedOutputView || layerView instanceof VLayerView)
-            return result;
-        result.add(new LinearLayerView(result.getLast().getOutputView(), layerView.getOutputView()));
-        return result;
-    }
-
-    private static boolean isDefaultResidualConnection(Block block) {
-        return block.asResidual().downSampling().name().equals("Default");
-    }
-
-
     private List<LayerView> blockLayerList(Iterator<Block.Layer> layersIterator, OutputView input, List<LayerView> layerViews) {
         if (!layersIterator.hasNext()) return layerViews;
         layerViews.add(render(layersIterator.next(), input));
         return blockLayerList(layersIterator, layerViews.getLast().getOutputView(), layerViews);
     }
+
+    private BlockView blockViewFor(List<LayerView> layerViewList, Block block, OutputView input) {
+        try {
+            if (block.isResidual()) return ResidualBlockView.from(layerViewList, residualConnectionView(layerViewList, block, input));
+            return SimpleBlockView.from(layerViewList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ShorcutView residualConnectionView(List<LayerView> layerViewList, LinearSection.Block block, OutputView inputView) {
+        if (!block.asResidual().shortcut().toString().equals("Custom")) return ShorcutView.from(block.asResidual().shortcut().toString(), inputView, layerViewList.getLast().getOutputView());
+        return ShorcutView.from(customDownSamplingLayerList((block.asResidual().customShortcut().layerList()).iterator(), inputView, new ArrayList<>()), layerViewList.getLast().getOutputView());
+    }
+
+    private List<LayerView> customDownSamplingLayerList(Iterator<Block.Residual.CustomShortcut.Layer> layersIterator, OutputView input, List<LayerView> layerViews) {
+        if (!layersIterator.hasNext()) return layerViews;
+        layerViews.add(render(layersIterator.next(), input));
+        return customDownSamplingLayerList(layersIterator, layerViews.getLast().getOutputView(), layerViews);
+    }
+
 
     private LinearSection cast(Section section) {
         return (LinearSection) section;

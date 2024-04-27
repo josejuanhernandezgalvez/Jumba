@@ -1,6 +1,6 @@
 dsl Flogo
 
-Laboratory
+Laboratory(epochs = 10, name = "CatsAndDogs")
 	Adam
 	MAELoss
 	RegressionStrategy
@@ -15,10 +15,11 @@ Laboratory
 Architecture RegressionLinearNeuralNetwork
 	LinearSection
 		Input(x=10000)
-		Block as Residual(Default)
+		Block as Residual(Custom)
 			Linear > Output(x=5000)
 			ReLU
-			VLayer(id="01")
+			CustomShortcut
+				Linear > Output(x=4000)
 		Block
 			Linear > Output(x=2000)
 			ReLU

@@ -55,7 +55,7 @@ public class PoolTwoDimensionsKernelTest {
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(2, 2),
                 new TwoDimensionsStride(2, 2),
-                new TwoDimensionsPadding(1, 1));
+                new TwoDimensionsPadding(1, 0));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -67,7 +67,7 @@ public class PoolTwoDimensionsKernelTest {
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(1, 1),
                 new TwoDimensionsStride(1, 1),
-                new TwoDimensionsPadding(1, 1));
+                new TwoDimensionsPadding(1, 0));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -79,7 +79,7 @@ public class PoolTwoDimensionsKernelTest {
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(1, 1),
                 new TwoDimensionsStride(1, 1),
-                new TwoDimensionsPadding(5, 5));
+                new TwoDimensionsPadding(3, 2));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -91,7 +91,7 @@ public class PoolTwoDimensionsKernelTest {
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(3, 3),
                 new TwoDimensionsStride(3, 3),
-                new TwoDimensionsPadding(4, 4));
+                new TwoDimensionsPadding(2, 2));
         assertThat(kernel).isEqualTo(expected);
     }
 }

@@ -1,6 +1,10 @@
 dsl Proteo
 
 Concept:{1..1} Laboratory
+	var integer eras=1
+	var integer epochs
+	var string name
+	var word:{CPU GPU MPS Default} device=Default
 	has:{1..1} Optimizer
 	has:{1..1} LossFunction
 	has:{0..1} EarlyStopper
@@ -224,11 +228,13 @@ Concept Optimizer is component
     	var double beta0=0.9
     	var double beta1=0.999
     	var double weightDecay=0
+    	var double eps=0.00000001
     sub AMSGrad
     	var double lr=0.0001
     	var double beta0=0.9
     	var double beta1=0.999
     	var double weightDecay=0
+    	var double eps=0.00000001
     sub ASGD
     	var double lr=0.001
 		var double lrDecay=0.00001
@@ -300,8 +306,11 @@ Concept Section is component
 				var integer z
 			Concept:{1..*} Block
 				Facet:CheckCustomDownSampling Residual
-                	var word:{Bottleneck Custom} downSampling = Bottleneck
-            		Concept:{0..1} CustomDownSampling
+                	var word:{Bottleneck Default Custom} shortcut = Bottleneck
+            		Concept:{0..1} CustomShortcut
+            			Concept:{1..*} Layer
+                        	sub ActivationLayer
+                        		sub Tanh
 				Concept:{1..*} Layer
 					sub VLayer
                     	var string id
@@ -377,16 +386,13 @@ Concept Section is component
             	var integer x
 			Concept:{1..*} Block
 				Facet:CheckCustomDownSampling Residual
-            		var word:{Default Custom} downSampling = Default
-					Concept:{0..1} CustomDownSampling
+            		var word:{Default Custom} shortcut = Default
+					Concept:{0..1} CustomShortcut
 						Concept:{1..*} Layer
             				sub ActivationLayer
             					sub ReLU
-            					sub ELU > var integer alpha=1
-            					sub SELU
+                                sub ELU > var integer alpha=1
                     		sub ProcessingLayer
-								sub VLayer
-                    				var string id
                     			sub Linear
                     				Concept:{1..1} Output > var integer x
                     			sub Dropout

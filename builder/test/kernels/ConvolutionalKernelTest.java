@@ -68,7 +68,7 @@ public class ConvolutionalKernelTest {
         ConvolutionTwoDimensionsKernel expected = new ConvolutionTwoDimensionsKernel(
                 new TwoDimensionsSize(1, 1),
                 new TwoDimensionsStride(1, 1),
-                new TwoDimensionsPadding(1, 1));
+                new TwoDimensionsPadding(1, 0));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -81,7 +81,7 @@ public class ConvolutionalKernelTest {
         ConvolutionTwoDimensionsKernel expected = new ConvolutionTwoDimensionsKernel(
                 new TwoDimensionsSize(1, 1),
                 new TwoDimensionsStride(1, 1),
-                new TwoDimensionsPadding(4, 4));
+                new TwoDimensionsPadding(2, 2));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -94,7 +94,7 @@ public class ConvolutionalKernelTest {
         ConvolutionTwoDimensionsKernel expected = new ConvolutionTwoDimensionsKernel(
                 new TwoDimensionsSize(1, 1),
                 new TwoDimensionsStride(1, 1),
-                new TwoDimensionsPadding(9, 9));
+                new TwoDimensionsPadding(5, 4));
         assertThat(kernel).isEqualTo(expected);
     }
 }

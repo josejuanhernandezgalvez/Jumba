@@ -1,12 +1,12 @@
 def.file
-$PROJECT_DIRECTORY/demo/src/io/flogo/demo/RegressionRecurrentNeuralNetwork.tara#true
+$PROJECT_DIRECTORY/demo/src/io/flogo/demo/RegressionLinearNeuralNetwork.tara#true
 
 project
 dsl-flogo
 module
 demo
 semantic.lib
-$HOME/.m2/repository/io/intino/tara/language/1.4.0/language-1.4.0.jar
+$HOME/.m2/repository/io/intino/tara/language/1.5.1/language-1.5.1.jar
 outputpath
 $PROJECT_DIRECTORY/demo/gen
 final_outputpath

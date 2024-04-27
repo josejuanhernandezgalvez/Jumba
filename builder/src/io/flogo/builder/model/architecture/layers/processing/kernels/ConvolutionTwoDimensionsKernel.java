@@ -26,8 +26,8 @@ public record ConvolutionTwoDimensionsKernel(Size size, Stride stride, Padding p
 
     private static TwoDimensionsPadding paddingFor(ThreeDimensionsOutputView previousOutput, ThreeDimensionsOutputView thisOutput) {
         return new TwoDimensionsPadding(
-                isGreater(thisOutput.x(), previousOutput.x()) ? thisOutput.x() - previousOutput.x() : 0,
-                isGreater(thisOutput.y(), previousOutput.y()) ? thisOutput.y() - previousOutput.y() : 0);
+                isGreater(thisOutput.x(), previousOutput.x()) ? (int) Math.ceil(((double) thisOutput.x() - previousOutput.x()) / 2) : 0,
+                isGreater(thisOutput.y(), previousOutput.y()) ? (int) Math.floor(((double) thisOutput.y() - previousOutput.y()) / 2) : 0);
     }
 
     private static boolean isGreater(int x, int y) {

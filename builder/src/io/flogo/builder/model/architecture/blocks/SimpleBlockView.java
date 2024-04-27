@@ -23,7 +23,7 @@ public class SimpleBlockView implements BlockView {
         return layerViews;
     }
 
-    public static SimpleBlockView from(List<LayerView> layerViews, List<LayerView> facetLayerViews) {
+    public static SimpleBlockView from(List<LayerView> layerViews) {
         return new SimpleBlockView(layerViews);
     }
 }

@@ -28,7 +28,7 @@ public record PoolTwoDimensionsKernel(Size size, Stride stride, Padding padding)
 
     private static TwoDimensionsPadding paddingFor(ThreeDimensionsOutputView previousOutput, ThreeDimensionsOutputView thisOutput) {
         return new TwoDimensionsPadding(
-                thisOutput.x() - (previousOutput.x() / sizeFor(previousOutput, thisOutput).xSize()),
-                thisOutput.x() - (previousOutput.x() / sizeFor(previousOutput, thisOutput).ySize()));
+                (int) Math.ceil(((double) thisOutput.x() - (previousOutput.x() / sizeFor(previousOutput, thisOutput).xSize())) / 2),
+                (int) Math.floor(((double) thisOutput.x() - (previousOutput.x() / sizeFor(previousOutput, thisOutput).ySize())) / 2));
     }
 }

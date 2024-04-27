@@ -18,4 +18,14 @@ public class LossDrivenEarlyStopperView implements EarlyStopperView {
         return new LossDrivenEarlyStopperView(lossDrivenEarlyStopper.patience(),
                 lossDrivenEarlyStopper.threshold());
     }
+
+    @Override
+    public int patience() {
+        return patience;
+    }
+
+    @Override
+    public double threshold() {
+        return threshold;
+    }
 }
