@@ -9,6 +9,7 @@ import io.intino.itrules.FrameBuilder;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class LaboratoryRenderer {
 
@@ -18,12 +19,22 @@ public class LaboratoryRenderer {
                 .add("architecture", architecturesBuilder(architecture, laboratoryView.experimentViews()))
                 .add("laboratory", laboratoryBuilder(laboratoryView))
                 .add("experiment", experimentsBuilder(laboratoryView.experimentViews(), laboratoryView.earlyStopperView()))
-                .add("optimizer", optimizerFrame(laboratoryView.optimizerView()))
+                .add("optimizer", optimizerBuilders(experimentsOn(laboratoryView)))
                 .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
-                .add("loss", lossBuilder(laboratoryView.lossFunctionView()))
+                .add("loss", lossBuilders(lossOn(laboratoryView)))
                 .add("dataset", datasetBuilder(laboratoryView.datasetView()));
         createExperiment(laboratoryView, builder);
         return new LaboratoryTemplate().render(builder);
+    }
+
+    private List<LossFunctionView> lossOn(LaboratoryView laboratoryView){
+        return laboratoryView.experimentViews().stream()
+                .map(experimentView -> experimentView.lossFunctionView)
+                .collect(Collectors.toList());
+    }
+
+    private List<ExperimentView> experimentsOn(LaboratoryView laboratoryView){
+        return laboratoryView.experimentViews();
     }
 
     private FrameBuilder[] architecturesBuilder(String architectureName, List<ExperimentView> experimentViews) {
@@ -44,13 +55,26 @@ public class LaboratoryRenderer {
                 .toArray(FrameBuilder[]::new);
     }
 
+    private FrameBuilder[] lossBuilders(List<LossFunctionView> lossFunctionViews){
+        return lossFunctionViews.stream()
+                .map(this::lossBuilder)
+                .toArray(FrameBuilder[]::new);
+    }
+
+    private FrameBuilder[] optimizerBuilders(List<ExperimentView> experimentViews){
+        return experimentViews.stream()
+                .map(experimentView -> optimizerBuilder(experimentView.optimizerView, experimentView.name))
+                .toArray(FrameBuilder[]::new);
+    }
+
     private FrameBuilder experimentBuilder(ExperimentView experimentView, EarlyStopperView earlyStopperView) {
-        return initFrameBuilder("experiment")
+        FrameBuilder builder = initFrameBuilder("experiment")
                 .add("experiment_name", experimentView.name)
                 .add("architecture_name", experimentView.name)
-                .add("optimizer", optimizerFrame(experimentView.optimizerView))
-                .add("loss", lossBuilder(experimentView.lossFunctionView))
-                .add("early_stopper", stopperBuilder(earlyStopperView));
+                .add("optimizer", optimizerBuilder(experimentView.optimizerView, experimentView.name))
+                .add("loss", lossBuilder(experimentView.lossFunctionView));
+        if (earlyStopperView == null) return builder;
+        return builder.add("early_stopper", stopperBuilder(earlyStopperView));
     }
 
     private FrameBuilder stopperBuilder(EarlyStopperView earlyStopperView) {
@@ -70,7 +94,7 @@ public class LaboratoryRenderer {
                 .add("eras", laboratoryView.eras())
                 .add("epochs", laboratoryView.epochs())
                 .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
-                .add("device", 0); //TODO obtain device
+                .add("device", laboratoryView.deviceView().value());
     }
 
     private FrameBuilder initFrameBuilder(String ... type) {
@@ -94,8 +118,9 @@ public class LaboratoryRenderer {
                 .add("testProportion", datasetView.split().test);
     }
 
-    private FrameBuilder optimizerFrame(OptimizerView optimizerView) {
+    private FrameBuilder optimizerBuilder(OptimizerView optimizerView, String architectureName) {
         FrameBuilder builder = initFrameBuilder("optimizer", optimizerName(optimizerView))
+                .add("architecture_name", architectureName)
                 .add("name", optimizerName(optimizerView));
         switch (optimizerView){
             case SGDView sgdView -> builder.add("lr", sgdView.learningRate)

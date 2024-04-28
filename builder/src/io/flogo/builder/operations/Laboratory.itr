@@ -5,11 +5,11 @@ def type(main)
     from framework.toolbox.stopper import EarlyStopper
     from implementations.$library.toolbox.experiment import $library+FirstUppercase~Device as Device
     from implementations.$library.toolbox.experiment import $library+FirstUppercase~Experiment as Experiment
-    from implementations.$library.toolbox.generator import $library+FirstUppercase~DatasetGenerator as DatasetGenerator
-    $optimizer+import
-    $loss+import
+    from implementations.$library.toolbox.data.generator import $library+FirstUppercase~DatasetGenerator as DatasetGenerator
+    $optimizer+import...[$NL]
+    $loss+import...[$NL]
     from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelSaver as ModelSaver
-    from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelLoader as ModelLoader
+    from implementations.$library.toolbox.loader import $library+FirstUppercase~ModelLoader as ModelLoader
     $strategy+import
 
     dataset = $dataset
@@ -20,7 +20,7 @@ def type(main)
 end
 
 def type(architecture) trigger(import)
-    from $architecture_name.$experiment_name+Lowercase import $experiment_name
+    from $experiment_name+Lowercase import architecture as $experiment_name
 end
 
 def type(strategy) trigger(import)
@@ -39,15 +39,15 @@ def type(laboratory)
     Laboratory(name="$laboratoryName",
                eras=$eras,
                epochs=$epochs,
-               dataset=dataset,
+               datagen=dataset,
                experiments=experiments,
                strategy=$strategy,
-               logger=Logger("C:/Users/Joel/Desktop/test_api/flogo/executions/logger/test.tsv"),
+               logger=Logger("C:/Users/Joel/Desktop/test_api/flogo/executions/logger/result.tsv"),
                loader=ModelLoader(),
                device=Device($device)).explore()
 end
 
-def type(experiment)
+def type(experiment) attribute(early_stopper)
     Experiment(name="$experiment_name",
                               architecture=$architecture_name
                               optimizer=$optimizer,
@@ -55,6 +55,15 @@ def type(experiment)
                               stopper=$early_stopper,
                               saver=ModelSaver("C:/Users/Joel/Desktop/test_api/flogo/test"))
 end
+
+def type(experiment)
+    Experiment(name="$experiment_name",
+                              architecture=$architecture_name,
+                              optimizer=$optimizer,
+                              loss_function=$loss,
+                              saver=ModelSaver("C:/Users/Joel/Desktop/test_api/flogo/test"))
+end
+
 
 def type(loss)
     $name~LossFunction()
@@ -82,57 +91,57 @@ end
 
 
 def type(optimizer) type(SGD)
-    SGDOptimizer(parameters=architecture.parameters(), learning_rate=$lr, $momentum, $dampening, weight_decay=$weight_decay)
+    SGDOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, $momentum, $dampening, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(Adadelta)
-    AdadeltaOptimizer(parameters=architecture.parameters(), learning_rate=$lr, rho=$rho, eps=$eps, weight_decay=$weight_decay)
+    AdadeltaOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, rho=$rho, eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(Adagrad)
-    AdagradOptimizer(parameters=architecture.parameters(), learning_rate=$lr, learning_rate_decay=$lr_decay, eps=$eps, weight_decay=$weight_decay)
+    AdagradOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, learning_rate_decay=$lr_decay, eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(Adam)
-    AdamOptimizerOptimizer(parameters=architecture.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+    AdamOptimizerOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(Adamax)
-    AdamaxOptimizer(parameters=architecture.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+    AdamaxOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(AdamW)
-    AdamWOptimizer(parameters=architecture.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+    AdamWOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(AMSGrad)
-    AMSGradOptimizer(parameters=architecture.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+    AMSGradOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(ASGD)
-    ASGDOptimizer(parameters=architecture.parameters(), learning_rate=$lr, lambd=$lambd, alpha=$alpha, t0=$t0, weight_decay=$weight_decay)
+    ASGDOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, lambd=$lambd, alpha=$alpha, t0=$t0, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(NAdam)
-    NAdamOptimizer(parameters=architecture.parameters(),learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+    NAdamOptimizer(parameters=$architecture_name.parameters(),learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(RProp)
-    RPropOptimizer(parameters=architecture.parameters(), learning_rate=$lr, etas=($eta0, $eta1), step_sizes=($step0, $step1))
+    RPropOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, etas=($eta0, $eta1), step_sizes=($step0, $step1))
 end
 
 def type(optimizer) type(RAdam)
-    RAdamOptimizer(parameters=architecture.parameters(), learning_rate=$lr, ($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+    RAdamOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, ($b0, $b1), eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(RMSProp)
-    RMSPropOptimizer(parameters=architecture.parameters(), learning_rate=$lr, alpha=$alpha, eps=$eps, weight_decay=$weight_decay, $momentum)
+    RMSPropOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, alpha=$alpha, eps=$eps, weight_decay=$weight_decay, $momentum)
 end
 
 def type(optimizer) type(SparseAdam)
-    SparseAdamOptimizer(parameters=architecture.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps)
+    SparseAdamOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps)
 end
 
 def type(optimizer) type(LBFGS)
-    LBFGSOptimizer(parameters=architecture.parameters(), learning_rate=$lr, rho=$rho, eps=$eps, weight_decay=$weight_decay)
+    LBFGSOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, rho=$rho, eps=$eps, weight_decay=$weight_decay)
 end

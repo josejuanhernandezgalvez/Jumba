@@ -8,6 +8,28 @@ public record LaboratoryView(String name, int eras, int epochs, LossFunctionView
                              StrategyView strategyView, DeviceView deviceView) {
 
     public enum DeviceView {
-        CPU, GPU, MPS, Default
+        CPU {
+            @Override
+            public int value() {
+                return 0;
+            }
+        }, GPU {
+            @Override
+            public int value() {
+                return 1;
+            }
+        }, MPS {
+            @Override
+            public int value() {
+                return 2;
+            }
+        }, Default {
+            @Override
+            public int value() {
+                return -1;
+            }
+        };
+
+        public abstract int value();
     }
 }
