@@ -91,7 +91,7 @@ end
 
 
 def type(optimizer) type(SGD)
-    SGDOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, $momentum, $dampening, weight_decay=$weight_decay)
+    SGDOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, momentum=$momentum, dampening=$dampening, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(Adadelta)
