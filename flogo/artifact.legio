@@ -1,9 +1,20 @@
 dsl Legio
 
 Artifact("io.flogo", "1.0.0") flogo
-	Model("Proteo", "5.1.0", "6.1.4")
+	Dsl(name="Proteo", version="1.0.0")
+		Builder("io.intino.magritte", "builder", "7.0.0", "model")
+		OutputDsl > Builder("io.flogo", "flogo", "1.0.0")
 	Code("io.flogo")
+	Imports
+		Test("junit", "junit", "4.13.2")
+		Test("org.assertj", "assertj-core", "3.25.3")
+			Exclude("io.intino.tara", "language")
+		Compile("io.intino", "builder-interface", "2.0.0")
+        Compile("io.intino.magritte", "builder", "7.0.0")
+		Compile("commons-io", "commons-io", "2.16.0")
+		Compile("tara.dsl", "flogo", "1.0.0")
 	Package(mode = ModulesAndLibrariesLinkedByManifest)
+
 
 Repository("intino-maven")
 	Release("https://artifactory.intino.io/artifactory/releases")
