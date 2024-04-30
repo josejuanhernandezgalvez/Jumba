@@ -178,8 +178,8 @@ public class ArchitectureRenderer {
                             .add("eps", batchNormalization.eps)
                             .add("momentum", batchNormalization.momentum);
             case FlattenLayerView flatten ->
-                    builder.add("from_dim", flatten.fromDimension)
-                            .add("to_dim", flatten.toDimension);
+                    builder.add("from_dim", flatten.toDimension)
+                            .add("to_dim", flatten.fromDimension);
             default -> {}
         }
         return builder;

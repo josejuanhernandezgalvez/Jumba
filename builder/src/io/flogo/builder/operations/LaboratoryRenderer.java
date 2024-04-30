@@ -8,7 +8,11 @@ import io.flogo.model.RAdam;
 import io.intino.itrules.FrameBuilder;
 
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class LaboratoryRenderer {
@@ -30,11 +34,20 @@ public class LaboratoryRenderer {
     private List<LossFunctionView> lossOn(LaboratoryView laboratoryView){
         return laboratoryView.experimentViews().stream()
                 .map(experimentView -> experimentView.lossFunctionView)
+                .filter(distinctBy(LossFunctionView::getClass))
                 .collect(Collectors.toList());
     }
 
+    public static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
     private List<ExperimentView> experimentsOn(LaboratoryView laboratoryView){
-        return laboratoryView.experimentViews();
+        return laboratoryView.experimentViews()
+                .stream()
+                .filter(distinctBy(experimentView -> experimentView.optimizerView.getClass()))
+                .collect(Collectors.toList());
     }
 
     private FrameBuilder[] architecturesBuilder(String architectureName, List<ExperimentView> experimentViews) {
@@ -225,8 +238,19 @@ public class LaboratoryRenderer {
         return functionName(className, className.indexOf("View"));
     }
 
+    private String addWhiteSpaces(String name) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name.charAt(0));
+        for (int i = 1; i < name.length(); i++) {
+            if (Character.isUpperCase(name.charAt(i)) & !Character.isUpperCase(builder.charAt(builder.length()-1)))
+                builder.append(" ");
+            builder.append(name.charAt(i));
+        }
+        return builder.toString();
+    }
+
     private String functionName(String className, int index) {
-        return className.substring(0, index);
+        return addWhiteSpaces(className.substring(0, index));
     }
 
     private void createExperiment(LaboratoryView laboratoryView, FrameBuilder builder) {

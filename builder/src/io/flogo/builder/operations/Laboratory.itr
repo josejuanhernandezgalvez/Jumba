@@ -24,15 +24,15 @@ def type(architecture) trigger(import)
 end
 
 def type(strategy) trigger(import)
-    from implementations.$library.toolbox.strategies.$name+Lowercase import $library+FirstUppercase$name+FirstUppercase~Strategy as $name+FirstUppercase~Strategy
+    from implementations.$library.toolbox.strategies.$name+SnakeCase import $library+FirstUppercase$name+CamelCase~Strategy as $name+CamelCase~Strategy
 end
 
 def type(optimizer) trigger(import)
-    from implementations.$library.toolbox.optimizers.$name+Lowercase import $library+FirstUppercase$name~Optimizer as $name~Optimizer
+    from implementations.$library.toolbox.optimizers.$name+SnakeCase import $library+FirstUppercase$name+CamelCase~Optimizer as $name+CamelCase~Optimizer
 end
 
 def type(loss) trigger(import)
-    from implementations.$library.toolbox.losses.$name+Lowercase import $library+FirstUppercase$name~LossFunction as $name~LossFunction
+    from implementations.$library.toolbox.losses.$name+SnakeCase import $library+FirstUppercase$name+CamelCase~LossFunction as $name+CamelCase~LossFunction
 end
 
 def type(laboratory)
@@ -49,7 +49,7 @@ end
 
 def type(experiment) attribute(early_stopper)
     Experiment(name="$experiment_name",
-                              architecture=$architecture_name
+                              architecture=$architecture_name,
                               optimizer=$optimizer,
                               loss_function=$loss,
                               stopper=$early_stopper,
@@ -66,7 +66,7 @@ end
 
 
 def type(loss)
-    $name~LossFunction()
+    $name+CamelCase~LossFunction()
 end
 
 def type(dataset)
@@ -79,7 +79,7 @@ def type(dataset)
 end
 
 def type(strategy)
-    $name+FirstUppercase~Strategy($loss)
+    $name+CamelCase+FirstUppercase~Strategy($loss)
 end
 
 def type(early_stopper)
@@ -103,7 +103,7 @@ def type(optimizer) type(Adagrad)
 end
 
 def type(optimizer) type(Adam)
-    AdamOptimizerOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+    AdamOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
 end
 
 def type(optimizer) type(Adamax)

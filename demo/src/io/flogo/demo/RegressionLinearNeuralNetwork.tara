@@ -15,11 +15,9 @@ Laboratory(epochs = 10, name = "CatsAndDogs")
 Architecture RegressionLinearNeuralNetwork
 	LinearSection
 		Input(x=10000)
-		Block as Residual(Custom)
+		Block
 			Linear > Output(x=5000)
 			ReLU
-			CustomShortcut
-				Linear > Output(x=4000)
 		Block
 			Linear > Output(x=2000)
 			ReLU
