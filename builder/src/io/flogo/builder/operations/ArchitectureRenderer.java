@@ -217,9 +217,23 @@ public class ArchitectureRenderer {
     private String typeOf(String view) {
         String component = view.substring(0, view.indexOf("View"));
         for (int i = component.length() - 1; i > 0; i--) {
-            if (Character.isUpperCase(component.charAt(i))) return component.substring(0, i);
+            if (Character.isUpperCase(component.charAt(i))) return splitIntoWords(component.substring(0, i));
         }
         return component;
+    }
+
+    private static String splitIntoWords(String component) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(component.charAt(0));
+        for (int i = 1; i < component.length(); i++) {
+            if (isWord(component, i)) sb.append(" ");
+            sb.append(component.charAt(i));
+        }
+        return sb.toString();
+    }
+
+    private static boolean isWord(String component, int i) {
+        return Character.isLowerCase(component.charAt(i - 1)) && Character.isUpperCase(component.charAt(i)) && Character.isLowerCase(component.charAt(i + 1));
     }
 
     private int dimensionOf(int[] dimensions) {
