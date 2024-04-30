@@ -21,11 +21,11 @@ def type(component) attribute(layer)
 end
 
 def type(section) trigger(import)
-    from implementations.$library.architecture.sections.$type+SnakeCase import $library+FirstUppercase~$type+CamelCase~Section as $type+CamelCase~Section
+    from implementations.$library.architecture.sections.$type+Lowercase import $library+FirstUppercase~$type~Section as $type+CamelCase~Section
 end
 
 def type(block) trigger(import) attribute(type)
-    from implementations.$library.architecture.blocks.$type+SnakeCase import $library+FirstUppercase~$type+CamelCase~Block as $type+CamelCase~Block
+    from implementations.$library.architecture.blocks.$type+Lowercase import $library+FirstUppercase~$type~Block as $type+CamelCase~Block
 end
 
 def type(block) trigger(import)
@@ -33,24 +33,24 @@ def type(block) trigger(import)
 end
 
 def type(layer) trigger(import) attribute(package) attribute(dimensionality)
-    from implementations.$library.architecture.layers.$package.$type+SnakeCase import $library+FirstUppercase~$dimensionality~Dimensional~$type+CamelCase~Layer as $type+CamelCase~Layer
+    from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$dimensionality~Dimensional~$type~Layer as $type~Layer
 end
 
 def type(layer) trigger(import) attribute(package) attribute(reduce)
-    from implementations.$library.architecture.layers.$package.$type+SnakeCase import $library+FirstUppercase~$type+CamelCase~Layer as $type+CamelCase~Layer
+    from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
     $reduce+import...[]
 end
 
 def type(layer) trigger(import) attribute(package)
-    from implementations.$library.architecture.layers.$package.$type+SnakeCase import $library+FirstUppercase~$type+CamelCase~Layer as $type+CamelCase~Layer
+    from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
 end
 
 def type(layer) trigger(import) attribute(dimensionality)
-    from implementations.$library.architecture.layers.$type+SnakeCase import $library+FirstUppercase~$dimensionality~Dimensional~$type+CamelCase~Layer as $type+CamelCase~Layer
+    from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$dimensionality~Dimensional~$type~Layer as $type~Layer
 end
 
 def type(layer) trigger(import)
-    from implementations.$library.architecture.layers.$type+SnakeCase import $library+FirstUppercase~$type+CamelCase~Layer as $type+CamelCase~Layer
+    from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
 end
 
 def type(reduce) trigger(import) attribute(slicing)
