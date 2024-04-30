@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static io.flogo.builder.BlattBuildConstants.BUILD_END;
-import static io.flogo.builder.BlattBuildConstants.SEPARATOR;
-import static io.intino.tara.builder.shared.TaraBuildConstants.*;
+import static io.intino.builder.BuildConstants.BUILD_END;
+import static io.intino.builder.BuildConstants.SEPARATOR;
+import static io.intino.builder.BuildConstants.*;
 
 
 class FlogoCompilerRunner {
@@ -62,7 +62,7 @@ class FlogoCompilerRunner {
     private void processErrors(List<CompilerMessage> compilerMessages) {
         int errorCount = 0;
         for (CompilerMessage message : compilerMessages) {
-            if (message.getCategory().equals(BlattCompilerMessageCategories.ERROR)) {
+            if (message.getCategory().equals(FlogoCompilerMessageCategories.ERROR)) {
                 if (errorCount > 100) continue;
                 errorCount++;
             }

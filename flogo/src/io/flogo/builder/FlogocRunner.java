@@ -1,7 +1,6 @@
 package io.flogo.builder;
 
-
-import io.intino.tara.builder.shared.TaraBuildConstants;
+import io.intino.builder.BuildConstants;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -15,11 +14,11 @@ public class FlogocRunner {
 
     public static void main(String[] args) {
         final boolean verbose = args.length != 2 || Boolean.parseBoolean(args[1]);
-        if (verbose) System.out.println(TaraBuildConstants.PRESENTABLE_MESSAGE + "Starting compiling");
+        if (verbose) System.out.println(BuildConstants.PRESENTABLE_MESSAGE + "Starting compiling");
         try {
             File argsFile;
             if (checkArgumentsNumber(args) || (argsFile = checkConfigurationFile(args[0])) == null)
-                throw new BlattException("Error finding args file");
+                throw new FlogoException("Error finding args file");
             new FlogoCompilerRunner(verbose).run(argsFile);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage() == null ? e.getStackTrace()[0].toString() : e.getMessage());

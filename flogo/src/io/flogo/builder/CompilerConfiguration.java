@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
-import static io.intino.Configuration.Artifact.Model.Level;
+import static io.intino.Configuration.Artifact.Dsl.Level;
 
 public class CompilerConfiguration implements Cloneable {
     private static final Logger LOG = Logger.getGlobal();

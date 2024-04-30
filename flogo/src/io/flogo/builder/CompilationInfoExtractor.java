@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static io.flogo.builder.BlattBuildConstants.*;
-import static io.intino.tara.builder.shared.TaraBuildConstants.*;
+import static io.intino.builder.BuildConstants.*;
 import static java.io.File.separator;
 
 class CompilationInfoExtractor {
@@ -73,10 +72,10 @@ class CompilationInfoExtractor {
             case MODULE:
                 configuration.module(reader.readLine());
                 break;
-            case LANGUAGE:
+            case DSL:
                 configuration.model().language(reader.readLine());
                 break;
-            case LANGUAGE_GENERATION_PACKAGE:
+            case DSL_GENERATION_PACKAGE:
                 configuration.model().generationPackage(reader.readLine());
                 break;
             case PROJECT_PATH:
@@ -86,7 +85,7 @@ class CompilationInfoExtractor {
                 configuration.moduleDirectory(new File(reader.readLine()));
                 break;
             case LEVEL:
-                configuration.model().level(Configuration.Artifact.Model.Level.valueOf(reader.readLine()));
+                configuration.model().level(Configuration.Artifact.Dsl.Level.valueOf(reader.readLine()));
                 break;
             case GROUP_ID:
                 configuration.groupId(reader.readLine());

@@ -5,8 +5,6 @@ project
 dsl-flogo
 module
 demo
-semantic.lib
-$HOME/.m2/repository/io/intino/tara/language/1.5.1/language-1.5.1.jar
 outputpath
 $PROJECT_DIRECTORY/demo/gen
 final_outputpath
@@ -23,7 +21,7 @@ $PROJECT_DIRECTORY/demo/gen
 
 level
 Model
-language
+dsl
 flogo:1.0.0
 
 groupId

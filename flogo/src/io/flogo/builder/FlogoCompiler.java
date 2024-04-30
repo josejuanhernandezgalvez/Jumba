@@ -9,6 +9,8 @@ import io.flogo.builder.model.renderers.architecture.ArchitectureViewRenderer;
 import io.flogo.builder.model.renderers.laboratory.LaboratoryViewRenderer;
 import io.flogo.builder.operations.FlogoRenderer;
 import io.flogo.model.FlogoGraph;
+import io.intino.magritte.framework.Layer;
+import io.intino.magritte.framework.Node;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static io.intino.tara.builder.shared.TaraBuildConstants.PRESENTABLE_MESSAGE;
+import static io.intino.builder.BuildConstants.PRESENTABLE_MESSAGE;
 
 public class FlogoCompiler {
     private final CompilerConfiguration configuration;
@@ -54,8 +56,8 @@ public class FlogoCompiler {
     }
 
     private void processCompilationException(Exception e) {
-        if (e instanceof BlattException) {
-            addErrorMessage((BlattException) e);
+        if (e instanceof FlogoException) {
+            addErrorMessage((FlogoException) e);
             return;
         }
         LOG.severe(e.getMessage());
@@ -66,7 +68,7 @@ public class FlogoCompiler {
         collector.add(new CompilerMessage(error ? CompilerMessage.ERROR : CompilerMessage.WARNING, message, null, -1, -1));
     }
 
-    private void addErrorMessage(BlattException exception) {
+    private void addErrorMessage(FlogoException exception) {
         collector.add(new CompilerMessage(CompilerMessage.ERROR, exception.getMessage(), "null", -1, -1));
     }
 
@@ -87,9 +89,23 @@ public class FlogoCompiler {
                             .substitutes(experimentView.substitutes)
                             .name(experimentView.name)
                             .collapse());
-            // flogoRenderer.render(flogoDTO);
+            flogoRenderer.render(flogoDTO);
+            context.getCompiledFiles().add(new OutputItem(sourceFileOf(graph.architecture(), context), ""));
         }
         System.out.println(laboratoryView);
         System.out.println(architectureView.sections());
+    }
+
+
+    public String sourceFileOf(Layer layer, CompilationContext context) {
+        if (layer == null) return context.getSources().get(0).getAbsolutePath();
+        final Node node = layer.core$();
+        return sourceFileOf(node, context);
+    }
+
+    public String sourceFileOf(Node node, CompilationContext context) {
+        String stash = node.stash();
+        File file = context.getSources().stream().filter(f -> f.getName().replace(".konos", "").equals(stash)).findFirst().orElse(null);
+        return file == null ? context.getSources().get(0).getAbsolutePath() : file.getAbsolutePath();
     }
 }
