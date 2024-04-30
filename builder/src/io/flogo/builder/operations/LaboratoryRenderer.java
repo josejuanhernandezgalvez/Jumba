@@ -22,7 +22,7 @@ public class LaboratoryRenderer {
         FrameBuilder builder = initFrameBuilder("main")
                 .add("architecture", architecturesBuilder(architecture, laboratoryView.experimentViews()))
                 .add("laboratory", laboratoryBuilder(laboratoryView))
-                .add("experiment", experimentsBuilder(laboratoryView.experimentViews(), laboratoryView.earlyStopperView()))
+                .add("experiment", experimentsBuilder(laboratoryView.name(), laboratoryView.experimentViews(), laboratoryView.earlyStopperView()))
                 .add("optimizer", optimizerBuilders(experimentsOn(laboratoryView)))
                 .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
                 .add("loss", lossBuilders(lossOn(laboratoryView)))
@@ -62,9 +62,9 @@ public class LaboratoryRenderer {
                 .add("experiment_name", experimentView.name);
     }
 
-    private FrameBuilder[] experimentsBuilder(List<ExperimentView> experimentViews, EarlyStopperView earlyStopperView) {
+    private FrameBuilder[] experimentsBuilder(String laboratoryName, List<ExperimentView> experimentViews, EarlyStopperView earlyStopperView) {
         return experimentViews.stream()
-                .map(experimentView -> experimentBuilder(experimentView, earlyStopperView))
+                .map(experimentView -> experimentBuilder(laboratoryName, experimentView, earlyStopperView))
                 .toArray(FrameBuilder[]::new);
     }
 
@@ -80,12 +80,13 @@ public class LaboratoryRenderer {
                 .toArray(FrameBuilder[]::new);
     }
 
-    private FrameBuilder experimentBuilder(ExperimentView experimentView, EarlyStopperView earlyStopperView) {
+    private FrameBuilder experimentBuilder(String laboratoryName, ExperimentView experimentView, EarlyStopperView earlyStopperView) {
         FrameBuilder builder = initFrameBuilder("experiment")
                 .add("experiment_name", experimentView.name)
                 .add("architecture_name", experimentView.name)
                 .add("optimizer", optimizerBuilder(experimentView.optimizerView, experimentView.name))
-                .add("loss", lossBuilder(experimentView.lossFunctionView));
+                .add("loss", lossBuilder(experimentView.lossFunctionView))
+                .add("laboratory_name", laboratoryName);
         if (earlyStopperView == null) return builder;
         return builder.add("early_stopper", stopperBuilder(earlyStopperView));
     }
@@ -238,19 +239,9 @@ public class LaboratoryRenderer {
         return functionName(className, className.indexOf("View"));
     }
 
-    private String addWhiteSpaces(String name) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(name.charAt(0));
-        for (int i = 1; i < name.length(); i++) {
-            if (Character.isUpperCase(name.charAt(i)) & !Character.isUpperCase(builder.charAt(builder.length()-1)))
-                builder.append(" ");
-            builder.append(name.charAt(i));
-        }
-        return builder.toString();
-    }
 
     private String functionName(String className, int index) {
-        return addWhiteSpaces(className.substring(0, index));
+        return className.substring(0, index);
     }
 
     private void createExperiment(LaboratoryView laboratoryView, FrameBuilder builder) {
