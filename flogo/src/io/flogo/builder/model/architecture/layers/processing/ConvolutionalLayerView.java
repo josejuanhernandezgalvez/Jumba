@@ -11,7 +11,7 @@ import io.flogo.builder.model.architecture.layers.processing.kernels.Undetermine
 import io.flogo.builder.model.architecture.layers.processing.kernels.paddings.TwoDimensionsPadding;
 import io.flogo.builder.model.architecture.layers.processing.kernels.size.TwoDimensionsSize;
 import io.flogo.builder.model.architecture.layers.processing.kernels.strides.TwoDimensionsStride;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.flogo.model.ConvolutionalSection.Block.Convolutional;
 import io.flogo.model.Laboratory;
 import io.intino.magritte.framework.Layer;
@@ -37,14 +37,15 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
         this.kernel = kernel;
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = isDetermined(previousLayerOutput) ?
-                calculateLayerOutput((ThreeDimensionsOutputView) previousLayerOutput, outChannels) :
+                ((ConvolutionTwoDimensionsKernel) this.kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput, outChannels) :
                 new UndeterminedOutputView();
         this.outChannels = outChannels;
     }
 
     @Override
     public OutputView getOutputView() {
-        return thisLayerOutput;
+        if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
+        return ((ConvolutionTwoDimensionsKernel) kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput, this.outChannels);
     }
 
     @Override
@@ -54,36 +55,32 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
                 new ConvolutionalLayerView((ConvolutionTwoDimensionsKernel) this.kernel, previous, outChannels);
     }
 
-    private ThreeDimensionsOutputView calculateLayerOutput(ThreeDimensionsOutputView previousLayerOutput, int outChannels) {
-        return new ThreeDimensionsOutputView(calculateX(previousLayerOutput, this.kernel), calculateY(previousLayerOutput, this.kernel), outChannels);
-    }
-
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
         if (hasNotOutput(layer))
             return new ConvolutionalLayerView(kernel((Convolutional) layer), previousOutput, ((Convolutional) layer).outChannels().z());
         return new ConvolutionalLayerView(previousOutput, thisOutput(layer));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return ((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output() == null ?
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView MaterializationView) {
+        return ((Laboratory.Experiment.Materialization.Convolutional) MaterializationView.layer).output() == null ?
                 new ConvolutionalLayerView(
-                        kernel(substituteView.layer),
+                        kernel(MaterializationView.layer),
                         previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(),
-                        ((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).outChannels().z()) :
+                        ((Laboratory.Experiment.Materialization.Convolutional) MaterializationView.layer).outChannels().z()) :
                 new ConvolutionalLayerView(
                         new ThreeDimensionsOutputView(
                                 previous instanceof VLayerView ? getValue(((VLayerView) previous).previousLayerOutput, "x") : getValue(previous.getOutputView(), "x"),
                                 previous instanceof VLayerView ? getValue(((VLayerView) previous).previousLayerOutput, "y") : getValue(previous.getOutputView(), "y"),
                                 previous instanceof VLayerView ? getValue(((VLayerView) previous).previousLayerOutput, "z") : getValue(previous.getOutputView(), "z")),
                         new ThreeDimensionsOutputView(
-                                getValue(((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output(), "x"),
-                                getValue(((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output(), "y"),
-                                getValue(((Laboratory.Experiment.Substitute.Convolutional) substituteView.layer).output(), "z")
+                                getValue(((Laboratory.Experiment.Materialization.Convolutional) MaterializationView.layer).output(), "x"),
+                                getValue(((Laboratory.Experiment.Materialization.Convolutional) MaterializationView.layer).output(), "y"),
+                                getValue(((Laboratory.Experiment.Materialization.Convolutional) MaterializationView.layer).output(), "z")
                         ));
     }
 
-    private static ConvolutionTwoDimensionsKernel kernel(Laboratory.Experiment.Substitute.Layer layer) {
-        Laboratory.Experiment.Substitute.Convolutional.Kernel kernel = ((Laboratory.Experiment.Substitute.Convolutional) layer).kernel();
+    private static ConvolutionTwoDimensionsKernel kernel(Laboratory.Experiment.Materialization.Layer layer) {
+        Laboratory.Experiment.Materialization.Convolutional.Kernel kernel = ((Laboratory.Experiment.Materialization.Convolutional) layer).kernel();
         return new ConvolutionTwoDimensionsKernel(
                 new TwoDimensionsSize(kernel.size().x(), kernel.size().y()),
                 new TwoDimensionsStride(kernel.stride().x(), kernel.stride().y()),

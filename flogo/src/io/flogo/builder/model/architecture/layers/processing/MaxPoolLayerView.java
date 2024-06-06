@@ -11,7 +11,7 @@ import io.flogo.builder.model.architecture.layers.processing.kernels.Undetermine
 import io.flogo.builder.model.architecture.layers.processing.kernels.paddings.TwoDimensionsPadding;
 import io.flogo.builder.model.architecture.layers.processing.kernels.size.TwoDimensionsSize;
 import io.flogo.builder.model.architecture.layers.processing.kernels.strides.TwoDimensionsStride;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.flogo.model.ConvolutionalSection.Block.MaxPool;
 import io.flogo.model.Laboratory;
 import io.intino.magritte.framework.Layer;
@@ -28,7 +28,8 @@ public class MaxPoolLayerView extends PoolLayerView {
 
     @Override
     public OutputView getOutputView() {
-        return thisLayerOutput.getClass().equals(ThreeDimensionsOutputView.class) ? thisLayerOutput : new UndeterminedOutputView();
+        if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
+        return thisLayerOutput.getClass().equals(ThreeDimensionsOutputView.class) ? ((PoolTwoDimensionsKernel) this.kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput) : new UndeterminedOutputView();
     }
 
     @Override
@@ -54,13 +55,13 @@ public class MaxPoolLayerView extends PoolLayerView {
         return new MaxPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return ((Laboratory.Experiment.Substitute.MaxPool) substituteView.layer).output() == null ?
-                new MaxPoolLayerView(kernel((Laboratory.Experiment.Substitute.MaxPool) substituteView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView()) :
+    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+        return ((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer).output() == null ?
+                new MaxPoolLayerView(kernel((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView()) :
                 new MaxPoolLayerView(
                         new ThreeDimensionsOutputView(
-                                ((Laboratory.Experiment.Substitute.MaxPool) substituteView.layer).output().x(),
-                                ((Laboratory.Experiment.Substitute.MaxPool) substituteView.layer).output().y(),
+                                ((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer).output().x(),
+                                ((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer).output().y(),
                                 previous instanceof VLayerView vLayerView ? getValue(vLayerView.previousLayerOutput, "z") : getValue(previous.getOutputView(), "z")),
                         new ThreeDimensionsOutputView(
                                 previous instanceof VLayerView vLayerView ? getValue(vLayerView.previousLayerOutput, "x") : getValue(previous.getOutputView(), "x"),
@@ -69,7 +70,7 @@ public class MaxPoolLayerView extends PoolLayerView {
                         );
     }
 
-    private static PoolTwoDimensionsKernel kernel(Laboratory.Experiment.Substitute.MaxPool pool) {
+    private static PoolTwoDimensionsKernel kernel(Laboratory.Experiment.Materialization.MaxPool pool) {
         return new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(pool.kernel().size().x(), pool.kernel().size().y()),
                 new TwoDimensionsStride(pool.kernel().stride().x(), pool.kernel().stride().y()),

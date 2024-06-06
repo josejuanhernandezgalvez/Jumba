@@ -4,6 +4,8 @@ import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.output.TwoDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
+import io.flogo.builder.model.architecture.layers.processing.kernels.ConvolutionTwoDimensionsKernel;
+import io.flogo.builder.model.architecture.layers.processing.kernels.PoolTwoDimensionsKernel;
 import io.flogo.builder.model.architecture.layers.processing.kernels.UndeterminedKernel;
 import io.intino.magritte.framework.Layer;
 
@@ -26,12 +28,8 @@ public abstract class PoolLayerView extends ThreeDimensionLayerView {
         this.kernel = kernel;
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = isDetermined(previousLayerOutput) ?
-                calculateLayerOutput((ThreeDimensionsOutputView) previousLayerOutput, this.kernel) :
+                ((PoolTwoDimensionsKernel) this.kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput) :
                 new UndeterminedOutputView();
-    }
-
-    protected ThreeDimensionsOutputView calculateLayerOutput(ThreeDimensionsOutputView previousLayerOutput, Kernel kernel) {
-        return new ThreeDimensionsOutputView(calculateX(previousLayerOutput, kernel), calculateY(previousLayerOutput, kernel), previousLayerOutput.z());
     }
 
     protected static OutputView thisOutput(Layer layer, OutputView previousOutput) {

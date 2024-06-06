@@ -6,9 +6,9 @@ public class ExperimentView {
     public final String name;
     public final LossFunctionView lossFunctionView;
     public final OptimizerView optimizerView;
-    public final List<SubstituteView> substitutes;
+    public final List<MaterializationView> substitutes;
 
-    public ExperimentView(String name, LossFunctionView lossFunctionView, OptimizerView optimizerView, List<SubstituteView> substitutes) {
+    public ExperimentView(String name, LossFunctionView lossFunctionView, OptimizerView optimizerView, List<MaterializationView> substitutes) {
         this.name = name;
         this.lossFunctionView = lossFunctionView;
         this.optimizerView = optimizerView;

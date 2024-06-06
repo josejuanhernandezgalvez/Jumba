@@ -1,4 +1,4 @@
-package kernels;
+package kernels.output;
 
 import io.flogo.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
 import io.flogo.builder.model.architecture.layers.processing.kernels.PoolTwoDimensionsKernel;
@@ -53,9 +53,9 @@ public class PoolTwoDimensionsKernelTest {
                 new ThreeDimensionsOutputView(22, 22, 3),
                 new ThreeDimensionsOutputView(12, 12, 3));
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
-                new TwoDimensionsSize(2, 2),
+                new TwoDimensionsSize(3, 3),
                 new TwoDimensionsStride(2, 2),
-                new TwoDimensionsPadding(1, 0));
+                new TwoDimensionsPadding(1, 1));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -63,11 +63,11 @@ public class PoolTwoDimensionsKernelTest {
     public void should_return_kernel_of_size_1_by_1_and_stride_1_by_1_and_padding_1_by_1() {
         PoolTwoDimensionsKernel kernel = PoolTwoDimensionsKernel.kernelFor(
                 new ThreeDimensionsOutputView(50, 50, 3),
-                new ThreeDimensionsOutputView(51, 51, 3));
+                new ThreeDimensionsOutputView(50, 50, 3));
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(1, 1),
                 new TwoDimensionsStride(1, 1),
-                new TwoDimensionsPadding(1, 0));
+                new TwoDimensionsPadding(0, 0));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -75,11 +75,11 @@ public class PoolTwoDimensionsKernelTest {
     public void should_return_kernel_of_size_1_by_1_and_stride_1_by_1_and_padding_5_by_5() {
         PoolTwoDimensionsKernel kernel = PoolTwoDimensionsKernel.kernelFor(
                 new ThreeDimensionsOutputView(50, 50, 3),
-                new ThreeDimensionsOutputView(55, 55, 3));
+                new ThreeDimensionsOutputView(56, 56, 3));
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(1, 1),
                 new TwoDimensionsStride(1, 1),
-                new TwoDimensionsPadding(3, 2));
+                new TwoDimensionsPadding(3, 3));
         assertThat(kernel).isEqualTo(expected);
     }
 
@@ -91,7 +91,7 @@ public class PoolTwoDimensionsKernelTest {
         PoolTwoDimensionsKernel expected = new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(3, 3),
                 new TwoDimensionsStride(3, 3),
-                new TwoDimensionsPadding(2, 2));
+                new TwoDimensionsPadding(1, 1));
         assertThat(kernel).isEqualTo(expected);
     }
 }

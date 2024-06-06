@@ -5,8 +5,8 @@ import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
-import io.flogo.builder.model.laboratory.SubstituteView;
-import io.flogo.model.Laboratory.Experiment.Substitute;
+import io.flogo.builder.model.laboratory.MaterializationView;
+import io.flogo.model.Laboratory;
 import io.intino.magritte.framework.Layer;
 
 public final class LinearLayerView implements ProcessingLayerView {
@@ -31,8 +31,8 @@ public final class LinearLayerView implements ProcessingLayerView {
         }
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return new LinearLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), new OneDimensionOutputView(((Substitute.Linear) substituteView.layer).output().x()));
+    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+        return new LinearLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), new OneDimensionOutputView(((Laboratory.Experiment.Materialization.Linear) materializationView.layer).output().x()));
     }
 
     @Override

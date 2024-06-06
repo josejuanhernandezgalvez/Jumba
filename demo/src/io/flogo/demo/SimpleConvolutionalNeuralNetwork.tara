@@ -8,18 +8,27 @@ Laboratory(epochs = 10, name = "CatsAndDogs")
 		Split(train=0.7, test=0.2, validation=0.1)
 
 	Experiment e626
+		Materialization(vLayer="01") > ReLU
+
+	Experiment e728
+		Materialization(vLayer="01") > Sigmoid
 
 
 Architecture Net
 	ConvolutionalSection
 		Input(32, 32, 1)
 		Block B1
-			Convolutional > Output(28, 28, 6)
-			ReLU
+			Convolutional
+				Kernel
+					Size(5, 5)
+					Stride(1, 1)
+					Padding(0, 0)
+				OutChannels(6)
+			VLayer(id="01")
 			MaxPool > Output(14, 14)
 		Block B2
 			Convolutional > Output(10, 10, 16)
-			ReLU
+			VLayer(id="01")
 			MaxPool > Output(5, 5)
 
 	FlattenSection
@@ -27,8 +36,8 @@ Architecture Net
 	LinearSection
 		Block B1
 			Linear > Output(120)
-			ReLU
+			VLayer(id="01")
 			Linear > Output(84)
-			ReLU
+			VLayer(id="01")
 			Linear > Output(10)
 

@@ -1,24 +1,22 @@
 dsl Flogo
 
-Laboratory(epochs = 10, name = "CatsAndDogs")
+Laboratory(epochs = 10, name = "Broker")
 	Adam
-	MAELoss
-	RegressionStrategy
-	Dataset(name = "cats and dogs", batchSize = 10)
+	CrossEntropyLoss
+	ClassificationStrategy
+	Dataset(name = "Zara Stock Prices", batchSize = 10)
 		Split(train=0.7, test=0.2, validation=0.1)
 
 	Experiment e626
-		Adagrad
-		Substitute(id = "01")
-			Linear > Output(x=10)
+		Materialization(vLayer = "01") > ReLU
 
 
 Architecture RecurrentNeuralNetwork
 	RecurrentSection
-		Input(x=300, seqLength = 4)
+		Input(x=300, seqLength = 8)
 		Block
 			LSTM(bidirectional  = true, numLayers = 4)
-            	LastCellState > Output(x=20)
-			VLayer(id = "01")
-			BatchNormalization
-			Dropout
+            	LastCellState > Output(x=512)
+			Linear > Output(x=100)
+			VLayer(id="01")
+			Linear > Output(x=10)

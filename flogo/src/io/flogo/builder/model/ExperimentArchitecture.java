@@ -4,7 +4,7 @@ import io.flogo.builder.model.architecture.*;
 import io.flogo.builder.model.architecture.blocks.ResidualBlockView;
 import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.intino.magritte.framework.Layer;
 
 import java.util.*;
@@ -16,22 +16,22 @@ import static io.flogo.builder.model.renderers.architecture.SectionRenderer.Laye
 public class ExperimentArchitecture extends ArchitectureView {
     static OutputView sectionInput;
 
-    public ExperimentArchitecture(ArchitectureView architectureView, List<SubstituteView> substitutes, String name) {
+    public ExperimentArchitecture(ArchitectureView architectureView, List<MaterializationView> substitutes, String name) {
         super(collapesedSectionList(architectureView.sections().iterator(), substitutes, new ArrayList<>()), name);
     }
 
-    private static List<SectionView> collapesedSectionList(Iterator<SectionView> iterator, List<SubstituteView> substitutes, ArrayList<SectionView> result) {
+    private static List<SectionView> collapesedSectionList(Iterator<SectionView> iterator, List<MaterializationView> substitutes, ArrayList<SectionView> result) {
         if (!iterator.hasNext()) return result;
         result.add(collapseSectionView(iterator.next(), map(substitutes), result.isEmpty() ? null : result.getLast().blocks().getLast().layerViews().getLast()));
         return collapesedSectionList(iterator, substitutes, result);
 
     }
 
-    private static Map<String, List<SubstituteView>> map(List<SubstituteView> substitutes) {
+    private static Map<String, List<MaterializationView>> map(List<MaterializationView> substitutes) {
         return substitutes.stream().collect(Collectors.groupingBy(substituteView -> substituteView.id));
     }
 
-    private static SectionView collapseSectionView(SectionView sectionView, Map<String, List<SubstituteView>> substitutes, LayerView previous) {
+    private static SectionView collapseSectionView(SectionView sectionView, Map<String, List<MaterializationView>> substitutes, LayerView previous) {
         try {
             sectionInput = sectionView.input();
             return (SectionView) sectionView.getClass().getConstructors()[0].newInstance(
@@ -41,7 +41,7 @@ public class ExperimentArchitecture extends ArchitectureView {
         }
     }
 
-    private static List<BlockView> collapsedBlockViewList(Iterator<BlockView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<BlockView> result, LayerView previous) {
+    private static List<BlockView> collapsedBlockViewList(Iterator<BlockView> iterator, Map<String, List<MaterializationView>> substitutes, ArrayList<BlockView> result, LayerView previous) {
         if (!iterator.hasNext()) return result;
         BlockView nextBlock = iterator.next();
         result.add(isSimple(nextBlock) ?
@@ -54,23 +54,23 @@ public class ExperimentArchitecture extends ArchitectureView {
         return !(nextBlock instanceof ResidualBlockView);
     }
 
-    private static BlockView collapsedSimpleBlockView(Iterator<LayerView> iterator, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
+    private static BlockView collapsedSimpleBlockView(Iterator<LayerView> iterator, Map<String, List<MaterializationView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
         if (!iterator.hasNext()) return new SimpleBlockView(result);
         result.add(collapsedLayerView(iterator.next(), substitutes, previous));
         return collapsedSimpleBlockView(iterator, substitutes, result, result.getLast());
     }
 
-    private static BlockView collapsedResidualBlockView(Iterator<LayerView> iterator, ResidualBlockView.ShorcutView residualConnection, Map<String, List<SubstituteView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
+    private static BlockView collapsedResidualBlockView(Iterator<LayerView> iterator, ResidualBlockView.ShorcutView residualConnection, Map<String, List<MaterializationView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
         if (!iterator.hasNext()) return new ResidualBlockView(result, residualConnection);
         result.add(collapsedLayerView(iterator.next(), substitutes, previous));
         return collapsedResidualBlockView(iterator, residualConnection, substitutes, result, result.getLast());
     }
 
-    private static LayerView collapsedLayerView(LayerView layerView, Map<String, List<SubstituteView>> substitutes, LayerView previous) {
+    private static LayerView collapsedLayerView(LayerView layerView, Map<String, List<MaterializationView>> substitutes, LayerView previous) {
         try {
             if (layerView instanceof VLayerView vLayerView) {
                 return (LayerView) Class.forName(viewClassName(substitutes.get(vLayerView.id).getFirst()))
-                        .getMethod("createFromSubstitute", LayerView.class, SubstituteView.class)
+                        .getMethod("createFromSubstitute", LayerView.class, MaterializationView.class)
                         .invoke(null, previous == null ? vLayerView : previous, substitutes.get(vLayerView.id).getFirst());
             }
             return layerView.from(previous != null ? previous.getOutputView() : sectionInput);
@@ -79,7 +79,7 @@ public class ExperimentArchitecture extends ArchitectureView {
         }
     }
 
-    private static String viewClassName(SubstituteView substitute) {
+    private static String viewClassName(MaterializationView substitute) {
         return packageName(substitute.layer) + layerName(substitute.layer) + "LayerView";
     }
 
@@ -98,7 +98,7 @@ public class ExperimentArchitecture extends ArchitectureView {
 
     public static class Builder {
         private ArchitectureView architectureView;
-        private List<SubstituteView> substitutes;
+        private List<MaterializationView> substitutes;
         private String name;
 
         public Builder from(ArchitectureView architectureView) {
@@ -106,7 +106,7 @@ public class ExperimentArchitecture extends ArchitectureView {
             return this;
         }
 
-        public Builder substitutes(List<SubstituteView> substitutes) {
+        public Builder substitutes(List<MaterializationView> substitutes) {
             this.substitutes = substitutes;
             return this;
         }

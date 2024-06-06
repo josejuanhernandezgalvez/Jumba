@@ -4,7 +4,7 @@ import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.intino.magritte.framework.Layer;
 
 import java.lang.reflect.Field;
@@ -23,8 +23,8 @@ public final class ELULayerView implements ActivationLayerView {
         return new ELULayerView(getAlphaFrom(layer), outputView);
     }
 
-    public static ActivationLayerView createFromSubstitute(OutputView previous, SubstituteView substituteView) {
-        return new ELULayerView(getAlphaFrom(substituteView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous);
+    public static ActivationLayerView createFromSubstitute(OutputView previous, MaterializationView materializationView) {
+        return new ELULayerView(getAlphaFrom(materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous);
     }
 
     private static int getAlphaFrom(Layer layer) {

@@ -5,7 +5,7 @@ import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
 import io.flogo.builder.model.architecture.layers.output.TwoDimensionsOutputView;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.flogo.model.RecurrentSection;
 import io.intino.magritte.framework.Layer;
 
@@ -27,15 +27,15 @@ public class GRULayerView extends RecurrentLayerView {
                 operations(gru, previousOutputView));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
+    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
         try {
             return new GRULayerView(previousOutputView(previous),
-                    operations(substituteView.layer, previousOutputView(previous)).getLast().getOutputView(),
-                    (Integer) substituteView.layer.getClass().getMethod("numLayers").invoke(substituteView.layer),
-                    outputType(substituteView.layer),
-                    (Boolean) substituteView.layer.getClass().getMethod("bidirectional").invoke(substituteView.layer),
-                    (Double) substituteView.layer.getClass().getMethod("dropout").invoke(substituteView.layer),
-                    operations(substituteView.layer, previousOutputView(previous)));
+                    operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),
+                    (Integer) materializationView.layer.getClass().getMethod("numLayers").invoke(materializationView.layer),
+                    outputType(materializationView.layer),
+                    (Boolean) materializationView.layer.getClass().getMethod("bidirectional").invoke(materializationView.layer),
+                    (Double) materializationView.layer.getClass().getMethod("dropout").invoke(materializationView.layer),
+                    operations(materializationView.layer, previousOutputView(previous)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

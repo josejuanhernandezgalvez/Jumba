@@ -11,7 +11,7 @@ import io.flogo.builder.model.architecture.layers.processing.kernels.Undetermine
 import io.flogo.builder.model.architecture.layers.processing.kernels.paddings.TwoDimensionsPadding;
 import io.flogo.builder.model.architecture.layers.processing.kernels.size.TwoDimensionsSize;
 import io.flogo.builder.model.architecture.layers.processing.kernels.strides.TwoDimensionsStride;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.flogo.model.ConvolutionalSection.Block.AvgPool;
 import io.flogo.model.Laboratory;
 import io.intino.magritte.framework.Layer;
@@ -28,7 +28,8 @@ public class AvgPoolLayerView extends PoolLayerView {
 
     @Override
     public OutputView getOutputView() {
-        return thisLayerOutput.getClass().equals(ThreeDimensionsOutputView.class) ? thisLayerOutput : new UndeterminedOutputView();
+        if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
+        return thisLayerOutput.getClass().equals(ThreeDimensionsOutputView.class) ? ((PoolTwoDimensionsKernel) this.kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput) : new UndeterminedOutputView();
     }
 
     @Override
@@ -48,13 +49,13 @@ public class AvgPoolLayerView extends PoolLayerView {
                         new AvgPoolLayerView(this.kernel, previous);
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return ((Laboratory.Experiment.Substitute.AvgPool) substituteView.layer).output() == null ?
-                new AvgPoolLayerView(kernel((Laboratory.Experiment.Substitute.AvgPool) substituteView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView()) :
+    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+        return ((Laboratory.Experiment.Materialization.AvgPool) materializationView.layer).output() == null ?
+                new AvgPoolLayerView(kernel((Laboratory.Experiment.Materialization.AvgPool) materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView()) :
                 new AvgPoolLayerView(
                         new ThreeDimensionsOutputView(
-                                ((Laboratory.Experiment.Substitute.AvgPool) substituteView.layer).output().x(),
-                                ((Laboratory.Experiment.Substitute.AvgPool) substituteView.layer).output().y(),
+                                ((Laboratory.Experiment.Materialization.AvgPool) materializationView.layer).output().x(),
+                                ((Laboratory.Experiment.Materialization.AvgPool) materializationView.layer).output().y(),
                                 previous instanceof VLayerView vLayerView ? getValue(vLayerView.previousLayerOutput, "z") : getValue(previous.getOutputView(), "z")),
                         new ThreeDimensionsOutputView(
                                 previous instanceof VLayerView vLayerView ? getValue(vLayerView.previousLayerOutput, "x") : getValue(previous.getOutputView(), "x"),
@@ -63,7 +64,7 @@ public class AvgPoolLayerView extends PoolLayerView {
                 );
     }
 
-    private static PoolTwoDimensionsKernel kernel(Laboratory.Experiment.Substitute.AvgPool pool) {
+    private static PoolTwoDimensionsKernel kernel(Laboratory.Experiment.Materialization.AvgPool pool) {
         return new PoolTwoDimensionsKernel(
                 new TwoDimensionsSize(pool.kernel().size().x(), pool.kernel().size().y()),
                 new TwoDimensionsStride(pool.kernel().stride().x(), pool.kernel().stride().y()),

@@ -4,7 +4,7 @@ import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.intino.magritte.framework.Layer;
 
 public class BatchNormalizationLayerView implements ProcessingLayerView {
@@ -22,8 +22,8 @@ public class BatchNormalizationLayerView implements ProcessingLayerView {
         return new BatchNormalizationLayerView(previousOutput, momentum(layer), eps(layer));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return new BatchNormalizationLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), momentum(substituteView.layer), eps(substituteView.layer));
+    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+        return new BatchNormalizationLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), momentum(materializationView.layer), eps(materializationView.layer));
     }
 
     @Override

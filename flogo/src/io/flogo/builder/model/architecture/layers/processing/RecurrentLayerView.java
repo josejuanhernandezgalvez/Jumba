@@ -146,7 +146,7 @@ public abstract class RecurrentLayerView implements LayerView {
                 ArrayList<Reduce> result = new ArrayList<>();
                 if (sliceCondition()) result.add(new SliceReduce(from, to, previousOutput));
                 if (reduceOperation.equals("flatten")) {
-                    if (getRows(result) > 1) result.add(new FlattenReduce(getLastOutputView(result)));
+                    if (getRows(result) >= 1) result.add(new FlattenReduce(getLastOutputView(result)));
                     return result;
                 }
                 if (reduceOperation.equals("linear")) {

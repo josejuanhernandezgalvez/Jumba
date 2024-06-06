@@ -141,7 +141,7 @@ public class ArchitectureRenderer {
                             .add("padding", new FrameBuilder("padding").add("dimension", convolutional.kernel.padding().asArray()));
             case RecurrentLayerView recurrent ->
                     builder.add("package", "recurrents")
-                            .add("input", recurrent.previousLayerOutput.asArray()[1])
+                            .add("input", recurrent.previousLayerOutput.asArray()[0])
                             .add("hidden", recurrent.getOutputView().asArray()[0])
                             .add("num_layers", recurrent.numLayers)
                             .add("bidirectional", recurrent.bidirectional)
@@ -201,12 +201,14 @@ public class ArchitectureRenderer {
                             .add("to", slicing.to + 1);
             case RecurrentLayerView.Reduce.LinearReduce linear ->
                         fb.add("linear", true)
+                            .add("output", output)
                             .add("in_features", dimensionOf(linear.previousOutputView.asArray()))
                             .add("out_features", dimensionOf(linear.outputView.asArray()))
                             .add("dimension", linear.dimensionToActOn - 1)
                             .add("bias", "True");
             case RecurrentLayerView.Reduce.FlattenReduce flatten ->
                         fb.add("flatten", true)
+                            .add("output", output)
                             .add("from", flatten.startDimension)
                             .add("to", flatten.endDimension);
             default -> {}

@@ -1,6 +1,7 @@
 package io.flogo.builder.operations;
 
 import io.flogo.builder.model.FlogoDTO;
+import io.flogo.builder.model.architecture.ArchitectureView;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,25 +12,24 @@ import java.nio.file.Path;
 public class FlogoRenderer {
     private final ArchitectureRenderer architectureRenderer;
     private final LaboratoryRenderer laboratoryRenderer;
-    private final String pathForLaboratory;
-    private final String pathForArchitecture;
+    private final String path;
 
-    public FlogoRenderer(String pathForLaboratory, String pathForArchitecture) {
+    public FlogoRenderer(String path) {
         this.architectureRenderer = new ArchitectureRenderer();
         this.laboratoryRenderer = new LaboratoryRenderer();
-        this.pathForLaboratory = pathForLaboratory;
-        this.pathForArchitecture = pathForArchitecture;
+        this.path = path;
     }
 
     public void render(FlogoDTO flogoDTO) {
-        if (!Files.exists(Path.of(pathForArchitecture + flogoDTO.architectureView().name))) mkdir(flogoDTO.architectureView().name);
-        write(pathForLaboratory + flogoDTO.collapsedArchitectureView().name + "-laboratory.py", laboratoryRenderer.render(flogoDTO.laboratoryView(), flogoDTO.architectureView().name));
-        write(pathForArchitecture + flogoDTO.architectureView().name + "/" + flogoDTO.collapsedArchitectureView().name + ".py", architectureRenderer.render(flogoDTO.collapsedArchitectureView(), "pytorch"));
+        if (!Files.exists(Path.of(path + flogoDTO.architectureView().name))) mkdir(flogoDTO.architectureView().name);
+        write(path + "laboratory.py", laboratoryRenderer.render(flogoDTO.laboratoryView(), flogoDTO.architectureView().name));
+        for (ArchitectureView collapsedArchitectureView : flogoDTO.collapsedArchitectureViews())
+            write(path + flogoDTO.architectureView().name + "/" + collapsedArchitectureView.name + ".py", architectureRenderer.render(collapsedArchitectureView, "pytorch"));
     }
 
     private void mkdir(String name) {
         try {
-            Files.createDirectory(Path.of(pathForArchitecture + name));
+            Files.createDirectory(Path.of(path + name));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

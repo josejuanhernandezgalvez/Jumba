@@ -79,17 +79,15 @@ public class FlogoCompiler {
     private void render(FlogoGraph graph, CompilationContext context) {
         ArchitectureView architectureView = new ArchitectureViewRenderer().render(graph.architecture());
         LaboratoryView laboratoryView = new LaboratoryViewRenderer().render(graph.laboratory());
-        FlogoRenderer flogoRenderer = new FlogoRenderer("", ""); //TODO add your path
+        List<ArchitectureView> collapsedArchitectureViews = new ArrayList<>();
         for (ExperimentView experimentView : laboratoryView.experimentViews()) {
-            FlogoDTO flogoDTO = new FlogoDTO(
-                    architectureView,
-                    laboratoryView,
-                    new ExperimentArchitecture.Builder()
+                    collapsedArchitectureViews.add(new ExperimentArchitecture.Builder()
                             .from(architectureView)
                             .substitutes(experimentView.substitutes)
                             .name(experimentView.name)
                             .collapse());
-            flogoRenderer.render(flogoDTO);
+            new FlogoRenderer("/Users/jose_juan/Desktop/results/")
+                    .render(new FlogoDTO(architectureView, collapsedArchitectureViews, laboratoryView));
             context.getCompiledFiles().add(new OutputItem(sourceFileOf(graph.architecture(), context), ""));
         }
         System.out.println(laboratoryView);

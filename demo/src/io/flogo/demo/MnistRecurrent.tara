@@ -1,0 +1,19 @@
+dsl Flogo
+
+Laboratory(epochs = 10, name = "MNIST")
+	Adam
+	MAELoss
+	ClassificationStrategy
+	Dataset(name = "mnist.csv", batchSize = 10)
+		Split(train=0.7, test=0.2, validation=0.1)
+
+	Experiment e626
+
+Architecture
+	RecurrentSection
+		Input(seqLength = 28, x = 28)
+		Block
+			LSTM(bidirectional = false, numLayers = 4)
+				EndSequence(reduce = flatten) > Output(x=100)
+			Linear > Output(x=10)
+			Softmax

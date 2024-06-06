@@ -3,9 +3,9 @@ package io.flogo.builder.model.renderers.laboratory;
 import io.flogo.builder.model.laboratory.ExperimentView;
 import io.flogo.builder.model.laboratory.LossFunctionView;
 import io.flogo.builder.model.laboratory.OptimizerView;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.flogo.model.Laboratory;
-import io.flogo.model.Laboratory.Experiment.Substitute;
+import io.flogo.model.Laboratory.Experiment.Materialization;
 
 import java.util.List;
 
@@ -45,10 +45,10 @@ public class ExperimentsRenderer {
             return new ExperimentView(name(experiment),
                     lossFunctionView(experiment, lossFunctionView),
                     optimizerView(experiment, optimizerView),
-                    substitutes(experiment.substituteList()));
+                    substitutes(experiment.materializationList()));
         }
 
-        private List<SubstituteView> substitutes(List<Substitute> substitutes) {
+        private List<MaterializationView> substitutes(List<Materialization> substitutes) {
             return substitutes.stream().map(SubstituteRenderer::render).toList();
         }
 
@@ -73,8 +73,8 @@ public class ExperimentsRenderer {
         }
 
         private static class SubstituteRenderer {
-            public static SubstituteView render(Substitute substitute) {
-                return new SubstituteView(substitute.id(), substitute.layer());
+            public static MaterializationView render(Materialization Materialization) {
+                return new MaterializationView(Materialization.vLayer(), Materialization.layer());
             }
         }
     }

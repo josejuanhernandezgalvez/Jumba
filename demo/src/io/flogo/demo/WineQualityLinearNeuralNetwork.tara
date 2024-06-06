@@ -9,9 +9,9 @@ Laboratory(epochs = 10, name = "CatsAndDogs")
 		Split(train = 0.6, test = 0.2, validation = 0.2)
 
 	Experiment e626
-		Substitute(id="01") > BatchNormalization(eps=0.00001, momentum=0.3)
-		Substitute(id="02") > ReLU
-		Substitute(id="03") > Dropout(probability=0.5)
+		Materialization(vLayer="01") > BatchNormalization(eps=0.00001, momentum=0.3)
+		Materialization(vLayer="02") > ReLU
+		Materialization(vLayer="03") > Dropout(probability=0.5)
 
 Architecture WineQualityNeuralNetwork
 	LinearSection

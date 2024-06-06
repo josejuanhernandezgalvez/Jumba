@@ -4,7 +4,7 @@ import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
-import io.flogo.builder.model.laboratory.SubstituteView;
+import io.flogo.builder.model.laboratory.MaterializationView;
 import io.intino.magritte.framework.Layer;
 
 import java.lang.reflect.Field;
@@ -23,8 +23,8 @@ public final class LeakyReLULayerView implements ActivationLayerView {
         return new LeakyReLULayerView(this.alpha, previous == null ? this.outputView : previous);
     }
 
-    public static ActivationLayerView createFromSubstitute(LayerView previous, SubstituteView substituteView) {
-        return new LeakyReLULayerView(getAlphaFrom(substituteView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
+    public static ActivationLayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+        return new LeakyReLULayerView(getAlphaFrom(materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 
     private static int getAlphaFrom(Layer layer) {

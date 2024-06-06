@@ -15,7 +15,7 @@ Architecture CustomResnet
 	ConvolutionalSection
 		Input(224, 224, 3)
 		Block
-			Convolutional
+			Convolutional > Output(x = 10, y = 10, z = 10)
 
     FlattenSection
 
