@@ -1,15 +1,15 @@
 def type(main)
-    $architecture+import...[$NL]
     from framework.toolbox.laboratory import Laboratory
     from framework.toolbox.logger import Logger
     from framework.toolbox.stopper import EarlyStopper
     from implementations.$library.toolbox.experiment import $library+FirstUppercase~Device as Device
     from implementations.$library.toolbox.experiment import $library+FirstUppercase~Experiment as Experiment
     from implementations.$library.toolbox.data.generator import $library+FirstUppercase~DatasetGenerator as DatasetGenerator
-    $optimizer+import...[$NL]
-    $loss+import...[$NL]
     from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelSaver as ModelSaver
     from implementations.$library.toolbox.loader import $library+FirstUppercase~ModelLoader as ModelLoader
+    $architecture+import...[$NL]
+    $optimizer+import...[$NL]
+    $loss+import...[$NL]
     $strategy+import
 
     dataset = $dataset
@@ -20,11 +20,7 @@ def type(main)
 end
 
 def type(architecture) trigger(import)
-    from $experiment_name+Lowercase import architecture as $experiment_name
-end
-
-def type(strategy) trigger(import)
-    from implementations.$library.toolbox.strategies.$name+LowerCase import $library+FirstUppercase$name+FirstUppercase~Strategy as $name~Strategy
+    from $name+Lowercase import architecture as $name
 end
 
 def type(optimizer) trigger(import)
@@ -33,6 +29,10 @@ end
 
 def type(loss) trigger(import)
     from implementations.$library.toolbox.losses.$name+LowerCase import $library+FirstUppercase$name+FirstUppercase~LossFunction as $name~LossFunction
+end
+
+def type(strategy) trigger(import)
+    from implementations.$library.toolbox.strategies.$name+LowerCase import $library+FirstUppercase$name+FirstUppercase~Strategy as $name~Strategy
 end
 
 def type(laboratory)
@@ -66,7 +66,7 @@ end
 
 
 def type(loss)
-    $name+CamelCase~LossFunction()
+    $name~LossFunction()
 end
 
 def type(dataset)

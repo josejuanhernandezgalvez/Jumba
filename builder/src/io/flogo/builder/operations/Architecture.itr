@@ -86,19 +86,19 @@ def type(kernel | stride | padding)
 end
 
 def type(Linear) type(layer)
-    $type+CamelCase~Layer(in_features=$in_features, out_features=$out_features, dimension=$dimension, bias=$bias)
+    $type~Layer(in_features=$in_features, out_features=$out_features, dimension=$dimension, bias=$bias)
 end
 
 def type(Convolutional) type(layer)
-    $type+CamelCase~Layer(in_channels=$in_channels, out_channels=$out_channels, kernel=$kernel, stride=$stride, padding=$padding)
+    $type~Layer(in_channels=$in_channels, out_channels=$out_channels, kernel=$kernel, stride=$stride, padding=$padding)
 end
 
 def type(MaxPool | AvgPool) type(layer)
-    $type+CamelCase~Layer(kernel=$kernel, stride=$stride, padding=$padding)
+    $type~Layer(kernel=$kernel, stride=$stride, padding=$padding)
 end
 
 def type(LSTM | RNN | GRU) type(layer)
-    $type+CamelCase~Layer(input_size=$input, hidden_size=$hidden, num_layer=$num_layers, bidirectional=$bidirectional+FirstUpperCase, dropout=$dropout),
+    $type~Layer(input_size=$input, hidden_size=$hidden, num_layer=$num_layers, bidirectional=$bidirectional+FirstUpperCase, dropout=$dropout),
     $reduce...[, $NL]
 end
 
@@ -115,33 +115,33 @@ def type(reduce) attribute(flatten)
 end
 
 def type(ELU) type(layer)
-    $type+CamelCase~Layer(alpha=$alpha)
+    $type~Layer(alpha=$alpha)
 end
 
 def type(LeakyReLU) type(layer)
-    $type+CamelCase~Layer(negative_slope=$slope)
+    $type~Layer(negative_slope=$slope)
 end
 
 def type(Softmax) type(layer)
-    $type+CamelCase~Layer(n_dimensions=$n_dimensions)
+    $type~Layer(n_dimensions=$n_dimensions)
 end
 
 def type(BatchNormalization) type(layer)
-    $type+CamelCase~Layer(num_features=$num_features, eps=$eps, momentum=$momentum)
+    $type~Layer(num_features=$num_features, eps=$eps, momentum=$momentum)
 end
 
 def type(LayerNormalization) type(layer)
-    $type+CamelCase~Layer(normalized_shape=$shape, eps=$eps)
+    $type~Layer(normalized_shape=$shape, eps=$eps)
 end
 
 def type(Dropout) type(layer)
-    $type+CamelCase~Layer(probability=$probability)
+    $type~Layer(probability=$probability)
 end
 
 def type(Flatten) type(layer)
-    $type+CamelCase~Layer(from_dim=$from_dim, to_dim=$to_dim)
+    $type~Layer(from_dim=$from_dim, to_dim=$to_dim)
 end
 
 def type(layer)
-    $type+CamelCase~Layer()
+    $type~Layer()
 end

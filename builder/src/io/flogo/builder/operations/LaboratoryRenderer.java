@@ -58,8 +58,8 @@ public class LaboratoryRenderer {
 
     private FrameBuilder architectureBuilder(String architectureName, ExperimentView experimentView) {
         return initFrameBuilder("architecture")
-                .add("architecture_name", architectureName.toLowerCase())
-                .add("experiment_name", experimentView.name);
+                .add("name", experimentView.name);
+        //.add("experiment_name", experimentView.name);
     }
 
     private FrameBuilder[] experimentsBuilder(String laboratoryName, List<ExperimentView> experimentViews, EarlyStopperView earlyStopperView) {
