@@ -12,25 +12,31 @@ import io.intino.magritte.framework.Layer;
 import java.util.List;
 
 public class GRULayerView extends RecurrentLayerView {
-    public GRULayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
-        super(previousLayerOutput, thisLayerOutput, numLayers, outputType, bidirectional, dropout, reduce);
+    public GRULayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int hiddenSize, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
+        super(previousLayerOutput, thisLayerOutput, hiddenSize, numLayers, outputType, bidirectional, dropout, reduce);
     }
 
     public static GRULayerView from(Layer layer, OutputView previousOutputView) {
         RecurrentSection.Block.GRU gru = (RecurrentSection.Block.GRU) layer;
-        return new GRULayerView(previousOutputView,
-                operations(layer, previousOutputView).getLast().getOutputView(),
-                gru.numLayers(),
-                outputType(gru),
-                gru.bidirectional(),
-                gru.dropout(),
-                operations(gru, previousOutputView));
+        try {
+            return new GRULayerView(previousOutputView,
+                    operations(layer, previousOutputView).getLast().getOutputView(),
+                    (Integer) gru.outputType().getClass().getMethod("output").invoke(gru.outputType()).getClass().getMethod("x").invoke(gru.outputType().getClass().getMethod("output").invoke(gru.outputType())),
+                    gru.numLayers(),
+                    outputType(gru),
+                    gru.bidirectional(),
+                    gru.dropout(),
+                    operations(gru, previousOutputView));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
         try {
             return new GRULayerView(previousOutputView(previous),
                     operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),
+                    (Integer) outputType(materializationView.layer).getClass().getMethod("output").invoke(outputType(materializationView.layer)).getClass().getMethod("x").invoke(outputType(materializationView.layer).getClass().getMethod("output").invoke(outputType(materializationView.layer))),
                     (Integer) materializationView.layer.getClass().getMethod("numLayers").invoke(materializationView.layer),
                     outputType(materializationView.layer),
                     (Boolean) materializationView.layer.getClass().getMethod("bidirectional").invoke(materializationView.layer),
@@ -55,6 +61,6 @@ public class GRULayerView extends RecurrentLayerView {
 
     @Override
     public LayerView from(OutputView previous) {
-        return new GRULayerView(previous, thisLayerOutput, numLayers, outputType, bidirectional, dropout, reduce);
+        return new GRULayerView(previous, thisLayerOutput, hiddenSize, numLayers, outputType, bidirectional, dropout, reduce);
     }
 }

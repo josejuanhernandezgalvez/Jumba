@@ -8,7 +8,11 @@ import io.flogo.model.RAdam;
 import io.intino.itrules.FrameBuilder;
 
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class LaboratoryRenderer {
@@ -18,7 +22,7 @@ public class LaboratoryRenderer {
         FrameBuilder builder = initFrameBuilder("main")
                 .add("architecture", architecturesBuilder(architecture, laboratoryView.experimentViews()))
                 .add("laboratory", laboratoryBuilder(laboratoryView))
-                .add("experiment", experimentsBuilder(laboratoryView.experimentViews(), laboratoryView.earlyStopperView()))
+                .add("experiment", experimentsBuilder(laboratoryView.name(), laboratoryView.experimentViews(), laboratoryView.earlyStopperView()))
                 .add("optimizer", optimizerBuilders(experimentsOn(laboratoryView)))
                 .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
                 .add("loss", lossBuilders(lossOn(laboratoryView)))
@@ -30,11 +34,20 @@ public class LaboratoryRenderer {
     private List<LossFunctionView> lossOn(LaboratoryView laboratoryView){
         return laboratoryView.experimentViews().stream()
                 .map(experimentView -> experimentView.lossFunctionView)
+                .filter(distinctBy(LossFunctionView::getClass))
                 .collect(Collectors.toList());
     }
 
+    public static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
     private List<ExperimentView> experimentsOn(LaboratoryView laboratoryView){
-        return laboratoryView.experimentViews();
+        return laboratoryView.experimentViews()
+                .stream()
+                .filter(distinctBy(experimentView -> experimentView.optimizerView.getClass()))
+                .collect(Collectors.toList());
     }
 
     private FrameBuilder[] architecturesBuilder(String architectureName, List<ExperimentView> experimentViews) {
@@ -45,13 +58,12 @@ public class LaboratoryRenderer {
 
     private FrameBuilder architectureBuilder(String architectureName, ExperimentView experimentView) {
         return initFrameBuilder("architecture")
-                .add("architecture_name", architectureName.toLowerCase())
                 .add("experiment_name", experimentView.name);
     }
 
-    private FrameBuilder[] experimentsBuilder(List<ExperimentView> experimentViews, EarlyStopperView earlyStopperView) {
+    private FrameBuilder[] experimentsBuilder(String laboratoryName, List<ExperimentView> experimentViews, EarlyStopperView earlyStopperView) {
         return experimentViews.stream()
-                .map(experimentView -> experimentBuilder(experimentView, earlyStopperView))
+                .map(experimentView -> experimentBuilder(laboratoryName, experimentView, earlyStopperView))
                 .toArray(FrameBuilder[]::new);
     }
 
@@ -67,12 +79,13 @@ public class LaboratoryRenderer {
                 .toArray(FrameBuilder[]::new);
     }
 
-    private FrameBuilder experimentBuilder(ExperimentView experimentView, EarlyStopperView earlyStopperView) {
+    private FrameBuilder experimentBuilder(String laboratoryName, ExperimentView experimentView, EarlyStopperView earlyStopperView) {
         FrameBuilder builder = initFrameBuilder("experiment")
                 .add("experiment_name", experimentView.name)
                 .add("architecture_name", experimentView.name)
                 .add("optimizer", optimizerBuilder(experimentView.optimizerView, experimentView.name))
-                .add("loss", lossBuilder(experimentView.lossFunctionView));
+                .add("loss", lossBuilder(experimentView.lossFunctionView))
+                .add("laboratory_name", laboratoryName);
         if (earlyStopperView == null) return builder;
         return builder.add("early_stopper", stopperBuilder(earlyStopperView));
     }
@@ -124,25 +137,25 @@ public class LaboratoryRenderer {
                 .add("name", optimizerName(optimizerView));
         switch (optimizerView){
             case SGDView sgdView -> builder.add("lr", sgdView.learningRate)
-                        .add("momentum", sgdView.momentum)
-                        .add("dampening", sgdView.momentumDecay)
-                        .add("weight_decay", sgdView.weightDecay);
+                    .add("momentum", sgdView.momentum)
+                    .add("dampening", sgdView.momentumDecay)
+                    .add("weight_decay", sgdView.weightDecay);
             case AdadeltaView adaDelta ->
-                builder.add("lr", adaDelta.learningRate)
-                        .add("rho", adaDelta.rho)
-                        .add("eps", adaDelta.eps)
-                        .add("weight_decay", adaDelta.weightDecay);
+                    builder.add("lr", adaDelta.learningRate)
+                            .add("rho", adaDelta.rho)
+                            .add("eps", adaDelta.eps)
+                            .add("weight_decay", adaDelta.weightDecay);
             case AdagradView adagrad ->
-                builder.add("lr", adagrad.learningRate)
-                        .add("lr_decay", adagrad.learningRateDecay)
-                        .add("eps", adagrad.eps)
-                        .add("weight_decay", adagrad.weightDecay);
+                    builder.add("lr", adagrad.learningRate)
+                            .add("lr_decay", adagrad.learningRateDecay)
+                            .add("eps", adagrad.eps)
+                            .add("weight_decay", adagrad.weightDecay);
             case AdamView adam ->
-                builder.add("lr", adam.learningRate)
-                        .add("b0", adam.beta0)
-                        .add("b1", adam.beta1)
-                        .add("eps", adam.eps)
-                        .add("weight_decay", adam.weightDecay);
+                    builder.add("lr", adam.learningRate)
+                            .add("b0", adam.beta0)
+                            .add("b1", adam.beta1)
+                            .add("eps", adam.eps)
+                            .add("weight_decay", adam.weightDecay);
             case AdamaxView adamax ->
                     builder.add("lr", adamax.learningRate)
                             .add("b0", adamax.beta0)
@@ -185,11 +198,11 @@ public class LaboratoryRenderer {
                             .add("eps", rAdam.eps())
                             .add("weight_decay", rAdam.weightDecay());
             case RMSPropView rmsProp ->
-                builder.add("lr", rmsProp.learningRate)
-                        .add("alpha", rmsProp.alpha)
-                        .add("eps", rmsProp.eps)
-                        .add("weight_decay", rmsProp.weightDecay)
-                        .add("momentum", rmsProp.momentum);
+                    builder.add("lr", rmsProp.learningRate)
+                            .add("alpha", rmsProp.alpha)
+                            .add("eps", rmsProp.eps)
+                            .add("weight_decay", rmsProp.weightDecay)
+                            .add("momentum", rmsProp.momentum);
             case SparseAdamView sparseAdam ->
                     builder.add("lr", sparseAdam.learningRate)
                             .add("b0", sparseAdam.beta0)
@@ -224,6 +237,7 @@ public class LaboratoryRenderer {
         String className = className(view);
         return functionName(className, className.indexOf("View"));
     }
+
 
     private String functionName(String className, int index) {
         return className.substring(0, index);

@@ -73,7 +73,7 @@ public class ArchitectureTest {
         ArchitectureView architecture = new ArchitectureView(
                 List.of(new RecurrentSectionView(
                         List.of(new SimpleBlockView(List.of(
-                                new LSTMLayerView(new TwoDimensionsOutputView(6, 300), new TwoDimensionsOutputView(1, 20), 4, RecurrentLayerView.OutputType.EndSequence, true, 0.5, List.of(new RecurrentLayerView.Reduce.SliceReduce(4, 6, new TwoDimensionsOutputView(6, 40)), new RecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(3, 40), 1, 40), new RecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(1, 40), 2, 20)))
+                                new LSTMLayerView(new TwoDimensionsOutputView(6, 300), new TwoDimensionsOutputView(1, 20), 20, 4, RecurrentLayerView.OutputType.EndSequence, true, 0.5, List.of(new RecurrentLayerView.Reduce.SliceReduce(4, 6, new TwoDimensionsOutputView(6, 40)), new RecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(3, 40), 1, 40), new RecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(1, 40), 2, 20)))
                         ))), new OneDimensionOutputView(8)), //TODO
                         new FlattenSectionView(List.of(new SimpleBlockView(List.of(new FlattenLayerView(new OneDimensionOutputView(20), new OneDimensionOutputView(20))))), new OneDimensionOutputView(8)), //TODO
                         new LinearSectionView(

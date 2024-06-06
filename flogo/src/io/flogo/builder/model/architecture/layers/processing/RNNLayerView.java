@@ -12,24 +12,31 @@ import io.intino.magritte.framework.Layer;
 import java.util.List;
 
 public class RNNLayerView extends RecurrentLayerView {
-    public RNNLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
-        super(previousLayerOutput, thisLayerOutput, numLayers, outputType, bidirectional, dropout, reduce);
+    public RNNLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int hiddenSize, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
+        super(previousLayerOutput, thisLayerOutput, hiddenSize, numLayers, outputType, bidirectional, dropout, reduce);
     }
 
     public static RNNLayerView from(Layer layer, OutputView previousOutputView) {
         RecurrentSection.Block.RNN rnn = (RecurrentSection.Block.RNN) layer;
-        return new RNNLayerView(previousOutputView,
-                operations(layer, previousOutputView).getLast().getOutputView(),
-                rnn.numLayers(), outputType(rnn),
-                rnn.bidirectional(),
-                rnn.dropout(),
-                operations(rnn, previousOutputView));
+        try {
+            return new RNNLayerView(previousOutputView,
+                    operations(layer, previousOutputView).getLast().getOutputView(),
+                    (Integer) rnn.outputType().getClass().getMethod("output").invoke(rnn.outputType()).getClass().getMethod("x").invoke(rnn.outputType().getClass().getMethod("output").invoke(rnn.outputType())),
+                    rnn.numLayers(),
+                    outputType(rnn),
+                    rnn.bidirectional(),
+                    rnn.dropout(),
+                    operations(rnn, previousOutputView));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
         try {
             return new RNNLayerView(previousOutputView(previous),
                     operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),
+                    (Integer) outputType(materializationView.layer).getClass().getMethod("output").invoke(outputType(materializationView.layer)).getClass().getMethod("x").invoke(outputType(materializationView.layer).getClass().getMethod("output").invoke(outputType(materializationView.layer))),
                     (Integer) materializationView.layer.getClass().getMethod("numLayers").invoke(materializationView.layer),
                     outputType(materializationView.layer),
                     (Boolean) materializationView.layer.getClass().getMethod("bidirectional").invoke(materializationView.layer),
@@ -55,6 +62,7 @@ public class RNNLayerView extends RecurrentLayerView {
     public LayerView from(OutputView previous) {
         return new RNNLayerView(previous == null ? previousLayerOutput : previous,
                 thisLayerOutput,
+                hiddenSize,
                 numLayers,
                 outputType,
                 bidirectional,

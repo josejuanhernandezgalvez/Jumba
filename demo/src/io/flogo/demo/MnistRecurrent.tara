@@ -14,6 +14,14 @@ Architecture
 		Input(seqLength = 28, x = 28)
 		Block
 			LSTM(bidirectional = false, numLayers = 4)
-				EndSequence(reduce = flatten) > Output(x=100)
-			Linear > Output(x=10)
+				EndSequence(reduce = flatten) > Output(x=512)
+			ReLU
+		Block
+			Linear > Output(x=300)
+			ReLU
+		Block
+            Linear > Output(x=75)
+            ReLU
+        Block
+        	Linear > Output(x=10)
 			Softmax

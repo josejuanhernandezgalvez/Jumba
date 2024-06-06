@@ -19,8 +19,9 @@ public abstract class RecurrentLayerView implements LayerView {
     public final boolean bidirectional;
     public final double dropout;
     public final List<Reduce> reduce;
+    public final int hiddenSize;
 
-    public RecurrentLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
+    public RecurrentLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int hiddenSize, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = thisLayerOutput;
         this.numLayers = numLayers;
@@ -28,6 +29,7 @@ public abstract class RecurrentLayerView implements LayerView {
         this.bidirectional = bidirectional;
         this.dropout = dropout;
         this.reduce = reduce;
+        this.hiddenSize = hiddenSize;
     }
 
     protected static List<Reduce> operations(Layer layer, OutputView previousLayerOutput) {

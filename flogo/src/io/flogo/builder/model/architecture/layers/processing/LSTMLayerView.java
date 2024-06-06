@@ -12,25 +12,31 @@ import io.intino.magritte.framework.Layer;
 import java.util.List;
 
 public class LSTMLayerView extends RecurrentLayerView {
-    public LSTMLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
-        super(previousLayerOutput, thisLayerOutput, numLayers, outputType, bidirectional, dropout, reduce);
+    public LSTMLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int hiddenSize, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
+        super(previousLayerOutput, thisLayerOutput, hiddenSize, numLayers, outputType, bidirectional, dropout, reduce);
     }
 
     public static LSTMLayerView from(Layer layer, OutputView previousOutputView) {
         RecurrentSection.Block.LSTM lstm = (RecurrentSection.Block.LSTM) layer;
-        return new LSTMLayerView(previousOutputView,
-                operations(layer, previousOutputView).getLast().getOutputView(),
-                lstm.numLayers(),
-                outputType(lstm),
-                lstm.bidirectional(),
-                lstm.dropout(),
-                operations(lstm, previousOutputView));
+        try {
+            return new LSTMLayerView(previousOutputView,
+                    operations(layer, previousOutputView).getLast().getOutputView(),
+                    (Integer) lstm.outputType().getClass().getMethod("output").invoke(lstm.outputType()).getClass().getMethod("x").invoke(lstm.outputType().getClass().getMethod("output").invoke(lstm.outputType())),
+                    lstm.numLayers(),
+                    outputType(lstm),
+                    lstm.bidirectional(),
+                    lstm.dropout(),
+                    operations(lstm, previousOutputView));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
         try {
             return new LSTMLayerView(previousOutputView(previous),
                     operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),
+                    (Integer) outputType(materializationView.layer).getClass().getMethod("output").invoke(outputType(materializationView.layer)).getClass().getMethod("x").invoke(outputType(materializationView.layer).getClass().getMethod("output").invoke(outputType(materializationView.layer))),
                     (Integer) materializationView.layer.getClass().getMethod("numLayers").invoke(materializationView.layer),
                     outputType(materializationView.layer),
                     (Boolean) materializationView.layer.getClass().getMethod("bidirectional").invoke(materializationView.layer),
@@ -56,6 +62,7 @@ public class LSTMLayerView extends RecurrentLayerView {
     public LayerView from(OutputView previous) {
         return new LSTMLayerView(previous == null ? previousLayerOutput : previous,
                 thisLayerOutput,
+                hiddenSize,
                 numLayers,
                 outputType,
                 bidirectional,

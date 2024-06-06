@@ -11,13 +11,11 @@ import io.flogo.builder.model.architecture.layers.activation.SoftmaxLayerView;
 import io.flogo.builder.model.architecture.layers.link.FlattenLayerView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
 import io.flogo.builder.model.architecture.layers.processing.*;
+import io.flogo.builder.model.architecture.layers.processing.RecurrentLayerView.Reduce.SliceReduce;
 import io.flogo.builder.model.architecture.sections.link.FlattenSectionView;
 import io.intino.itrules.FrameBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -92,6 +90,7 @@ public class ArchitectureRenderer {
         for (RecurrentLayerView.Reduce reduce : recurrent.reduce) {
             if (reduce instanceof RecurrentLayerView.Reduce.LinearReduce) layers.add(new LinearLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1)));
             if (reduce instanceof RecurrentLayerView.Reduce.FlattenReduce) layers.add(new FlattenLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1)));
+            if (reduce instanceof SliceReduce) layers.add(new SlicingLayerView());
         }
         layers.add(recurrent);
         return layers;
@@ -141,8 +140,9 @@ public class ArchitectureRenderer {
                             .add("padding", new FrameBuilder("padding").add("dimension", convolutional.kernel.padding().asArray()));
             case RecurrentLayerView recurrent ->
                     builder.add("package", "recurrents")
-                            .add("input", recurrent.previousLayerOutput.asArray()[0])
-                            .add("hidden", recurrent.getOutputView().asArray()[0])
+                            .add("input", recurrent.previousLayerOutput.asArray()[1])
+                            .add("hidden", recurrent.hiddenSize)
+                            .add("output", outputsNames.get(recurrent.outputType.name()))
                             .add("num_layers", recurrent.numLayers)
                             .add("bidirectional", recurrent.bidirectional)
                             .add("dropout", recurrent.dropout)
@@ -161,7 +161,7 @@ public class ArchitectureRenderer {
                             .add("slope", leaky.alpha);
             case SoftmaxLayerView softmax ->
                     builder.add("package", "activations")
-                            .add("n_dimensions", softmax.getOutputView().dimensions());
+                            .add("dimension", -1);
             case ActivationLayerView activation ->
                     builder.add("package", "activations");
             case DropoutLayerView dropout ->
@@ -178,8 +178,8 @@ public class ArchitectureRenderer {
                             .add("eps", batchNormalization.eps)
                             .add("momentum", batchNormalization.momentum);
             case FlattenLayerView flatten ->
-                    builder.add("from_dim", flatten.fromDimension)
-                            .add("to_dim", flatten.toDimension);
+                    builder.add("from_dim", flatten.toDimension)
+                            .add("to_dim", flatten.fromDimension);
             default -> {}
         }
         return builder;
@@ -191,24 +191,26 @@ public class ArchitectureRenderer {
                 .toArray(FrameBuilder[]::new);
     }
 
+    private static Map<String, String> outputsNames = Map.of("EndSequence", "EndSequence",
+            "LastHiddenState", "HiddenStates",
+            "LastCellState", "CellStates",
+            "HiddenStates", "HiddenStates",
+            "CellStates", "CellStates");
     private FrameBuilder buildReduceFrame(RecurrentLayerView.Reduce reduce, RecurrentLayerView.OutputType output, String library) {
         FrameBuilder fb = new FrameBuilder("reduce").add("library", library);
         switch (reduce) {
-            case RecurrentLayerView.Reduce.SliceReduce slicing ->
-                        fb.add("slicing", true)
-                            .add("output", output)
+            case SliceReduce slicing ->
+                    fb.add("slicing", true)
                             .add("from", slicing.from)
                             .add("to", slicing.to + 1);
             case RecurrentLayerView.Reduce.LinearReduce linear ->
-                        fb.add("linear", true)
-                            .add("output", output)
-                            .add("in_features", dimensionOf(linear.previousOutputView.asArray()))
-                            .add("out_features", dimensionOf(linear.outputView.asArray()))
-                            .add("dimension", linear.dimensionToActOn - 1)
+                    fb.add("linear", true)
+                            .add("in_features", linear.previousOutputView.asArray()[linear.dimensionToActOn - 1])
+                            .add("out_features", linear.outputView.asArray()[linear.dimensionToActOn - 1])
+                            .add("dimension", linear.dimensionToActOn)
                             .add("bias", "True");
             case RecurrentLayerView.Reduce.FlattenReduce flatten ->
-                        fb.add("flatten", true)
-                            .add("output", output)
+                    fb.add("flatten", true)
                             .add("from", flatten.startDimension)
                             .add("to", flatten.endDimension);
             default -> {}
