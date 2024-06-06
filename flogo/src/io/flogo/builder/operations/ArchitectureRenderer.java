@@ -127,8 +127,8 @@ public class ArchitectureRenderer {
                 .add("type", typeOf(layer.getClass().getSimpleName()));
         switch (layer) {
             case LinearLayerView linear ->
-                    builder.add("in_features", dimensionOf(linear.previousLayerOutput.asArray()))
-                            .add("out_features", dimensionOf(linear.thisLayerOutput.asArray()))
+                    builder.add("in_features", linear.previousLayerOutput.asArray()[0])
+                            .add("out_features", linear.thisLayerOutput.asArray()[0])
                             .add("dimension", -1)
                             .add("bias", "True");
             case ConvolutionalLayerView convolutional ->
@@ -169,17 +169,17 @@ public class ArchitectureRenderer {
                             .add("probability", dropout.probability);
             case LayerNormalizationLayerView layerNormalization ->
                     builder.add("package", "regularizations")
-                            .add("shape", dimensionOf(layerNormalization.output.asArray()))
+                            .add("shape", layerNormalization.output.asArray()[layerNormalization.output.asArray().length - 1])
                             .add("eps", layerNormalization.eps);
             case BatchNormalizationLayerView batchNormalization ->
                     builder.add("package", "regularizations")
-                            .add("dimensionality", batchNormalization.getOutputView().dimensions())
-                            .add("num_features", dimensionOf(batchNormalization.output.asArray()))
+                            .add("dimensionality", batchNormalization.getOutputView().dimensions() - 1)
+                            .add("num_features", batchNormalization.output.asArray()[batchNormalization.output.asArray().length - 1])
                             .add("eps", batchNormalization.eps)
                             .add("momentum", batchNormalization.momentum);
             case FlattenLayerView flatten ->
-                    builder.add("from_dim", flatten.toDimension)
-                            .add("to_dim", flatten.fromDimension);
+                    builder.add("from_dim", flatten.fromDimension)
+                            .add("to_dim", flatten.toDimension);
             default -> {}
         }
         return builder;
@@ -224,10 +224,6 @@ public class ArchitectureRenderer {
             if (Character.isUpperCase(component.charAt(i))) return component.substring(0, i);
         }
         return component;
-    }
-
-    private int dimensionOf(int[] dimensions) {
-        return Arrays.stream(dimensions).reduce(1, (a, b) -> a * b);
     }
 
     public static <T> Predicate<T> distinctBy(Function<? super T, ?> keyExtractor) {

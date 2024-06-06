@@ -36,7 +36,7 @@ def type(layer) trigger(import) attribute(package) attribute(dimensionality)
     from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$dimensionality~Dimensional~$type~Layer as $type~Layer
 end
 
-def type(layer) trigger(import) attribute(package & reduce)
+def type(layer) trigger(import) attribute(package) attribute(reduce)
     from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
     $reduce+import...[]
 end
