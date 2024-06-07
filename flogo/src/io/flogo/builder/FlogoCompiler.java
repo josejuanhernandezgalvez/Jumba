@@ -86,7 +86,7 @@ public class FlogoCompiler {
                             .substitutes(experimentView.substitutes)
                             .name(experimentView.name)
                             .collapse());
-            new FlogoRenderer(configuration.outDirectory().getAbsolutePath())
+            new FlogoRenderer(configuration.outDirectory().getAbsolutePath(), context)
                     .render(new FlogoDTO(architectureView, collapsedArchitectureViews, laboratoryView));
             context.getCompiledFiles().add(new OutputItem(sourceFileOf(graph.architecture(), context), ""));
         }
