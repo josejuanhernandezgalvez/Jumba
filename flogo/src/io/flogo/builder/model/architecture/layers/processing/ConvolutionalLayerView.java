@@ -61,7 +61,7 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
         return new ConvolutionalLayerView(previousOutput, thisOutput(layer));
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView MaterializationView) {
+    public static LayerView createFromSubstitute(LayerView previous, MaterializationView MaterializationView) {
         return ((Laboratory.Experiment.Materialization.Convolutional) MaterializationView.layer).output() == null ?
                 new ConvolutionalLayerView(
                         kernel(MaterializationView.layer),

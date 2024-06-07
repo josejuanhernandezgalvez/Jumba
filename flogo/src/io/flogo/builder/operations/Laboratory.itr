@@ -86,10 +86,6 @@ def type(early_stopper)
     EarlyStopper(patience=$patience, delta=$delta)
 end
 
-
-
-
-
 def type(optimizer) and type(SGD)
     SGDOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, momentum=$momentum, dampening=$dampening, weight_decay=$weight_decay)
 end
