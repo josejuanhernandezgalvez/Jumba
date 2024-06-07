@@ -77,7 +77,7 @@ def type(block)
     ])
 end
 
-def type(kernel | stride | padding)
+def type(kernel) or type(stride) or type(padding)
     ($dimension...[, ])
 end
 
@@ -93,7 +93,7 @@ def (type(MaxPool) or type(AvgPool)) and type(layer)
     $type~Layer(kernel=$kernel, stride=$stride, padding=$padding)
 end
 
-def type(LSTM | RNN | GRU) and type(layer)
+def (type(LSTM) or type(RNN) or type(GRU)) and type(layer)
     $type~Layer(input_size=$input, hidden_size=$hidden, output_type=$type~Layer.OutputType.$output, num_layer=$num_layers, bidirectional=$bidirectional+FirstUpperCase, dropout=$dropout),
     $reduce...[, $NL]
 end
