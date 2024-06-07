@@ -15,29 +15,29 @@ Architecture VGG16
 	ConvolutionalSection s0
 		Input(x=224,y=224,z=3)
 		Block b0
-			Convolutional > Output(x=224, y=224, z=64)
+			Convolutional > Output(x=222, y=222, z=3)
 			ReLU
+			Convolutional > Output(x=220, y=220, z=64)
+            ReLU
         	MaxPool > Output(x=112, y=112)
 		Block b1
-			Convolutional > Output(x=112, y=112, z=96)
+			Convolutional > Output(x=110, y=110, z=96)
 			ReLU
-			Convolutional > Output(x=112, y=112, z=128)
+			Convolutional > Output(x=108, y=108, z=128)
             ReLU
+            Convolutional > Output(x=108, y=108, z=128)
+			ReLU
         	MaxPool > Output(x=56, y=56)
         Block b1
-            Convolutional > Output(x=56, y=56, z=192)
+            Convolutional > Output(x=54, y=54, z=192)
             ReLU
-            Convolutional > Output(x=112, y=112, z=256)
+            Convolutional > Output(x=52, y=52, z=256)
             ReLU
-            Convolutional > Output(x=112, y=112, z=256)
+            Convolutional > Output(x=48, y=48, z=256)
             ReLU
         	MaxPool > Output(x=14, y=14)
         Block b3
-        	Convolutional > Output(x=14, y=14, z=384)
-			ReLU
-			Convolutional > Output(x=14, y=14, z=512)
-			ReLU
-			Convolutional > Output(x=14, y=14, z=512)
+        	Convolutional > Output(x=14, y=14, z=512)
 			ReLU
 			MaxPool > Output(x=7, y=7)
 

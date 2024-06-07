@@ -1,5 +1,5 @@
 def.file
-$PROJECT_DIRECTORY/demo/src/io/flogo/demo/MnistRecurrent.tara#true
+$PROJECT_DIRECTORY/demo/src/io/flogo/demo/SimpleConvolutionalNeuralNetwork.tara#true
 
 project
 flogo-dsl

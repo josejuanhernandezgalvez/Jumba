@@ -306,7 +306,7 @@ Concept Section is component
 				var integer z
 			Concept:{1..*} Block
 				Facet:CheckCustomDownSampling Residual
-                	var word:{Bottleneck Default Custom} shortcut = Bottleneck
+                	var word:{Default Custom} shortcut = Default
             		Concept:{0..1} CustomShortcut
             			Concept:{1..*} Layer
 							sub ActivationLayer

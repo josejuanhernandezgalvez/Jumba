@@ -45,7 +45,7 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     @Override
     public OutputView getOutputView() {
         if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
-        return ((ConvolutionTwoDimensionsKernel) kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput, this.outChannels);
+        return kernel instanceof UndeterminedKernel ? thisLayerOutput : ((ConvolutionTwoDimensionsKernel) kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput, this.outChannels);
     }
 
     @Override
