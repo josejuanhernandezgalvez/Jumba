@@ -198,9 +198,9 @@ This project is licensed under the EUPL v1.2 License - see the [LICENSE](LICENSE
 
 ## Contact
 
-(c) 2023 José Juan Hernández Gálvez 
+(c) 2024 José Juan Hernández Gálvez 
 <br>Github: https://github.com/josejuanhernandezgalvez<br> 
-(c) 2023 Juan Carlos Santana Santana 
+(c) 2024 Juan Carlos Santana Santana 
 <br>Github: https://github.com/JuanCarss<br>
-(c) 2023 Joel del Rosario Pérez
+(c) 2024 Joel del Rosario Pérez
 <br>Github: https://github.com/Joeel71<br>
