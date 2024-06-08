@@ -1,0 +1,57 @@
+dsl Flogo
+
+Laboratory(epochs = 10, name = "CatsAndDogs")
+    Adam(lr=0.001, beta0=0.9, beta1=0.999, weightDecay=0, eps=1e-08)
+    CrossEntropyLoss
+    ClassificationStrategy
+    LossDrivenEarlyStopper(10, 0.01)
+    Dataset(name = "CatDogDataset", batchSize=10)
+        Split(train = 0.7, test = 0.2, validation = 0.1)
+
+    Experiment i626
+        Materialization(vLayer="01") > ReLU
+
+    Experiment z424
+        Materialization(vLayer="01") > Tanh
+        Adamax(lr=0.0001)
+
+    Experiment h536
+        Materialization(vLayer="01") > LogSigmoid
+
+Architecture CatsAndDogsNeuralNetwork
+    ConvolutionalSection
+        Input(100, 100, 3)
+        Block B1
+            Convolutional
+                Kernel
+                    Size(x = 3, y = 3)
+                    Stride(x = 2, y = 2)
+                    Padding(x = 0, y = 0)
+                OutChannels(33)
+            VLayer(id="01")
+            MaxPool
+                Kernel
+                    Size(x = 5, y = 5)
+                    Stride(x = 4, y = 4)
+                    Padding(x = 0, y = 0)
+        Block B2
+            Convolutional
+                Kernel
+                    Size(x = 3, y = 3)
+                    Stride(x = 3, y = 3)
+                    Padding(x = 0, y = 0)
+                OutChannels(16)
+            VLayer(id="01")
+            BatchNormalization
+            MaxPool
+                Kernel
+                    Size(x = 3, y = 3)
+                    Stride(x = 2, y = 2)
+                    Padding(x = 1, y = 1)
+
+    FlattenSection
+
+    LinearSection
+        Block B3
+            Linear > Output(2)
+            Softmax

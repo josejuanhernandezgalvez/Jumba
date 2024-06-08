@@ -20,8 +20,8 @@ Concept:{1..1} Laboratory
 	Concept:{1..*} Experiment
 		has:{0..1} Optimizer
 		has:{0..1} LossFunction
-		Concept Substitute
-			var string id
+		Concept Materialization
+			var string vLayer
 			Concept:{1..1} Layer
 				sub ActivationLayer
 					sub Tanh
@@ -107,7 +107,7 @@ Concept:{1..1} Laboratory
                     	Concept:{1..1} Output > var integer x
                     sub Dropout
             			var double probability=0.8
-            		sub:CheckIsDefinedEitherOutputOrKernel Convolutional
+            		sub Convolutional
                 		Concept:{0..1} Output
                 			var integer x
                 			var integer y
@@ -125,7 +125,7 @@ Concept:{1..1} Laboratory
                 		Concept:{0..1} OutChannels
                 			var integer z
                 	sub Pool
-                        sub:CheckIsDefinedEitherOutputOrKernel MaxPool
+                        sub MaxPool
                         	Concept:{0..1} Output
                         		var integer x
                         		var integer y
@@ -139,7 +139,7 @@ Concept:{1..1} Laboratory
                         		Concept:{1..1} Padding
                         			var integer x
                         			var integer y
-                        sub:CheckIsDefinedEitherOutputOrKernel AvgPool
+                        sub AvgPool
                         	Concept:{0..1} Output
                             	var integer x
                         		var integer y
@@ -306,11 +306,76 @@ Concept Section is component
 				var integer z
 			Concept:{1..*} Block
 				Facet:CheckCustomDownSampling Residual
-                	var word:{Bottleneck Default Custom} shortcut = Bottleneck
+                	var word:{Default Custom} shortcut = Default
             		Concept:{0..1} CustomShortcut
             			Concept:{1..*} Layer
-                        	sub ActivationLayer
-                        		sub Tanh
+							sub ActivationLayer
+								sub Tanh
+								sub Sigmoid
+								sub LogSigmoid
+								sub ReLU
+								sub SELU
+								sub GELU
+								sub SiLU
+								sub GLU
+								sub ELU > var integer alpha=1
+								sub LeakyReLU > var integer alpha=1
+								sub Mish
+								sub Softmax
+							sub ProcessingLayer
+								sub Dropout
+									var double probability = 0.8
+                    		    sub Convolutional
+                    		    	Concept:{0..1} Output
+                    		    		var integer x
+                    		    		var integer y
+                    		    		var integer z
+                    		    	Concept:{0..1} Kernel
+                    		    		Concept:{1..1} Size
+                    		    			var integer x
+                    		    			var integer y
+                    		    		Concept:{1..1} Stride
+                    		    			var integer x
+                    		    			var integer y
+                    		    		Concept:{1..1} Padding
+                    		    			var integer x
+                    		    			var integer y
+									Concept:{0..1} OutChannels
+										var integer z
+                    		    sub Pool
+                    		    	sub MaxPool
+                    		    		Concept:{0..1} Output
+                    		    			var integer x
+                    		    			var integer y
+                    		    		Concept:{0..1} Kernel
+                    		    			Concept:{1..1} Size
+                    		    				var integer x
+                    		    				var integer y
+                    		    			Concept:{1..1} Stride
+                    		    				var integer x
+                    		    				var integer y
+                    		    			Concept:{1..1} Padding
+                    		    				var integer x
+                    		    				var integer y
+                    		    	sub AvgPool
+                    		        	Concept:{0..1} Output
+                    		            	var integer x
+                    		    			var integer y
+                    		    		Concept:{0..1} Kernel
+                    		    			Concept:{1..1} Size
+                    		    				var integer x
+                    		    				var integer y
+                    		    			Concept:{1..1} Stride
+                    		    				var integer x
+                    		    				var integer y
+                    		    			Concept:{1..1} Padding
+                    		    				var integer x
+                    		    				var integer y
+								sub BatchNormalization
+									var double eps = 0.00001
+									var double momentum = 0.1
+								sub LayerNormalization
+									var double eps=0.00001
 				Concept:{1..*} Layer
 					sub VLayer
                     	var string id
@@ -330,7 +395,7 @@ Concept Section is component
 					sub ProcessingLayer
 						sub Dropout
 							var double probability = 0.8
-                        sub:CheckIsDefinedEitherOutputOrKernel Convolutional
+                        sub Convolutional
                         	Concept:{0..1} Output
                         		var integer x
                         		var integer y
@@ -348,7 +413,7 @@ Concept Section is component
 							Concept:{0..1} OutChannels
 								var integer z
                         sub Pool
-                        	sub:CheckIsDefinedEitherOutputOrKernel MaxPool
+                        	sub MaxPool
                         		Concept:{0..1} Output
                         			var integer x
                         			var integer y
@@ -362,7 +427,7 @@ Concept Section is component
                         			Concept:{1..1} Padding
                         				var integer x
                         				var integer y
-                        	sub:CheckIsDefinedEitherOutputOrKernel AvgPool
+                        	sub AvgPool
                             	Concept:{0..1} Output
                                 	var integer x
                         			var integer y
@@ -392,6 +457,16 @@ Concept Section is component
             				sub ActivationLayer
             					sub ReLU
                                 sub ELU > var integer alpha=1
+                                sub SELU
+                                sub GELU
+                                sub SiLU
+                                sub GLU
+                                sub LeakyReLU > var integer alpha=1
+                                sub LogSigmoid
+                                sub Sigmoid
+                                sub Tanh
+                                sub Mish
+                                sub Softmax
                     		sub ProcessingLayer
                     			sub Linear
                     				Concept:{1..1} Output > var integer x

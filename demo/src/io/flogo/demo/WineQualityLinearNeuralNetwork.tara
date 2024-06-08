@@ -1,43 +1,31 @@
 dsl Flogo
 
-Laboratory(epochs = 10, name = "WineQuality")
-    SGD(lr=0.001, momentum=0, momentumDecay=0, weightDecay=0)
-    MSELoss
-    RegressionStrategy
-    LossDrivenEarlyStopper(10, 0.01)
-    Dataset(name = "winequality-red", batchSize=10)
-        Split(train = 0.7, test = 0.2, validation = 0.1)
+Laboratory(epochs = 10, name = "CatsAndDogs")
+	SGD(lr=0.0001, momentum=0, momentumDecay=0, weightDecay=0)
+	MSELoss
+	RegressionStrategy
+	LossDrivenEarlyStopper(10, 0.01)
+	Dataset(name = "wine-quality", batchSize=20)
+		Split(train = 0.6, test = 0.2, validation = 0.2)
 
-    Experiment b525
-        Substitute(id="01") > BatchNormalization(eps=0.1, momentum=0.7)
-        Substitute(id="02") > LogSigmoid
-        Substitute(id="03") > Dropout(probability=0.6)
-        MAELoss
-
-    Experiment e626
-        Substitute(id="01") > BatchNormalization(eps=0.00001, momentum=0.3)
-        Substitute(id="02") > ReLU
-        Substitute(id="03") > Dropout(probability=0.5)
-
-    Experiment a424
-        Substitute(id="01") > BatchNormalization(eps=0.001, momentum=0.5)
-        Substitute(id="02") > Tanh
-        Substitute(id="03") > Dropout(probability=0.3)
-        Adam(lr=0.0001)
+	Experiment e626
+		Materialization(vLayer="01") > BatchNormalization(eps=0.00001, momentum=0.3)
+		Materialization(vLayer="02") > ReLU
+		Materialization(vLayer="03") > Dropout(probability=0.5)
 
 Architecture WineQualityNeuralNetwork
-    LinearSection
-        Input(x=11)
+	LinearSection
+		Input(x=11)
+		Block
+			Linear > Output(x=30)
+			VLayer(id="01")
+			VLayer(id="02")
+			VLayer(id="03")
+		Block
+        	Linear > Output(x=10)
+        	VLayer(id="01")
+        	VLayer(id="02")
+        	VLayer(id="03")
         Block
-            Linear > Output(x=30)
-            VLayer(id="01")
-            VLayer(id="02")
-            VLayer(id="03")
-        Block
-            Linear > Output(x=10)
-            VLayer(id="01")
-            VLayer(id="02")
-            VLayer(id="03")
-        Block
-            Linear > Output(x=1)
-            VLayer("02")
+        	Linear > Output(x=1)
+        	VLayer("02")

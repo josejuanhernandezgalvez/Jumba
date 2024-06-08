@@ -1,0 +1,143 @@
+def type(architecture)
+	from implementations.$library.architecture.architecture import $library+FirstUppercase~Architecture as Architecture
+	$import
+
+    architecture = (Architecture("$name")
+                        $component...[$NL])
+end
+
+def type(import)
+    $section+import...[$NL]
+    $block+import...[$NL]
+    $layer+import...[$NL]
+end
+
+def type(component) and attribute(section)
+    .attach($section)
+end
+
+def type(component) and attribute(layer)
+    .attach($layer)
+end
+
+def type(section) and trigger(import)
+    from implementations.$library.architecture.sections.$type+Lowercase import $library+FirstUppercase~$type~Section as $type+CamelCase~Section
+end
+
+def type(block) and trigger(import) and attribute(type)
+    from implementations.$library.architecture.blocks.$type+Lowercase import $library+FirstUppercase~$type~Block as $type+CamelCase~Block
+end
+
+def type(block) and trigger(import)
+    from implementations.$library.architecture.block import $library+FirstUppercase~Block as Block
+end
+
+def type(layer) and trigger(import) and attribute(package) and attribute(dimensionality)
+    from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$dimensionality~Dimensional~$type~Layer as $type~Layer
+end
+
+def type(layer) and trigger(import) and attribute(package) and attribute(reduce)
+    from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
+    $reduce+import...[]
+end
+
+def type(layer) and trigger(import) and attribute(package)
+    from implementations.$library.architecture.layers.$package.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
+end
+
+def type(layer) and trigger(import) and attribute(dimensionality)
+    from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$dimensionality~Dimensional~$type~Layer as $type~Layer
+end
+
+def type(layer) and trigger(import)
+    from implementations.$library.architecture.layers.$type+Lowercase import $library+FirstUppercase~$type~Layer as $type~Layer
+end
+
+def type(reduce) and trigger(import) and attribute(linear)
+end
+
+def type(reduce) and trigger(import) and attribute(flatten)
+end
+
+def type(section)
+    $type+CamelCase~Section([
+                $block...[, $NL]
+    ])
+end
+
+def type(block) and attribute(type)
+    $type+CamelCase~Block([
+        $layer...[, $NL]
+    ])
+end
+
+def type(block)
+    Block([
+        $layer...[, $NL]
+    ])
+end
+
+def type(kernel) or type(stride) or type(padding)
+    ($dimension...[, ])
+end
+
+def type(Linear, layer)
+    $type~Layer(in_features=$in_features, out_features=$out_features, dimension=$dimension, bias=$bias)
+end
+
+def type(Convolutional, layer)
+    $type~Layer(in_channels=$in_channels, out_channels=$out_channels, kernel=$kernel, stride=$stride, padding=$padding)
+end
+
+def (type(MaxPool) or type(AvgPool)) and type(layer)
+    $type~Layer(kernel=$kernel, stride=$stride, padding=$padding)
+end
+
+def (type(LSTM) or type(RNN) or type(GRU)) and type(layer)
+    $type~Layer(input_size=$input, hidden_size=$hidden, output_type=$type~Layer.OutputType.$output, num_layer=$num_layers, bidirectional=$bidirectional+FirstUpperCase, dropout=$dropout),
+    $reduce...[, $NL]
+end
+
+def type(reduce) and attribute(slicing)
+    SlicingLayer(start=$from, end=$to)
+end
+
+def type(reduce) and attribute(linear)
+    LinearLayer(in_features=$in_features, out_features=$out_features, dimension=$dimension, bias=$bias)
+end
+
+def type(reduce) and attribute(flatten)
+    FlattenLayer(from_dim=$from, to_dim=$to)
+end
+
+def type(ELU, layer)
+    $type~Layer(alpha=$alpha)
+end
+
+def type(LeakyReLU, layer)
+    $type~Layer(negative_slope=$slope)
+end
+
+def type(Softmax, layer)
+    $type~Layer(dimension=$dimension)
+end
+
+def type(BatchNormalization, layer)
+    $type~Layer(num_features=$num_features, eps=$eps, momentum=$momentum)
+end
+
+def type(LayerNormalization, layer)
+    $type~Layer(normalized_shape=$shape, eps=$eps)
+end
+
+def type(Dropout, layer)
+    $type~Layer(probability=$probability)
+end
+
+def type(Flatten, layer)
+    $type~Layer(from_dim=$from_dim, to_dim=$to_dim)
+end
+
+def type(layer)
+    $type~Layer()
+end

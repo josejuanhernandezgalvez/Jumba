@@ -9,7 +9,7 @@ Laboratory(epochs = 10, name = "CatsAndDogs")
 
 	Experiment e626
 		Adagrad
-		Substitute(id="01")
+		Materialization(vLayer="01")
 			Convolutional
             	Kernel
 					Size(x = 3, y = 3)
@@ -17,7 +17,7 @@ Laboratory(epochs = 10, name = "CatsAndDogs")
 					Padding(x = 0, y = 0)
 				OutChannels(60)
 
-		Substitute(id="02")
+		Materialization(vLayer="02")
         	Linear > Output(x=10)
 
 Architecture ConvolutionalNeuralNetwork
