@@ -1,13 +1,10 @@
 dsl Legio
 
-Artifact(groupId = "io.flogo", version = "1.0.0") demo
-	Model("Blatt", "1.0.0", "5.0.0")
-		exclude = ExcludeFrameworkCode
-	Imports
-		Test(groupId = "junit", artifactId = "junit", version = "4.13")
+Artifact("io.flogo", "1.0.0") demo
+	Dsl("Flogo", "1.0.0")
+	Imports > Test("junit", "junit", "4.13")
 	Package(mode = ModulesAndLibrariesLinkedByManifest)
 
-Repository(identifier = "intino-maven")
-	Release("https://artifactory.intino.io/artifactory/releases")
+Repository("intino-maven") > Release("https://artifactory.intino.io/artifactory/releases")
 
 RunConfiguration local

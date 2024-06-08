@@ -1,0 +1,31 @@
+dsl Flogo
+
+Laboratory(epochs = 10, name = "CatsAndDogs")
+	SGD(lr=0.0001, momentum=0, momentumDecay=0, weightDecay=0)
+	MSELoss
+	RegressionStrategy
+	LossDrivenEarlyStopper(10, 0.01)
+	Dataset(name = "wine-quality", batchSize=20)
+		Split(train = 0.6, test = 0.2, validation = 0.2)
+
+	Experiment e626
+		Materialization(vLayer="01") > BatchNormalization(eps=0.00001, momentum=0.3)
+		Materialization(vLayer="02") > ReLU
+		Materialization(vLayer="03") > Dropout(probability=0.5)
+
+Architecture WineQualityNeuralNetwork
+	LinearSection
+		Input(x=11)
+		Block
+			Linear > Output(x=30)
+			VLayer(id="01")
+			VLayer(id="02")
+			VLayer(id="03")
+		Block
+        	Linear > Output(x=10)
+        	VLayer(id="01")
+        	VLayer(id="02")
+        	VLayer(id="03")
+        Block
+        	Linear > Output(x=1)
+        	VLayer("02")

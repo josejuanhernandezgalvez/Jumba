@@ -1,0 +1,143 @@
+def type(main)
+    $architecture+import...[$NL]
+    from framework.toolbox.laboratory import Laboratory
+    from framework.toolbox.logger import Logger
+    from framework.toolbox.stopper import EarlyStopper
+    from implementations.$library.toolbox.experiment import $library+FirstUppercase~Device as Device
+    from implementations.$library.toolbox.experiment import $library+FirstUppercase~Experiment as Experiment
+    from implementations.$library.toolbox.data.generator import $library+FirstUppercase~DatasetGenerator as DatasetGenerator
+    $optimizer+import...[$NL]
+    $loss+import...[$NL]
+    from implementations.$library.toolbox.saver import $library+FirstUppercase~ModelSaver as ModelSaver
+    from implementations.$library.toolbox.loader import $library+FirstUppercase~ModelLoader as ModelLoader
+    $strategy+import
+
+    dataset = $dataset
+
+    experiments = [$experiment...[, $NL$TAB$TAB$TAB$TAB]]
+
+    $laboratory
+end
+
+def type(architecture) and trigger(import)
+    from $experiment_name+Lowercase import architecture as $experiment_name
+end
+
+def type(strategy) and trigger(import)
+    from implementations.$library.toolbox.strategies.$name+LowerCase import $library+FirstUppercase$name+FirstUppercase~Strategy as $name~Strategy
+end
+
+def type(optimizer) and trigger(import)
+    from implementations.$library.toolbox.optimizers.$name+LowerCase import $library+FirstUppercase$name+FirstUppercase~Optimizer as $name~Optimizer
+end
+
+def type(loss) and trigger(import)
+    from implementations.$library.toolbox.losses.$name+LowerCase import $library+FirstUppercase$name+FirstUppercase~LossFunction as $name~LossFunction
+end
+
+def type(laboratory)
+    Laboratory(name="$laboratoryName",
+               eras=$eras,
+               epochs=$epochs,
+               datagen=dataset,
+               experiments=experiments,
+               strategy=$strategy,
+               logger=Logger("C:/Users/Joel/Desktop/test_api/flogo/executions/logger/result.tsv"),
+               loader=ModelLoader(),
+               device=Device($device)).explore()
+end
+
+def type(experiment) and attribute(early_stopper)
+    Experiment(name="$experiment_name",
+                              architecture=$architecture_name,
+                              optimizer=$optimizer,
+                              loss_function=$loss,
+                              stopper=$early_stopper,
+                              saver=ModelSaver("C:/Users/Joel/Desktop/test_api/flogo/model/$laboratory_name"))
+end
+
+def type(experiment)
+    Experiment(name="$experiment_name",
+                              architecture=$architecture_name,
+                              optimizer=$optimizer,
+                              loss_function=$loss,
+                              saver=ModelSaver("C:/Users/Joel/Desktop/test_api/flogo/model/$laboratory_name"))
+end
+
+
+def type(loss)
+    $name~LossFunction()
+end
+
+def type(dataset)
+    DatasetGenerator(name="$datasetName",
+                               path="C:/Users/Joel/Desktop/test_api/flogo/execute/files/dataset/",
+                               batch_size=$batchSize,
+                               random_state=$seed).generate(train_proportion=$trainProportion,
+                                                          validation_proportion=$valProportion,
+                                                          test_proportion=$testProportion)
+end
+
+def type(strategy)
+    $name+CamelCase+FirstUppercase~Strategy($loss)
+end
+
+def type(early_stopper)
+    EarlyStopper(patience=$patience, delta=$delta)
+end
+
+def type(optimizer) and type(SGD)
+    SGDOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, momentum=$momentum, dampening=$dampening, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(Adadelta)
+    AdadeltaOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, rho=$rho, eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(Adagrad)
+    AdagradOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, learning_rate_decay=$lr_decay, eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(Adam)
+    AdamOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(Adamax)
+    AdamaxOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(AdamW)
+    AdamWOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(AMSGrad)
+    AMSGradOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(ASGD)
+    ASGDOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, lambd=$lambd, alpha=$alpha, t0=$t0, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(NAdam)
+    NAdamOptimizer(parameters=$architecture_name.parameters(),learning_rate=$lr, betas=($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(RProp)
+    RPropOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, etas=($eta0, $eta1), step_sizes=($step0, $step1))
+end
+
+def type(optimizer) and type(RAdam)
+    RAdamOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, ($b0, $b1), eps=$eps, weight_decay=$weight_decay)
+end
+
+def type(optimizer) and type(RMSProp)
+    RMSPropOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, alpha=$alpha, eps=$eps, weight_decay=$weight_decay, $momentum)
+end
+
+def type(optimizer) and type(SparseAdam)
+    SparseAdamOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, betas=($b0, $b1), eps=$eps)
+end
+
+def type(optimizer) and type(LBFGS)
+    LBFGSOptimizer(parameters=$architecture_name.parameters(), learning_rate=$lr, rho=$rho, eps=$eps, weight_decay=$weight_decay)
+end

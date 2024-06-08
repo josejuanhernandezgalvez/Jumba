@@ -1,0 +1,32 @@
+dsl Flogo
+
+Laboratory(epochs = 10, name = "CatsAndDogs")
+	Adam
+	MAELoss
+	ClassificationStrategy
+	Dataset(name = "cats and dogs", batchSize = 10)
+		Split(train=0.7, test=0.2, validation=0.1)
+
+	Experiment e626
+		Adagrad
+
+
+Architecture CustomResnet
+	ConvolutionalSection
+		Input(224, 224, 3)
+		Block
+			Convolutional > Output(x = 10, y = 10, z = 10)
+
+    FlattenSection
+
+    LinearSection
+    	Block
+    		Linear > Output(1600)
+			ReLU
+		Block
+			Linear > Output(800)
+			ReLU
+		Block
+			Linear > Output(200)
+			ReLU
+			Softmax

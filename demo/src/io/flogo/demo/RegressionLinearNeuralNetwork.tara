@@ -1,8 +1,18 @@
-dsl Blatt
+dsl Flogo
+
+Laboratory(epochs = 10, name = "CatsAndDogs")
+	Adam
+	MAELoss
+	RegressionStrategy
+	Dataset(name = "cats and dogs", batchSize = 10)
+		Split(train=0.7, test=0.2, validation=0.1)
+
+	Experiment e626
+    	Adagrad
+    	Materialization(vLayer = "01") > Linear > Output(x=2000)
 
 
-
-NeuralNetwork LinearRegressionNeuralNetwork
+Architecture RegressionLinearNeuralNetwork
 	LinearSection
 		Input(x=10000)
 		Block
