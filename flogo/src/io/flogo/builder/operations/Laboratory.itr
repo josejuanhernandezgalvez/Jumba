@@ -42,7 +42,7 @@ def type(laboratory)
                datagen=dataset,
                experiments=experiments,
                strategy=$strategy,
-               logger=Logger("C:/Users/Joel/Desktop/test_api/flogo/executions/logger/result.tsv"),
+               logger=Logger("$server_path/executions/logger/result.tsv"),
                loader=ModelLoader(),
                device=Device($device)).explore()
 end
@@ -53,7 +53,7 @@ def type(experiment) and attribute(early_stopper)
                               optimizer=$optimizer,
                               loss_function=$loss,
                               stopper=$early_stopper,
-                              saver=ModelSaver("C:/Users/Joel/Desktop/test_api/flogo/model/$laboratory_name"))
+                              saver=ModelSaver("$server_path/executions/checkpoints/$laboratory_name"))
 end
 
 def type(experiment)
@@ -61,7 +61,7 @@ def type(experiment)
                               architecture=$architecture_name,
                               optimizer=$optimizer,
                               loss_function=$loss,
-                              saver=ModelSaver("C:/Users/Joel/Desktop/test_api/flogo/model/$laboratory_name"))
+                              saver=ModelSaver("$server_path/executions/checkpoints/$laboratory_name"))
 end
 
 
@@ -71,7 +71,7 @@ end
 
 def type(dataset)
     DatasetGenerator(name="$datasetName",
-                               path="C:/Users/Joel/Desktop/test_api/flogo/execute/files/dataset/",
+                               path="$server_path/execute/files/dataset/",
                                batch_size=$batchSize,
                                random_state=$seed).generate(train_proportion=$trainProportion,
                                                           validation_proportion=$valProportion,
