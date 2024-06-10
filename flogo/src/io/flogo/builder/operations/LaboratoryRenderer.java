@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 public class LaboratoryRenderer {
 
+    private final static String SERVER_PATH = "";
+
     public String render(LaboratoryView laboratoryView, String architecture){
 
         FrameBuilder builder = initFrameBuilder("main")
@@ -85,6 +87,7 @@ public class LaboratoryRenderer {
                 .add("architecture_name", experimentView.name)
                 .add("optimizer", optimizerBuilder(experimentView.optimizerView, experimentView.name))
                 .add("loss", lossBuilder(experimentView.lossFunctionView))
+                .add("server_path", SERVER_PATH)
                 .add("laboratory_name", laboratoryName);
         if (earlyStopperView == null) return builder;
         return builder.add("early_stopper", stopperBuilder(earlyStopperView));
@@ -104,6 +107,7 @@ public class LaboratoryRenderer {
     private FrameBuilder laboratoryBuilder(LaboratoryView laboratoryView) {
         return initFrameBuilder("laboratory")
                 .add("laboratoryName", laboratoryView.name())
+                .add("server_path", SERVER_PATH)
                 .add("eras", laboratoryView.eras())
                 .add("epochs", laboratoryView.epochs())
                 .add("strategy", strategyFrame(laboratoryView.strategyView(), laboratoryView.lossFunctionView()))
@@ -124,6 +128,7 @@ public class LaboratoryRenderer {
     private FrameBuilder datasetBuilder(DatasetView datasetView) {
         return initFrameBuilder("dataset")
                 .add("datasetName", datasetView.name())
+                .add("server_path", SERVER_PATH)
                 .add("batchSize", datasetView.batchSize())
                 .add("seed", ThreadLocalRandom.current().nextInt(0, 1000 + 1))
                 .add("trainProportion", datasetView.split().train)
