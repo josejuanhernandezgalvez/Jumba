@@ -1,5 +1,6 @@
 dsl Proteo
 
+!! <b>Laboratory</b><br>Provides tools to describe how architectures should be trained in a structured and systematic manner, promoting innovation and continuous improvement in the development of artificial intelligence solutions. You must define at least one <b>Experiment</b>.<code><pre style="background-color: #333; color: white; padding: 5px; font-family: monospace; white-space: pre; border-radius: 10px;">Laboratory(eras=1,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;epochs,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device=Default,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Optimizer[Adam, SGD...],<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LossFunction[MSELoss, MAELoss...],<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Strategy[RegressionStrategy, ClassificationStrategy],<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EarlyStopper=null,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CheckPointSaver=null)</pre></code><br><b>Examples</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 10px;"><span style="color: #569cd6;">Laboratory</span>(<span style="color: #9cdcfe;">epochs = <span style="color: #b5cea8;">10</span>, name = <span style="color: #ce9178;">"MNIST"</span></span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Adam</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">MAELoss</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">RegressionStrategy</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Dataset</span>(name = <span style="color: #ce9178;">"mnist.csv"</span>, batchSize = <span style="color: #b5cea8;">10</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Split</span>(train = <span style="color: #b5cea8;">0.7</span>, test = <span style="color: #b5cea8;">0.2</span>, validation = <span style="color: #b5cea8;">0.1</span>)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Experiment</span> <span style="color: #dcdcaa;">e626</span></pre>
 Concept:{1..1} Laboratory
 	var integer eras=1
 	var integer epochs
@@ -10,37 +11,54 @@ Concept:{1..1} Laboratory
 	has:{0..1} EarlyStopper
 	has:{1..1} Strategy
 	has:{0..1} CheckPointSaver
+	!! <b>Dataset</b><br>Defines the dataset used for training the network, including the ability to split the data into training, validation, and test sets.<br><pre style="background-color: #333; color: white; padding: 5px; font-family: monospace; white-space: pre; border-radius: 10px;">Dataset(name,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;batchSize=10,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Split())</pre><br><b>Examples</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 10px;"><span style="color: #569cd6;">Dataset</span>(name = <span style="color: #ce9178;">"mnist.csv"</span>, batchSize = <span style="color: #b5cea8;">10</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Split</span>(train = <span style="color: #b5cea8;">0.7</span>, test = <span style="color: #b5cea8;">0.2</span>, validation = <span style="color: #b5cea8;">0.1</span>)</pre>
 	Concept:{1..1} Dataset
 		var string name
 		var integer batchSize = 10
+		!! <b>Split</b><br>Specifies the proportions of the data for training, testing, and validation. (train, test, validation)
 		Concept:{1..1} Split
 			var double train
 			var double test
 			var double validation
+	!!<b>Experiment</b><br> Defines a structured approach to training and evaluating deep learning models, enabling systematic exploration and optimization of various training configurations such as optimizers and loss functions, as well as architecture configurations using vLayers and materializations.<br><br><b>Examples</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 10px;"><span style="color: #569cd6;">Experiment</span> <span style="color: #dcdcaa;">e626</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Adagrad</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">MSELoss</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Materialization</span>(vLayer = <span style="color: #ce9178;">"01"</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Linear</span> &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">2000</span>)</pre>
 	Concept:{1..*} Experiment
 		has:{0..1} Optimizer
 		has:{0..1} LossFunction
+		!! <b>Materialization</b><br>Defines the actual layers that will replace the vLayers during experimentation.<br><br><b>Examples</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 10px;"><span style="color: #569cd6;">Materialization</span>(vLayer = <span style="color: #ce9178;">"01"</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Linear</span> &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">2000</span>)</pre> <br> <pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 10px;"><span style="color: #569cd6;">Materialization</span>(vLayer = <span style="color: #ce9178;">"01"</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">ReLU</span></pre>
 		Concept Materialization
 			var string vLayer
 			Concept:{1..1} Layer
 				sub ActivationLayer
+					!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
 					sub Tanh
+					!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
             		sub Sigmoid
+            		!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
             		sub LogSigmoid
+            		!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
             		sub ReLU
+            		!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
             		sub SELU
+            		!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
             		sub GELU
+            		!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
             		sub SiLU
+            		!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
             		sub GLU
+					!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
             		sub ELU > var integer alpha=1
+            		!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
             		sub LeakyReLU > var integer alpha=1
+            		!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
             		sub Mish
+            		!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
             		sub Softmax
             	sub ProcessingLayer
             		sub Recurrent
                     	var integer numLayers = 1
                     	var boolean bidirectional = false
                     	var double dropout = 0
+                    	!! <b>LSTM</b>(Long Short Term Memory)<br> LSTM layers are designed to handle sequential data by addressing the vanishing gradient problem inherent in traditional RNNs. They use special gating mechanisms—input, forget, and output gates—to control the flow of information and maintain long-term dependencies. This makes them particularly effective for tasks where context over long sequences is crucial, such as time series forecasting, language modeling, and speech recognition. In Flogo, LSTMs are inspired by the map-reduce methodology, where the mapping operation applies LSTM units to process sequential data, and the reducing operation aggregates the outputs to produce meaningful results.<br><br><b>Types of Output</b><br>EndSequence, HiddenStates, LastHiddenState, CellStates, LastCellState<br><br><b>Example</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 5px;"><span style="color: #569cd6;">LSTM</span>(bidirectional = <span style="color: #d19a66;">false</span>, numLayers = <span style="color: #b5cea8;">4</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">EndSequence</span>(reduce = <span style="color: #569cd6;">flatten</span>) &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">512</span>)</pre>
                     	sub LSTM
                     		Concept:{1..1} OutputType
                     			sub EndSequence
@@ -64,6 +82,7 @@ Concept:{1..1} Laboratory
                     			sub LastCellState
                     				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
+                    	!! <b>GRU</b>(Gated Recurrent Units)<br> GRU layers are a simplified version of LSTMs, combining the input and forget gates into a single update gate. They also have a reset gate to control the influence of the previous hidden state. GRUs are computationally more efficient than LSTMs while still capturing dependencies in sequences effectively, making them a popular choice for similar tasks where LSTMs are used, especially when faster training and inference are needed. In Flogo, GRUs leverage the map-reduce methodology, using the mapping operation to apply GRU units across the data and the reducing operation to combine the outputs efficiently.<br><br><b>Types of Output</b><br>EndSequence, HiddenStates, LastHiddenState<br><br><b>Example</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 5px;"><span style="color: #569cd6;">GRU</span>(bidirectional = <span style="color: #d19a66;">false</span>, numLayers = <span style="color: #b5cea8;">4</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">EndSequence</span>(reduce = <span style="color: #569cd6;">flatten</span>) &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">512</span>)</pre>
                     	sub GRU
                     		Concept:{1..1} OutputType
                     			sub EndSequence
@@ -81,6 +100,7 @@ Concept:{1..1} Laboratory
                                     var integer to=0
                     				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
+                    	!! <b>RNN</b>(Recurrent Neural Networks)<br> Simple RNN layers are the most basic form of recurrent layers, designed to process sequential data by maintaining a hidden state that captures information from previous time steps. They are easier to implement and understand but suffer from the vanishing gradient problem, which limits their ability to learn long-term dependencies. RNNs are suitable for tasks with short sequence dependencies or where computational resources are limited. In Flogo, RNNs follow the map-reduce approach, where the mapping operation processes the data sequentially with RNN units, and the reducing operation consolidates the outputs for further analysis or prediction.<br><br><b>Types of Output</b><br>EndSequence, HiddenStates, LastHiddenState<br><br><b>Example</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 5px;"><span style="color: #569cd6;">RNN</span>(bidirectional = <span style="color: #d19a66;">false</span>, numLayers = <span style="color: #b5cea8;">4</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">EndSequence</span>(reduce = <span style="color: #569cd6;">flatten</span>) &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">512</span>)</pre>
                     	sub RNN
                     		Concept:{1..1} OutputType
                     			sub EndSequence
@@ -98,20 +118,26 @@ Concept:{1..1} Laboratory
                                     var integer to=0
                     				var word:{flatten linear} reduce=flatten
                     				Concept:{1..1} Output > var integer x
+					!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
             		sub BatchNormalization
                     	var double eps = 0.00001
                     	var double momentum = 0.1
+                    !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
 					sub LayerNormalization
 						var double eps=0.00001
+					!! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
                     sub Linear
                     	Concept:{1..1} Output > var integer x
+					!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
                     sub Dropout
             			var double probability=0.8
+            		!! <b>Convolutional</b><br> This layer applies convolution operations to the input data, which is a key operation in many deep learning models, especially in image processing tasks. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code> and <code>OutChannels</code>.
             		sub Convolutional
                 		Concept:{0..1} Output
                 			var integer x
                 			var integer y
                 			var integer z
+                		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                 		Concept:{0..1} Kernel
                 			Concept:{1..1} Size
                 				var integer x
@@ -125,10 +151,12 @@ Concept:{1..1} Laboratory
                 		Concept:{0..1} OutChannels
                 			var integer z
                 	sub Pool
+                		!! <b>MaxPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and taking the maximum value of each region. This helps in reducing the spatial dimensions of the input while retaining the most significant features. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
                         sub MaxPool
                         	Concept:{0..1} Output
                         		var integer x
                         		var integer y
+                        	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                         	Concept:{0..1} Kernel
                         		Concept:{1..1} Size
                         			var integer x
@@ -139,10 +167,12 @@ Concept:{1..1} Laboratory
                         		Concept:{1..1} Padding
                         			var integer x
                         			var integer y
+                       	!! <b>AvgPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and computing the average of each region. This helps in reducing the spatial dimensions of the input and the computational load. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
                         sub AvgPool
                         	Concept:{0..1} Output
                             	var integer x
                         		var integer y
+                        	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                         	Concept:{0..1} Kernel
                         		Concept:{1..1} Size
                         			var integer x
@@ -155,23 +185,29 @@ Concept:{1..1} Laboratory
                         			var integer y
 
 
-
+!! Defines the training approach depending on the problem type. [RegressionStrategy, ClassificationStrategy]
 Concept Strategy is component
+	!! <b>RegressionStrategy</b><br> Defines the approach for training models where the target variable is continuous.
 	sub RegressionStrategy
+	!! <b>ClassificationStrategy</b><br> Defines the approach for training models where the target variable is categorical.
 	sub ClassificationStrategy
 
+!! The algorithm responsible for adjusting the parameters of the neural network through small steps, navigating the search space. [Adagrad, Adadelta, Adamax, AdamW, LBFGS, NAdam, RAdam, RProp, SparseAdam, Adam, AMSGrad, ASGD, RMSProp, CenteredRMSProp, SGD, SGDWithNesterovMomentum]
 Concept Optimizer is component
+	!! <b>Adagrad</b><br> Useful for sparse data and online learning. Adapts the learning rate for each parameter, improving performance on sparse data. (lr=0.001, lrDecay=0, eps=1e-6, weightDecay=1e-10, initialAccumulator=0)
     sub Adagrad
     	var double lr=0.001
 		var double lrDecay=0
 		var double eps=1e-6
 		var double weightDecay=0.00000000001
 		var double initialAccumulator=0
+	!! <b>Adadelta</b><br> Useful for training deep neural networks. Addresses the diminishing learning rate problem of Adagrad. (lr=1.0, rho=0.9, eps=1e-6, weightDecay=0)
 	sub Adadelta
 		var double lr=1.0
 		var double rho=0.9
 		var double eps=0.000001
 		var double weightDecay=0
+	!! <b>Adamax</b><br> Useful for very large parameter spaces. Variant of Adam based on infinity norm. (lr=0.002, Betas(beta0=0.9, beta1=0.999), eps=1e-7, weightDecay=0)
 	sub Adamax
 		var double lr=0.002
 		Concept:{0..1} Betas
@@ -179,6 +215,7 @@ Concept Optimizer is component
 			var double beta1=0.999
 		var double eps=0.00000001
 		var double weightDecay=0
+	!! <b>AdamW</b><br> Useful for improving generalization by decoupling weight decay from the gradient-based optimization step. lr=0.002, Betas(beta0=0.9, beta1=0.999), weightDecay=0.01, amsgrad=false)
 	sub AdamW
 		var double lr=0.001
 		Concept:{0..1} Betas
@@ -186,12 +223,14 @@ Concept Optimizer is component
 			var double beta1=0.999
 		var double weightDecay=0.01
 		var boolean amsgrad=false
+	!! <b>LBFGS</b><br> Useful for training networks with relatively small data, typically in batch mode rather than stochastic mode. (lr=1, maxIter=20, toleranceGrad=1e-7, toleranceChange=1e-8, historySize=100)
 	sub LBFGS
 		var double lr=1
 		var integer maxIter=20
 		var double toleranceGrad=0.0000001
 		var double toleranceChange=0.000000001
 		var integer historySize=100
+	!! <b>NAdam</b><br> Useful for improving convergence speed and performance. Combines Nesterov momentum and Adam. (lr=0.002, Betas(beta0=0.9, beta1=0.999), eps=1e-7, weightDecay=0, momentumDecay=0.004, decoupledWeightDecay=false)
 	sub NAdam
 		var double lr=0.002
 		Concept:{0..1} Betas
@@ -201,6 +240,7 @@ Concept Optimizer is component
 		var double weightDecay=0
 		var double momentumDecay=0.004
 		var boolean decoupledWeightDecay=false
+	!! <b>RAdam</b><br> Useful for very deep networks. Reduces the variance of the adaptive learning rate, making training more stable. (lr=0.001, Betas(beta0=0.9, beta1=0.999), eps=1e-7, weightDecay=0, decoupledWeightDecay=false)
 	sub RAdam
 		var double lr=0.001
 		Concept:{0..1} Betas
@@ -209,6 +249,7 @@ Concept Optimizer is component
 		var double eps=0.00000001
 		var double weightDecay=0
 		var boolean decoupledWeightDecay=false
+	!! <b>RProp</b><br> Useful for shallow networks. Resilient backpropagation and avoids the vanishing gradient problem by adapting the update step. (lr=0.01, Etas(eta0=0.5, eta1=1.2), StepSizes(step0=1e-6, step1=50))
 	sub RProp
 		var double lr=0.01
 		Concept:{0..1} Etas
@@ -217,119 +258,162 @@ Concept Optimizer is component
 		Concept:{0..1} StepSizes
 			var double step0=0.000001
 			var double step1=50
+	!! <b>SparseAdam</b><br> Useful for natural language processing and other sparse datasets. An Adam variant suitable for sparse data. (lr=0.001, Betas(beta0=0.9, beta1=0.999), eps=1e-8)
 	sub SparseAdam
 		var double lr=0.001
 		Concept:{0..1} Betas
 			var double beta0=0.9
 			var double beta1=0.999
 		var double eps=0.00000001
+	!! <b>Adam</b><br> Usefull for large datasets and parameters, it is really efficient. Computes adaptive learning rates for each parameter. (lr=0.0001, beta0=0.9, beta1=0.999, weightDecay=0, eps=1e-8)
     sub Adam
     	var double lr=0.0001
     	var double beta0=0.9
     	var double beta1=0.999
     	var double weightDecay=0
     	var double eps=0.00000001
+    !! <b>AMSGrad</b><br> Useful for more stable convergence. A variant of Adam with better theoretical convergence guarantees. (lr=0.0001, beta0=0.9, beta1=0.999, weightDecay=0, eps=1e-7)
     sub AMSGrad
     	var double lr=0.0001
     	var double beta0=0.9
     	var double beta1=0.999
     	var double weightDecay=0
     	var double eps=0.00000001
+    !! <b>ASGD</b><br> Useful for scenarios where we need robust convergence to a solution, typically in large-scale and noisy datasets. (lr=0.001, lrDecay=1e-5, alpha=0.75, pointToStartAverage=1e-8, weightDecay=1e-8)
     sub ASGD
     	var double lr=0.001
 		var double lrDecay=0.00001
     	var double alpha=0.75
     	var double pointToStartAverage=0.0000001
 		var double weightDecay=0.0000001
+	!! <b>RMSProp</b><br> Usefull for recurrent neural networks. Maintains a moving average of the squared gradient. (lr=0.001, momentum=0, alpha=0.99, eps=1e-10, weightDecay=0)
     sub RMSProp
          var double lr=0.001
          var double momentum=0
          var double alpha=0.99
          var double eps=0.000000001
          var double weightDecay=0
+    !! <b>CenteredRMSProp</b><br> Useful for improving convergence stability. A variant of RMSProp that maintains a moving average of the squared gradients. (lr=0.001, momentum=0, alpha=0.99, eps=1e-9, weightDecay=0)
     sub CenteredRMSProp
          var double lr=0.001
          var double momentum=0
          var double alpha=0.99
          var double eps=0.000000001
          var double weightDecay=0
+    !! <b>SGD</b><br> Useful for general optimization problems and large-scale machine learning tasks. A simple yet effective optimizer. (lr=0.001, momentum=0, momentumDecay=0, weightDecay=0)
     sub SGD
     	var double lr=0.001
     	var double momentum=0
     	var double momentumDecay=0
 		var double weightDecay=0
+	!! <b>SGDWithNesterovMomentum</b><br> Useful for improving training speed and stability. An enhanced version of SGD that provides better convergence by looking ahead at the updated gradient. (lr=0.001, momentum=0, momentumDecay=0, weightDecay=0)
    	sub SGDWithNesterovMomentum
     	var double lr=0.001
     	var double momentum=0
     	var double momentumDecay=0
 		var double weightDecay=0
 
+!! Prevents overfitting by stopping the training process early when some parameter stops improving.
 Concept EarlyStopper
+	!! Prevents overfitting by stopping the training process early when the loss function stops improving.
     sub LossDrivenEarlyStopper
     	var integer patience=5
         var double threshold=0.5
 
+!! Saves the model state at specified points during training to avoid retraining from scratch if performance decreases.
 Concept CheckPointSaver
+	!! Saves the model state at specified points during training to avoid retraining from scratch if performance decreases with maximum politic.
 	sub MaxCheckPointSaver
 
+!! Defines the search space within which the model will try to find a minimum. [HingeEmbeddingLoss, BinaryCrossEntropyLoss, CrossEntropyLoss, MAELoss, MSELoss, HuberLoss, CTCLoss, MarginRankingLoss, KullbackLeiblerDivergenceLoss, TripletMarginLossWithSwap, TripletMarginLoss]
 Concept LossFunction is component
+	!! <b>HingeEmbeddingLoss</b><br> Useful for training embeddings. Measures the loss given an input tensor and a labels tensor containing values (1 or -1). (margin=1)
     sub HingeEmbeddingLoss
     	var double margin = 1
+    !! <b>BinaryCrossEntropyLoss</b><br> Useful for binary classification tasks. Measures the binary cross entropy between the target and the output.
 	sub BinaryCrossEntropyLoss
+	!! <b>CrossEntropyLoss</b><br> Useful for multi-class classification tasks. Measures the cross entropy between the target and the output.
     sub CrossEntropyLoss
+    !! <b>MAELoss</b><br> Useful for regression tasks. Measures the mean absolute error (MAE) between each element in the input and target.
     sub MAELoss
+    !! <b>MSELoss</b><br> Useful for regression tasks. Measures the mean squared error (MSE) between each element in the input and target.
     sub MSELoss
+    !! <b>HuberLoss</b><br> Useful for regression tasks. Combines the best properties of MAE and MSE, less sensitive to outliers.
     sub HuberLoss
+    !! <b>CTCLoss</b><br> Useful for sequence-to-sequence problems, such as speech recognition. Measures the Connectionist Temporal Classification (CTC) loss.
     sub CTCLoss
+    !! <b>MarginRankingLoss</b><br> Useful for ranking tasks. Measures the loss given inputs `x1`, `x2`, and a label tensor `y` with values (1 or -1).
     sub MarginRankingLoss
+    !! <b>KullbackLeiblerDivergenceLoss</b><br> Useful for measuring the difference between two probability distributions. Often used for comparing the predicted distribution with the true distribution.
     sub KullbackLeiblerDivergenceLoss
+    !! <b>TripletMarginLossWithSwap</b><br> Useful for metric learning tasks, such as face recognition. Measures the triplet loss with optional swapping of anchor-negative pairs. (margin=1, normDegree=2, eps=1e-8)
     sub TripletMarginLossWithSwap
     	var double margin = 1
     	var double normDegree = 2
     	var double eps = 0.0000001
+    !! <b>TripletMarginLoss</b><br> Useful for metric learning tasks, such as face recognition. Measures the triplet loss given an input tensor. (margin=1, normDegree=2, eps=1e-8)
     sub TripletMarginLoss
     	var double margin = 1
     	var double normDegree = 2
 		var double eps = 0.0000001
 
-
+!! <b>Architecture</b><br>An architecture defines the overall structure of a neural network model. It specifies how different sections and blocks are organized and connected, forming the blueprint for the network. <br><br><b>Example</b> <pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 10px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 10px;"><span style="color: #569cd6;">Architecture</span> <span style="color: #569cd6;">Net</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">ConvolutionalSection</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Input</span>(<span style="color: #b5cea8;">32, 32, 1</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Block</span> <span style="color: #569cd6;">B1</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Convolutional</span> &gt; <span style="color: #569cd6;">Output</span>(<span style="color: #b5cea8;">28, 28, 10</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">ReLU</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">MaxPool</span> &gt; <span style="color: #569cd6;">Output</span>(<span style="color: #b5cea8;">14, 14</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Block</span> <span style="color: #569cd6;">B2</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Convolutional</span> &gt; <span style="color: #569cd6;">Output</span>(<span style="color: #b5cea8;">10, 10, 16</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">ReLU</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">MaxPool</span> &gt; <span style="color: #569cd6;">Output</span>(<span style="color: #b5cea8;">5, 5</span>)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">FlattenSection</span><br><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">LinearSection</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Block</span> <span style="color: #569cd6;">B1</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Linear</span> &gt; <span style="color: #569cd6;">Output</span>(<span style="color: #b5cea8;">120</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">VLayer</span>(id=<span style="color: #ce9178;">"01"</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Block</span> <span style="color: #569cd6;">B1</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Linear</span> &gt; <span style="color: #569cd6;">Output</span>(<span style="color: #b5cea8;">84</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">VLayer</span>(id=<span style="color: #ce9178;">"01"</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Linear</span> &gt; <span style="color: #569cd6;">Output</span>(<span style="color: #b5cea8;">10</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">Softmax</span></pre>
 Concept:{1..1} Architecture
 	has:CheckFirstSectionWithInput:CheckSectionsWithNoInput Section
 Concept Section is component
 	sub LinkSection
+		!! <b>FlattenSection</b><br>Aimed to transform multi-dimensional tensors into one-dimensional tensors. This is especially useful when transitioning from a convolutional or recurrent section to a linear section, making it ideal for classification or regression tasks.
 		sub FlattenSection
 	sub ProcessingSection
+		!! <b>ConvolutionalSection</b><br>Focused on visual processing tasks where convolutional operations are essential, working with three-dimensional tensors.
 		sub ConvolutionalSection
+			!! <b>Input</b><ul><li><code>x</code>: width</li><li><code>y</code>: height</li><li><code>z</code>: channels</li></ul>
 			Concept:{0..1} Input
 				var integer x
 				var integer y
 				var integer z
+			!! <b>Block</b><br>Blocks are modular units that group common layer patterns in neural networks. They can be configured as residual, allowing sequential processing and residual connections via <code>Shortcut</code>. Shortcuts can be <code>Default</code> (simple convolutional layer) or <code>Custom</code> (detailed layer customization with dimension adjustment). The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>Convolutional</code></li><li><code>AvgPool</code></li><li><code>MaxPool</code></li><li><code>BatchNormalization</code></li><li><code>LayerNormalization</code></li></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul><li><code>VLayer</code></li></ul>
 			Concept:{1..*} Block
 				Facet:CheckCustomDownSampling Residual
                 	var word:{Default Custom} shortcut = Default
             		Concept:{0..1} CustomShortcut
             			Concept:{1..*} Layer
 							sub ActivationLayer
+								!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
 								sub Tanh
+								!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
 								sub Sigmoid
+								!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
 								sub LogSigmoid
+								!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
 								sub ReLU
+								!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
 								sub SELU
+								!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
 								sub GELU
+								!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
 								sub SiLU
+								!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
 								sub GLU
+								!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
 								sub ELU > var integer alpha=1
+            					!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
 								sub LeakyReLU > var integer alpha=1
+								!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
 								sub Mish
+								!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
 								sub Softmax
 							sub ProcessingLayer
+								!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
 								sub Dropout
 									var double probability = 0.8
+								!! <b>Convolutional</b><br> This layer applies convolution operations to the input data, which is a key operation in many deep learning models, especially in image processing tasks. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code> and <code>OutChannels</code>.
                     		    sub Convolutional
                     		    	Concept:{0..1} Output
                     		    		var integer x
                     		    		var integer y
                     		    		var integer z
+                    		    	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                     		    	Concept:{0..1} Kernel
                     		    		Concept:{1..1} Size
                     		    			var integer x
@@ -343,10 +427,12 @@ Concept Section is component
 									Concept:{0..1} OutChannels
 										var integer z
                     		    sub Pool
+                    		    	!! <b>MaxPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and taking the maximum value of each region. This helps in reducing the spatial dimensions of the input while retaining the most significant features. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
                     		    	sub MaxPool
                     		    		Concept:{0..1} Output
                     		    			var integer x
                     		    			var integer y
+                    		    		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                     		    		Concept:{0..1} Kernel
                     		    			Concept:{1..1} Size
                     		    				var integer x
@@ -357,10 +443,12 @@ Concept Section is component
                     		    			Concept:{1..1} Padding
                     		    				var integer x
                     		    				var integer y
+                    		    	!! <b>AvgPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and computing the average of each region. This helps in reducing the spatial dimensions of the input and the computational load. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
                     		    	sub AvgPool
                     		        	Concept:{0..1} Output
                     		            	var integer x
                     		    			var integer y
+                    		    		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                     		    		Concept:{0..1} Kernel
                     		    			Concept:{1..1} Size
                     		    				var integer x
@@ -371,35 +459,53 @@ Concept Section is component
                     		    			Concept:{1..1} Padding
                     		    				var integer x
                     		    				var integer y
+								!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
 								sub BatchNormalization
 									var double eps = 0.00001
 									var double momentum = 0.1
+								!! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
 								sub LayerNormalization
 									var double eps=0.00001
 				Concept:{1..*} Layer
+					!! <b>VLayer</b> (Virtual Layer)<br> Used to parametrize the architectures, they are later replaced by the materializations defined in the experiments.
 					sub VLayer
                     	var string id
 					sub ActivationLayer
+						!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
 						sub Tanh
+						!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
 						sub Sigmoid
+						!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
 						sub LogSigmoid
+						!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
 						sub ReLU
+						!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
 						sub SELU
+						!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
 						sub GELU
+						!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
 						sub SiLU
+						!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
 						sub GLU
+						!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
 						sub ELU > var integer alpha=1
+						!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
 						sub LeakyReLU > var integer alpha=1
+						!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
 						sub Mish
+						!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
 						sub Softmax
 					sub ProcessingLayer
+						!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
 						sub Dropout
 							var double probability = 0.8
+						!! <b>Convolutional</b><br> This layer applies convolution operations to the input data, which is a key operation in many deep learning models, especially in image processing tasks. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code> and <code>OutChannels</code>.
                         sub Convolutional
                         	Concept:{0..1} Output
                         		var integer x
                         		var integer y
                         		var integer z
+                        	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                         	Concept:{0..1} Kernel
                         		Concept:{1..1} Size
                         			var integer x
@@ -413,10 +519,12 @@ Concept Section is component
 							Concept:{0..1} OutChannels
 								var integer z
                         sub Pool
+                        	!! <b>MaxPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and taking the maximum value of each region. This helps in reducing the spatial dimensions of the input while retaining the most significant features. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
                         	sub MaxPool
                         		Concept:{0..1} Output
                         			var integer x
                         			var integer y
+                        		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                         		Concept:{0..1} Kernel
                         			Concept:{1..1} Size
                         				var integer x
@@ -427,10 +535,12 @@ Concept Section is component
                         			Concept:{1..1} Padding
                         				var integer x
                         				var integer y
+							!! <b>AvgPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and computing the average of each region. This helps in reducing the spatial dimensions of the input and the computational load. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
                         	sub AvgPool
                             	Concept:{0..1} Output
                                 	var integer x
                         			var integer y
+                        		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
                         		Concept:{0..1} Kernel
                         			Concept:{1..1} Size
                         				var integer x
@@ -441,74 +551,116 @@ Concept Section is component
                         			Concept:{1..1} Padding
                         				var integer x
                         				var integer y
+                        !! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
 						sub BatchNormalization
 							var double eps = 0.00001
 							var double momentum = 0.1
+						!! !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
 						sub LayerNormalization
 							var double eps=0.00001
+		!! <b>LinearSection</b><br>Used for sequences of layers suitable for standard classification or regression tasks, working with one-dimensional tensors.
 		sub LinearSection
+			!! <b>Input</b><ul><li><code>x</code>: size of the one dimensional tensor</li></ul>
 			Concept:{0..1} Input
             	var integer x
+            !! <b>Block</b><br> Blocks are modular units that group common layer patterns in neural networks. They can be configured as residual, allowing sequential processing and residual connections via <code>Shortcut</code>. Shortcuts can be <code>Default</code> (simple linear layer) or <code>Custom</code> (detailed layer customization with dimension adjustment). The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>Linear</code></li><li><code>Dropout</code></li><li><code>LayerNormalization</code></li><li><code>BatchNormalization</code></li></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul><li><code>VLayer</code></li></ul>
 			Concept:{1..*} Block
 				Facet:CheckCustomDownSampling Residual
             		var word:{Default Custom} shortcut = Default
 					Concept:{0..1} CustomShortcut
 						Concept:{1..*} Layer
             				sub ActivationLayer
+								!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
+								sub Tanh
+								!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
+            					sub Sigmoid
+            					!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
+            					sub LogSigmoid
+            					!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
             					sub ReLU
-                                sub ELU > var integer alpha=1
-                                sub SELU
-                                sub GELU
-                                sub SiLU
-                                sub GLU
-                                sub LeakyReLU > var integer alpha=1
-                                sub LogSigmoid
-                                sub Sigmoid
-                                sub Tanh
-                                sub Mish
-                                sub Softmax
+            					!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
+            					sub SELU
+            					!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
+            					sub GELU
+            					!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
+            					sub SiLU
+            					!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
+            					sub GLU
+            					!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
+            					sub ELU > var integer alpha=1
+            					!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
+            					sub LeakyReLU > var integer alpha=1
+            					!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
+            					sub Mish
+            					!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
+            					sub Softmax
                     		sub ProcessingLayer
+                    			!! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
                     			sub Linear
                     				Concept:{1..1} Output > var integer x
+                    			!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
                     			sub Dropout
                     				var double probability=0.8
+                    			!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
                     			sub BatchNormalization
                     	        	var double eps = 0.00001
                     	        	var double momentum = 0.1
+                    	        !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
                     			sub LayerNormalization
                     				var double eps=0.00001
             	Concept:{1..*} Layer
+            		!! <b>VLayer</b> (Virtual Layer)<br> Used to parametrize the architectures, they are later replaced by the materializations defined in the experiments.
 					sub VLayer
                     	var string id
             		sub ActivationLayer
-            			sub ReLU
-            			sub ELU > var integer alpha=1
-            			sub SELU
-            			sub GELU
-            			sub SiLU
-            			sub GLU
-            			sub LeakyReLU > var integer alpha=1
-            			sub LogSigmoid
+						!! <b>Tanh</b><br>Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
+						sub Tanh
+						!! <b>Sigmoid</b><br>Squashes input values to a range between 0 and 1 using the sigmoid function.
             			sub Sigmoid
-            			sub Tanh
+            			!! <b>LogSigmoid</b><br>Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
+            			sub LogSigmoid
+            			!! <b>ReLU</b><br>Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
+            			sub ReLU
+            			!! <b>SELU</b><br>Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
+            			sub SELU
+            			!! <b>GELU</b><br>Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
+            			sub GELU
+            			!! <b>SiLU</b><br>Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
+            			sub SiLU
+            			!! <b>GLU</b><br>Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
+            			sub GLU
+            			!! <b>ELU</b><br>Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
+            			sub ELU > var integer alpha=1
+            			!! <b>LeakyReLU</b><br>Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
+            			sub LeakyReLU > var integer alpha=1
+            			!! <b>Mish</b><br>Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
             			sub Mish
+            			!! <b>Softmax</b><br>Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
             			sub Softmax
             		sub ProcessingLayer
+            			!! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
             			sub Linear
             				Concept:{1..1} Output > var integer x
+            			!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
             			sub Dropout
             				var double probability=0.8
+            			!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
 						sub BatchNormalization
                         	var double eps = 0.00001
                         	var double momentum = 0.1
+                        !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
 						sub LayerNormalization
 							var double eps=0.00001
+		!! <b>RecurrentSection</b><br>Suitable for tasks with temporal or sequential dependencies, working with both two-dimensional and one-dimensional tensors. The first layer of the first block must be a recurrent layer (LSTM, GRU or RNN).
         sub:CheckFirstLayerIsARecurrentLayerAndIsFirstSection RecurrentSection
+        	!! <b>Input</b><ul><li><code>seqLength</code>: number of elements in the two dimensional tensor.</li><li><code>x</code>: size of each element.</li></ul>
 			Concept:{0..1} Input
             	var integer seqLength
             	var integer x
+            !! Blocks are modular units that group common layer patterns in sections. The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>LSTM</code></li><li><code>GRU</code></li><li><code>RNN</code></li><li><code>Linear</code></li><li><code>Dropout</code></li><li><code>BatchNormalization</code></li><li><code>LayerNormalization</code></li></ul></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul></li><li><code>VLayer</code></li></ul>
 			Concept:{1..*} Block
         		Concept:{1..*} Layer
+        			!! <b>VLayer</b> (Virtual Layer)<br> Used to parametrize the architectures, they are later replaced by the materializations defined in the experiments.
 					sub VLayer
                     	var string id
 					sub ProcessingLayer
@@ -516,6 +668,7 @@ Concept Section is component
 							var integer numLayers = 1
 							var boolean bidirectional = false
 							var double dropout = 0
+                    		!! <b>LSTM</b> (Long Short Term Memory)<br> These layers are designed to handle sequential data by addressing the vanishing gradient problem inherent in traditional RNNs. They use special gating mechanisms—input, forget, and output gates—to control the flow of information and maintain long-term dependencies. This makes them particularly effective for tasks where context over long sequences is crucial, such as time series forecasting, language modeling, and speech recognition. In Flogo, LSTMs are inspired by the map-reduce methodology, where the mapping operation applies LSTM units to process sequential data, and the reducing operation aggregates the outputs to produce meaningful results.<br><br><b>Types of Output</b><br>EndSequence, HiddenStates, LastHiddenState, CellStates, LastCellState<br><br><b>Example</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 5px;"><span style="color: #569cd6;">LSTM</span>(bidirectional = <span style="color: #d19a66;">false</span>, numLayers = <span style="color: #b5cea8;">4</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">EndSequence</span>(reduce = <span style="color: #569cd6;">flatten</span>) &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">512</span>)</pre>
         					sub LSTM
         						Concept:{1..1} OutputType
         							sub EndSequence
@@ -539,6 +692,7 @@ Concept Section is component
         							sub LastCellState
         								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
+                    		!! <b>GRU</b>(Gated Recurrent Units)<br> GRU layers are a simplified version of LSTMs, combining the input and forget gates into a single update gate. They also have a reset gate to control the influence of the previous hidden state. GRUs are computationally more efficient than LSTMs while still capturing dependencies in sequences effectively, making them a popular choice for similar tasks where LSTMs are used, especially when faster training and inference are needed. In Flogo, GRUs leverage the map-reduce methodology, using the mapping operation to apply GRU units across the data and the reducing operation to combine the outputs efficiently.<br><br><b>Types of Output</b><br>EndSequence, HiddenStates, LastHiddenState<br><br><b>Example</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 5px;"><span style="color: #569cd6;">GRU</span>(bidirectional = <span style="color: #d19a66;">false</span>, numLayers = <span style="color: #b5cea8;">4</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">EndSequence</span>(reduce = <span style="color: #569cd6;">flatten</span>) &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">512</span>)</pre>
         					sub GRU
         						Concept:{1..1} OutputType
         							sub EndSequence
@@ -556,6 +710,7 @@ Concept Section is component
                                     	var integer to=0
         								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
+                    		!! <b>RNN</b>(Recurrent Neural Networks)<br> Simple RNN layers are the most basic form of recurrent layers, designed to process sequential data by maintaining a hidden state that captures information from previous time steps. They are easier to implement and understand but suffer from the vanishing gradient problem, which limits their ability to learn long-term dependencies. RNNs are suitable for tasks with short sequence dependencies or where computational resources are limited. In Flogo, RNNs follow the map-reduce approach, where the mapping operation processes the data sequentially with RNN units, and the reducing operation consolidates the outputs for further analysis or prediction.<br><br><b>Types of Output</b><br>EndSequence, HiddenStates, LastHiddenState<br><br><b>Example</b><pre style="background-color: #2d2d2d; color: #d4d4d4; padding: 5px; font-family: 'Courier New', Courier, monospace; white-space: pre; border-radius: 5px;"><span style="color: #569cd6;">RNN</span>(bidirectional = <span style="color: #d19a66;">false</span>, numLayers = <span style="color: #b5cea8;">4</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #569cd6;">EndSequence</span>(reduce = <span style="color: #569cd6;">flatten</span>) &gt; <span style="color: #569cd6;">Output</span>(x = <span style="color: #b5cea8;">512</span>)</pre>
         					sub RNN
         						Concept:{1..1} OutputType
         							sub EndSequence
@@ -571,25 +726,41 @@ Concept Section is component
         							sub LastHiddenState
         								var word:{flatten linear} reduce=flatten
         								Concept:{1..1} Output > var integer x
+        				!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
             	        sub Dropout
             	        	var double probability = 0.8
+            	        !! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
             	        sub BatchNormalization
             	            var double eps = 0.00001
             	            var double momentum = 0.1
+						!! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
             	        sub LayerNormalization
                         	var double eps=0.00001
+                        !! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
                         sub Linear
             				Concept:{1..1} Output > var integer x
             	    sub ActivationLayer
-            	        sub ReLU
-            	        sub ELU > var integer alpha=1
-            	        sub SELU
-            	        sub GELU
-            	        sub SiLU
-            	        sub GLU
-            	        sub LeakyReLU > var integer alpha=1
-            	        sub LogSigmoid
-            	        sub Sigmoid
-            	        sub Tanh
-            	        sub Mish
-						sub Softmax
+						!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
+						sub Tanh
+						!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
+            			sub Sigmoid
+            			!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
+            			sub LogSigmoid
+            			!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
+            			sub ReLU
+            			!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
+            			sub SELU
+            			!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
+            			sub GELU
+            			!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
+            			sub SiLU
+            			!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
+            			sub GLU
+            			!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
+            			sub ELU > var integer alpha=1
+            			!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
+            			sub LeakyReLU > var integer alpha=1
+            			!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
+            			sub Mish
+            			!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
+            			sub Softmax
