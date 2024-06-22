@@ -9,39 +9,34 @@ Laboratory(epochs = 10, name = "CatsAndDogs")
         Split(train = 0.7, test = 0.2, validation = 0.1)
 
     Experiment i626
-        Substitute(id="01") > ReLU
 
-    Experiment z424
-        Substitute(id="01") > Tanh
-        Adamax(lr=0.0001)
 
-    Experiment h536
-        Substitute(id="01") > LogSigmoid
 
 Architecture CatsAndDogsNeuralNetwork
     ConvolutionalSection
         Input(100, 100, 3)
-        Block B1
+        Block
             Convolutional
                 Kernel
                     Size(x = 3, y = 3)
                     Stride(x = 2, y = 2)
                     Padding(x = 0, y = 0)
                 OutChannels(33)
-            VLayer(id="01")
+            ReLU
             MaxPool
                 Kernel
                     Size(x = 5, y = 5)
                     Stride(x = 4, y = 4)
                     Padding(x = 0, y = 0)
-        Block B2
+        Block
             Convolutional
                 Kernel
                     Size(x = 3, y = 3)
                     Stride(x = 3, y = 3)
                     Padding(x = 0, y = 0)
                 OutChannels(16)
-            VLayer(id="01")
+            ReLU
+            BatchNormalization
             MaxPool
                 Kernel
                     Size(x = 3, y = 3)
@@ -51,8 +46,7 @@ Architecture CatsAndDogsNeuralNetwork
     FlattenSection
 
     LinearSection
-        Block B3
+        Block
             Linear > Output(2)
             Softmax
-
 

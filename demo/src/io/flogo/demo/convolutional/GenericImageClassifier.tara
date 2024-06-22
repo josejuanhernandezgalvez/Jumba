@@ -1,26 +1,25 @@
 dsl Flogo
 
-Laboratory(epochs = 10, name = "CatsAndDogs")
+Laboratory(epochs = 10, name = "vgg")
 	Adam
 	MAELoss
 	ClassificationStrategy
-	Dataset(name = "cats and dogs", batchSize = 10)
+	Dataset(name = "cifar", batchSize = 10)
 		Split(train=0.7, test=0.2, validation=0.1)
 
 	Experiment e626
 		Adagrad
 
-
 Architecture VGG16
-	ConvolutionalSection s0
+	ConvolutionalSection
 		Input(x=224,y=224,z=3)
-		Block b0
+		Block
 			Convolutional > Output(x=222, y=222, z=3)
 			ReLU
 			Convolutional > Output(x=220, y=220, z=64)
             ReLU
         	MaxPool > Output(x=112, y=112)
-		Block b1
+		Block
 			Convolutional > Output(x=110, y=110, z=96)
 			ReLU
 			Convolutional > Output(x=108, y=108, z=128)
@@ -28,7 +27,7 @@ Architecture VGG16
             Convolutional > Output(x=108, y=108, z=128)
 			ReLU
         	MaxPool > Output(x=56, y=56)
-        Block b1
+        Block
             Convolutional > Output(x=54, y=54, z=192)
             ReLU
             Convolutional > Output(x=52, y=52, z=256)
@@ -36,7 +35,7 @@ Architecture VGG16
             Convolutional > Output(x=48, y=48, z=256)
             ReLU
         	MaxPool > Output(x=14, y=14)
-        Block b3
+        Block
         	Convolutional > Output(x=14, y=14, z=512)
 			ReLU
 			MaxPool > Output(x=7, y=7)
@@ -53,4 +52,4 @@ Architecture VGG16
 		Block
 			Linear > Output(x=100)
 			ReLU
-			Softmax 
+			Softmax

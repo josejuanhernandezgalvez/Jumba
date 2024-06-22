@@ -3,7 +3,6 @@ dsl Legio
 Artifact("io.flogo", "1.0.0") demo
 	Dsl("Flogo", "1.0.0")
 	Imports > Test("junit", "junit", "4.13")
-	Package(mode = ModulesAndLibrariesLinkedByManifest)
 
 Repository("intino-maven") > Release("https://artifactory.intino.io/artifactory/releases")
 
