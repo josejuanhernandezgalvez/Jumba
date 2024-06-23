@@ -33,7 +33,7 @@ public class VLayerView implements LayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return null;
     }
 

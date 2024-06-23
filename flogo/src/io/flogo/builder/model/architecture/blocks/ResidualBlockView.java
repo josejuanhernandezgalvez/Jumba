@@ -11,14 +11,14 @@ import java.util.List;
 
 public class ResidualBlockView implements BlockView {
     private final List<LayerView> layerViews;
-    public final ShorcutView shortCut;
+    public final ShortcutView shortCut;
 
-    public ResidualBlockView(List<LayerView> layerViews, ShorcutView facetLayerViews) {
+    public ResidualBlockView(List<LayerView> layerViews, ShortcutView facetLayerViews) {
         this.layerViews = layerViews;
         this.shortCut = facetLayerViews;
     }
 
-    public static ResidualBlockView from(List<LayerView> layerViews, ShorcutView facetLayerViews) {
+    public static ResidualBlockView from(List<LayerView> layerViews, ShortcutView facetLayerViews) {
         return new ResidualBlockView(layerViews, facetLayerViews);
     }
 
@@ -32,16 +32,16 @@ public class ResidualBlockView implements BlockView {
         return layerViews;
     }
 
-    public static class ShorcutView {
+    public static class ShortcutView {
         public final List<LayerView> layerViews;
 
-        public ShorcutView(List<LayerView> layerViews) {
+        public ShortcutView(List<LayerView> layerViews) {
             this.layerViews = layerViews;
         }
 
-        public static ShorcutView from(List<LayerView> layerViews, OutputView outputView) {
+        public static ShortcutView from(List<LayerView> layerViews, OutputView outputView) {
             if (!layerViews.getLast().getOutputView().equals(outputView) && !(layerViews.getLast() instanceof VLayerView)) add(layerViews, outputView);
-            return new ShorcutView(layerViews);
+            return new ShortcutView(layerViews);
         }
 
         private static void add(List<LayerView> layerViews, OutputView outputView) {
@@ -52,9 +52,9 @@ public class ResidualBlockView implements BlockView {
             }
         }
 
-        public static ShorcutView from(String type, OutputView inputView, OutputView outputView) {
-            if (type.equals("Default")) return new ShorcutView(defaultConnection(inputView, outputView));
-            if (type.equals("BottleNeck")) return new ShorcutView(bottleneckConnection(inputView, outputView));
+        public static ShortcutView from(String type, OutputView inputView, OutputView outputView) {
+            if (type.equals("Default")) return new ShortcutView(defaultConnection(inputView, outputView));
+            if (type.equals("BottleNeck")) return new ShortcutView(bottleneckConnection(inputView, outputView));
             throw new RuntimeException("Not Residual connection for " + type);
         }
 

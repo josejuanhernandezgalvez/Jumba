@@ -19,7 +19,7 @@ public class SiLULayerView implements ActivationLayerView {
         return new SiLULayerView(outputView);
     }
 
-    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new SiLULayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 
@@ -29,7 +29,7 @@ public class SiLULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new SiLULayerView(previous == null ? this.outputView : previous);
     }
 }

@@ -21,7 +21,7 @@ public class LayerNormalizationLayerView implements ProcessingLayerView {
         return new LayerNormalizationLayerView(previousOutput, eps(layer));
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new LayerNormalizationLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), eps(materializationView.layer));
     }
 
@@ -39,7 +39,7 @@ public class LayerNormalizationLayerView implements ProcessingLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new LayerNormalizationLayerView(previous == null ? this.output: previous, this.eps);
     }
 }

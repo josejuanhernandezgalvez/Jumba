@@ -24,7 +24,7 @@ public class ExperimentArchitecture extends ArchitectureView {
 
     private static List<SectionView> collapesedSectionList(Iterator<SectionView> iterator, List<MaterializationView> substitutes, ArrayList<SectionView> result, CompilationContext context) {
         if (!iterator.hasNext()) return result;
-        result.add(collapseSectionView(iterator.next(), map(substitutes), result.isEmpty() ? null : result.getLast().blocks().getLast().layerViews().getLast()));
+        result.add(collapseSectionView(iterator.next(), map(substitutes), result.isEmpty() ? null : result.getLast().blocks().getLast().layerViews().getLast(), context));
         return collapesedSectionList(iterator, substitutes, result, context);
 
     }
@@ -33,49 +33,49 @@ public class ExperimentArchitecture extends ArchitectureView {
         return substitutes.stream().collect(Collectors.groupingBy(substituteView -> substituteView.id));
     }
 
-    private static SectionView collapseSectionView(SectionView sectionView, Map<String, List<MaterializationView>> substitutes, LayerView previous) {
+    private static SectionView collapseSectionView(SectionView sectionView, Map<String, List<MaterializationView>> substitutes, LayerView previous, CompilationContext context) {
         try {
             sectionInput = sectionView.input();
             return (SectionView) sectionView.getClass().getConstructors()[0].newInstance(
-                    collapsedBlockViewList(sectionView.blocks().iterator(), substitutes, new ArrayList<>(), previous), sectionView.input());
+                    collapsedBlockViewList(sectionView.blocks().iterator(), substitutes, new ArrayList<>(), previous, context), sectionView.input());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static List<BlockView> collapsedBlockViewList(Iterator<BlockView> iterator, Map<String, List<MaterializationView>> substitutes, ArrayList<BlockView> result, LayerView previous) {
+    private static List<BlockView> collapsedBlockViewList(Iterator<BlockView> iterator, Map<String, List<MaterializationView>> substitutes, ArrayList<BlockView> result, LayerView previous, CompilationContext context) {
         if (!iterator.hasNext()) return result;
         BlockView nextBlock = iterator.next();
         result.add(isSimple(nextBlock) ?
-                collapsedSimpleBlockView(nextBlock.layerViews().iterator(), substitutes, new ArrayList<>(), previous) :
-                collapsedResidualBlockView(nextBlock.layerViews().iterator(), ((ResidualBlockView) nextBlock).shortCut, substitutes, new ArrayList<>(), previous));
-        return collapsedBlockViewList(iterator, substitutes, result, result.getLast().layerViews().getLast());
+                collapsedSimpleBlockView(nextBlock.layerViews().iterator(), substitutes, new ArrayList<>(), previous, context) :
+                collapsedResidualBlockView(nextBlock.layerViews().iterator(), ((ResidualBlockView) nextBlock).shortCut, substitutes, new ArrayList<>(), previous, context));
+        return collapsedBlockViewList(iterator, substitutes, result, result.getLast().layerViews().getLast(), context);
     }
 
     private static boolean isSimple(BlockView nextBlock) {
         return !(nextBlock instanceof ResidualBlockView);
     }
 
-    private static BlockView collapsedSimpleBlockView(Iterator<LayerView> iterator, Map<String, List<MaterializationView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
+    private static BlockView collapsedSimpleBlockView(Iterator<LayerView> iterator, Map<String, List<MaterializationView>> substitutes, ArrayList<LayerView> result, LayerView previous, CompilationContext context) {
         if (!iterator.hasNext()) return new SimpleBlockView(result);
-        result.add(collapsedLayerView(iterator.next(), substitutes, previous));
-        return collapsedSimpleBlockView(iterator, substitutes, result, result.getLast());
+        result.add(collapsedLayerView(iterator.next(), substitutes, previous, context));
+        return collapsedSimpleBlockView(iterator, substitutes, result, result.getLast(), context);
     }
 
-    private static BlockView collapsedResidualBlockView(Iterator<LayerView> iterator, ResidualBlockView.ShorcutView residualConnection, Map<String, List<MaterializationView>> substitutes, ArrayList<LayerView> result, LayerView previous) {
+    private static BlockView collapsedResidualBlockView(Iterator<LayerView> iterator, ResidualBlockView.ShortcutView residualConnection, Map<String, List<MaterializationView>> substitutes, ArrayList<LayerView> result, LayerView previous, CompilationContext context) {
         if (!iterator.hasNext()) return new ResidualBlockView(result, residualConnection);
-        result.add(collapsedLayerView(iterator.next(), substitutes, previous));
-        return collapsedResidualBlockView(iterator, residualConnection, substitutes, result, result.getLast());
+        result.add(collapsedLayerView(iterator.next(), substitutes, previous, context));
+        return collapsedResidualBlockView(iterator, residualConnection, substitutes, result, result.getLast(), context);
     }
 
-    private static LayerView collapsedLayerView(LayerView layerView, Map<String, List<MaterializationView>> substitutes, LayerView previous) {
+    private static LayerView collapsedLayerView(LayerView layerView, Map<String, List<MaterializationView>> substitutes, LayerView previous, CompilationContext context) {
         try {
             if (layerView instanceof VLayerView vLayerView) {
                 return (LayerView) Class.forName(viewClassName(substitutes.get(vLayerView.id).getFirst()))
-                        .getMethod("createFromMaterialization", LayerView.class, MaterializationView.class)
-                        .invoke(null, previous == null ? vLayerView : previous, substitutes.get(vLayerView.id).getFirst());
+                        .getMethod("createFromMaterialization", LayerView.class, MaterializationView.class, CompilationContext.class)
+                        .invoke(null, previous == null ? vLayerView : previous, substitutes.get(vLayerView.id).getFirst(), context);
             }
-            return layerView.from(previous != null ? previous.getOutputView() : sectionInput);
+            return layerView.from(previous != null ? previous.getOutputView() : sectionInput, context);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

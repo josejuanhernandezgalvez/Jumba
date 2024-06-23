@@ -33,7 +33,7 @@ public class GRULayerView extends RecurrentLayerView {
         }
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         try {
             return new GRULayerView(previousOutputView(previous),
                     operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),
@@ -61,7 +61,7 @@ public class GRULayerView extends RecurrentLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new GRULayerView(previous, thisLayerOutput, hiddenSize, numLayers, outputType, bidirectional, dropout, reduce);
     }
 }

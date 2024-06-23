@@ -32,12 +32,12 @@ public final class LinearLayerView implements ProcessingLayerView {
         }
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new LinearLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), new OneDimensionOutputView(((Laboratory.Experiment.Materialization.Linear) materializationView.layer).output().x()));
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new LinearLayerView(previous == null ? previousLayerOutput: previous, thisLayerOutput);
     }
 

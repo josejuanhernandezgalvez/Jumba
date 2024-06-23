@@ -27,7 +27,7 @@ public class AvgPoolLayerView extends PoolLayerView {
         super(kernel, previousLayerOutput);
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return ((Laboratory.Experiment.Materialization.AvgPool) materializationView.layer).output() == null ?
                 new AvgPoolLayerView(kernel((Laboratory.Experiment.Materialization.AvgPool) materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView()) :
                 new AvgPoolLayerView(
@@ -52,7 +52,10 @@ public class AvgPoolLayerView extends PoolLayerView {
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         if (hasNotOutput(layer))
             return new AvgPoolLayerView(kernel((AvgPool) layer), previousOutput);
-        return new AvgPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
+        AvgPoolLayerView avgPoolLayerView = new AvgPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
+        if (!thisOutput(layer, previousOutput).equals(avgPoolLayerView.getOutputView()))
+            System.out.println(layer.getClass().getSimpleName() + " output has been modified from " + thisOutput(layer, previousOutput) + " to " + avgPoolLayerView.getOutputView()); // TODO log it don't sout it
+        return avgPoolLayerView;
     }
 
     private static PoolTwoDimensionsKernel kernel(AvgPool layer) {
@@ -69,7 +72,7 @@ public class AvgPoolLayerView extends PoolLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return thisLayerOutput instanceof UndeterminedOutputView ?
                 new AvgPoolLayerView(this.kernel, previous) :
                 kernel instanceof UndeterminedKernel ?

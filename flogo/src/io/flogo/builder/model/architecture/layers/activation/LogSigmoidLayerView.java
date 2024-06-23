@@ -19,17 +19,17 @@ public class LogSigmoidLayerView implements ActivationLayerView {
         return new LogSigmoidLayerView(outputView);
     }
 
-    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new LogSigmoidLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
-    }
-
-    @Override
-    public LayerView from(OutputView previous) {
-        return new LogSigmoidLayerView(previous == null ? this.outputView : previous);
     }
 
     @Override
     public OutputView getOutputView() {
         return outputView;
+    }
+
+    @Override
+    public LayerView from(OutputView previous, CompilationContext context) {
+        return new LogSigmoidLayerView(previous == null ? this.outputView : previous);
     }
 }

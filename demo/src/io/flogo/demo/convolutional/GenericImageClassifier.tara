@@ -18,7 +18,7 @@ Architecture VGG16
 			ReLU
 			Convolutional > Output(x=220, y=220, z=64)
             ReLU
-        	MaxPool > Output(x=112, y=112)
+        	MaxPool > Output(x=120, y=120)
 		Block
 			Convolutional > Output(x=110, y=110, z=96)
 			ReLU

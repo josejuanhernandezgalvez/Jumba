@@ -33,7 +33,7 @@ public class LSTMLayerView extends RecurrentLayerView {
         }
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         try {
             return new LSTMLayerView(previousOutputView(previous),
                     operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),
@@ -60,7 +60,7 @@ public class LSTMLayerView extends RecurrentLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new LSTMLayerView(previous == null ? previousLayerOutput : previous,
                 thisLayerOutput,
                 hiddenSize,

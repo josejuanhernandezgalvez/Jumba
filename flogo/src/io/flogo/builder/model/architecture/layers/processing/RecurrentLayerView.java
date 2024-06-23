@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.output.OneDimensionOutputView;
@@ -103,6 +104,8 @@ public abstract class RecurrentLayerView implements LayerView {
             throw new RuntimeException(e);
         }
     }
+
+    public abstract LayerView from(OutputView previous, CompilationContext context);
 
     public enum OutputType {
         EndSequence, CellStates, HiddenStates, LastHiddenState, LastCellState

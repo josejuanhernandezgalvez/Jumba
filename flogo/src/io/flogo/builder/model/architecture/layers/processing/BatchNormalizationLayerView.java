@@ -23,7 +23,7 @@ public class BatchNormalizationLayerView implements ProcessingLayerView {
         return new BatchNormalizationLayerView(previousOutput, momentum(layer), eps(layer));
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new BatchNormalizationLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), momentum(materializationView.layer), eps(materializationView.layer));
     }
 
@@ -49,7 +49,7 @@ public class BatchNormalizationLayerView implements ProcessingLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new BatchNormalizationLayerView(previous == null ? this.output: previous, this.momentum, this.eps);
     }
 }

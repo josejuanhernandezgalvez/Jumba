@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.link;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.LinkLayerView;
@@ -21,7 +22,7 @@ public class FlattenLayerView implements LinkLayerView {
         this.thisLayerOutput = thisLayerOutput;
     }
 
-    public static  OneDimensionOutputView toOneDimension(OutputView previousLayerOutput) {
+    public static OneDimensionOutputView toOneDimension(OutputView previousLayerOutput) {
         return new OneDimensionOutputView(
                 Arrays.stream(previousLayerOutput.getClass().getDeclaredFields())
                         .map(field -> getValue(field, previousLayerOutput))
@@ -43,7 +44,7 @@ public class FlattenLayerView implements LinkLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new FlattenLayerView(previous, toOneDimension(previous));
     }
 }

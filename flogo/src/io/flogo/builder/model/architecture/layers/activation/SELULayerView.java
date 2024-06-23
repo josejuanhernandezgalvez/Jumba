@@ -19,7 +19,7 @@ public class SELULayerView implements ActivationLayerView {
         return new SELULayerView(outputView);
     }
 
-    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new SELULayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 
@@ -29,7 +29,7 @@ public class SELULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new SELULayerView(previous == null ? this.outputView : previous);
     }
 }

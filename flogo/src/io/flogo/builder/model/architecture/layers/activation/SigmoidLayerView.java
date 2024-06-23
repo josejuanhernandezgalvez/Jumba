@@ -19,7 +19,7 @@ public class SigmoidLayerView implements ActivationLayerView {
         return new SigmoidLayerView(outputView);
     }
 
-    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new SigmoidLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 
@@ -29,7 +29,7 @@ public class SigmoidLayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new SigmoidLayerView(previous == null ? this.outputView : previous);
     }
 }

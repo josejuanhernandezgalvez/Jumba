@@ -1,5 +1,5 @@
 def.file
-$PROJECT_DIRECTORY/demo/src/io/flogo/demo/convolutional/MNIST.tara#true
+$PROJECT_DIRECTORY/demo/src/io/flogo/demo/convolutional/GenericImageClassifier.tara#true
 
 project
 flogo-dsl

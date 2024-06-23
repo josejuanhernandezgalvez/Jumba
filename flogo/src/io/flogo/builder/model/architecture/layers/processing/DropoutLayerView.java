@@ -21,7 +21,7 @@ public final class DropoutLayerView implements ProcessingLayerView {
         return new DropoutLayerView(previousOutput, probability(layer));
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new DropoutLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), probability(materializationView.layer));
     }
 
@@ -39,7 +39,7 @@ public final class DropoutLayerView implements ProcessingLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new DropoutLayerView(previous == null ? this.output: previous, this.probability);
     }
 }

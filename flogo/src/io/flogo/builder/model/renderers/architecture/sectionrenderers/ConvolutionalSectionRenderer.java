@@ -5,7 +5,7 @@ import io.flogo.builder.model.architecture.BlockView;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.blocks.ResidualBlockView;
-import io.flogo.builder.model.architecture.blocks.ResidualBlockView.ShorcutView;
+import io.flogo.builder.model.architecture.blocks.ResidualBlockView.ShortcutView;
 import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
 import io.flogo.builder.model.architecture.sections.processing.ConvolutionalSectionView;
 import io.flogo.builder.model.renderers.architecture.SectionRenderer;
@@ -58,9 +58,9 @@ public class ConvolutionalSectionRenderer extends SectionRenderer<ConvolutionalS
             return ResidualBlockView.from(layerViewList, residualConnectionView(layerViewList, block, input, context));
         }
 
-        private ShorcutView residualConnectionView(List<LayerView> layerViewList, ConvolutionalSection.Block block, OutputView inputView, CompilationContext context) {
-            if (!block.asResidual().shortcut().toString().equals("Custom")) return ShorcutView.from(block.asResidual().shortcut().toString(), inputView, layerViewList.getLast().getOutputView());
-            return ShorcutView.from(customDownSamplingLayerList((block.asResidual().customShortcut().layerList()).iterator(), inputView, new ArrayList<>(), context), layerViewList.getLast().getOutputView());
+        private ShortcutView residualConnectionView(List<LayerView> layerViewList, ConvolutionalSection.Block block, OutputView inputView, CompilationContext context) {
+            if (!block.asResidual().shortcut().toString().equals("Custom")) return ShortcutView.from(block.asResidual().shortcut().toString(), inputView, layerViewList.getLast().getOutputView());
+            return ShortcutView.from(customDownSamplingLayerList((block.asResidual().customShortcut().layerList()).iterator(), inputView, new ArrayList<>(), context), layerViewList.getLast().getOutputView());
         }
 
         private List<LayerView> customDownSamplingLayerList(Iterator<ConvolutionalSection.Block.Residual.CustomShortcut.Layer> layersIterator, OutputView input, List<LayerView> layerViews, CompilationContext context) {

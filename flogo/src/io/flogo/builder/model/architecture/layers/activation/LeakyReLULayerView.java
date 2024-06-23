@@ -23,7 +23,7 @@ public final class LeakyReLULayerView implements ActivationLayerView {
         return new LeakyReLULayerView(getAlphaFrom(layer), outputView);
     }
 
-    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return new LeakyReLULayerView(getAlphaFrom(materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 
@@ -38,12 +38,12 @@ public final class LeakyReLULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
-        return new LeakyReLULayerView(this.alpha, previous == null ? this.outputView : previous);
+    public OutputView getOutputView() {
+        return outputView;
     }
 
     @Override
-    public OutputView getOutputView() {
-        return outputView;
+    public LayerView from(OutputView previous, CompilationContext context) {
+        return new LeakyReLULayerView(this.alpha, previous == null ? this.outputView : previous);
     }
 }

@@ -30,10 +30,13 @@ public class MaxPoolLayerView extends PoolLayerView {
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         if (hasNotOutput(layer))
             return new MaxPoolLayerView(kernel((MaxPool) layer), previousOutput);
-        return new MaxPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
+        MaxPoolLayerView maxPoolLayerView = new MaxPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
+        if (!thisOutput(layer, previousOutput).equals(maxPoolLayerView.getOutputView()))
+            System.out.println(layer.getClass().getSimpleName() + " output has been modified from " + thisOutput(layer, previousOutput) + " to " + maxPoolLayerView.getOutputView()); // TODO log it don't sout it
+        return maxPoolLayerView;
     }
 
-    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView, CompilationContext context) {
         return ((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer).output() == null ?
                 new MaxPoolLayerView(kernel((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView()) :
                 new MaxPoolLayerView(
@@ -69,7 +72,7 @@ public class MaxPoolLayerView extends PoolLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return thisLayerOutput instanceof UndeterminedOutputView ?
                 new MaxPoolLayerView(this.kernel, previous) :
                 kernel instanceof UndeterminedKernel ?

@@ -24,7 +24,7 @@ public final class ELULayerView implements ActivationLayerView {
         return new ELULayerView(getAlphaFrom(layer), outputView);
     }
 
-    public static ActivationLayerView createFromMaterialization(OutputView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(OutputView previous, MaterializationView materializationView, CompilationContext context) {
         return new ELULayerView(getAlphaFrom(materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous);
     }
 
@@ -44,7 +44,7 @@ public final class ELULayerView implements ActivationLayerView {
     }
 
     @Override
-    public LayerView from(OutputView previous) {
+    public LayerView from(OutputView previous, CompilationContext context) {
         return new ELULayerView(this.alpha, previous == null ? this.outputView : previous);
     }
 
