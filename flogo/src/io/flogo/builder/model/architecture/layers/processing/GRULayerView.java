@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
@@ -16,7 +17,7 @@ public class GRULayerView extends RecurrentLayerView {
         super(previousLayerOutput, thisLayerOutput, hiddenSize, numLayers, outputType, bidirectional, dropout, reduce);
     }
 
-    public static GRULayerView from(Layer layer, OutputView previousOutputView) {
+    public static GRULayerView from(Layer layer, OutputView previousOutputView, CompilationContext context) {
         RecurrentSection.Block.GRU gru = (RecurrentSection.Block.GRU) layer;
         try {
             return new GRULayerView(previousOutputView,
@@ -32,7 +33,7 @@ public class GRULayerView extends RecurrentLayerView {
         }
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         try {
             return new GRULayerView(previousOutputView(previous),
                     operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),

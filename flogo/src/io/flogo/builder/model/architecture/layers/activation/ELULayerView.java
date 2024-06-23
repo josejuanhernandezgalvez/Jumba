@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.activation;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
@@ -19,11 +20,11 @@ public final class ELULayerView implements ActivationLayerView {
         this.outputView = outputView;
     }
 
-    public static ActivationLayerView from(Layer layer, OutputView outputView) {
+    public static ActivationLayerView from(Layer layer, OutputView outputView, CompilationContext context) {
         return new ELULayerView(getAlphaFrom(layer), outputView);
     }
 
-    public static ActivationLayerView createFromSubstitute(OutputView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(OutputView previous, MaterializationView materializationView) {
         return new ELULayerView(getAlphaFrom(materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous);
     }
 

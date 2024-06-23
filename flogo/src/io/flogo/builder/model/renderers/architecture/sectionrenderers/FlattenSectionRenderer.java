@@ -1,5 +1,6 @@
 package io.flogo.builder.model.renderers.architecture.sectionrenderers;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
 import io.flogo.builder.model.architecture.layers.link.FlattenLayerView;
@@ -15,7 +16,7 @@ import static io.flogo.builder.model.architecture.layers.link.FlattenLayerView.t
 public class FlattenSectionRenderer extends SectionRenderer<FlattenSectionView> {
 
     @Override
-    public FlattenSectionView render(Section section, OutputView previousLayerOutput) {
+    public FlattenSectionView render(Section section, OutputView previousLayerOutput, CompilationContext context) {
         return new FlattenSectionView(
                 List.of(new SimpleBlockView(List.of(
                         isDetermined(previousLayerOutput) ?

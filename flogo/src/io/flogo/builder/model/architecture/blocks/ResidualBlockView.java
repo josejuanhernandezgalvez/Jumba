@@ -18,7 +18,6 @@ public class ResidualBlockView implements BlockView {
         this.shortCut = facetLayerViews;
     }
 
-
     public static ResidualBlockView from(List<LayerView> layerViews, ShorcutView facetLayerViews) {
         return new ResidualBlockView(layerViews, facetLayerViews);
     }

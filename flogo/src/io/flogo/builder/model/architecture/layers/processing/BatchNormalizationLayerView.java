@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
@@ -18,17 +19,12 @@ public class BatchNormalizationLayerView implements ProcessingLayerView {
         this.eps = eps;
     }
 
-    public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
+    public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         return new BatchNormalizationLayerView(previousOutput, momentum(layer), eps(layer));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         return new BatchNormalizationLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), momentum(materializationView.layer), eps(materializationView.layer));
-    }
-
-    @Override
-    public LayerView from(OutputView previous) {
-        return new BatchNormalizationLayerView(previous == null ? this.output: previous, this.momentum, this.eps);
     }
 
     private static double momentum(Layer layer) {
@@ -50,5 +46,10 @@ public class BatchNormalizationLayerView implements ProcessingLayerView {
     @Override
     public OutputView getOutputView() {
         return output;
+    }
+
+    @Override
+    public LayerView from(OutputView previous) {
+        return new BatchNormalizationLayerView(previous == null ? this.output: previous, this.momentum, this.eps);
     }
 }

@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
@@ -42,26 +43,13 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
         this.outChannels = outChannels;
     }
 
-    @Override
-    public OutputView getOutputView() {
-        if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
-        return kernel instanceof UndeterminedKernel ? thisLayerOutput : ((ConvolutionTwoDimensionsKernel) kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput, this.outChannels);
-    }
-
-    @Override
-    public LayerView from(OutputView previous) {
-        return this.kernel instanceof UndeterminedKernel ?
-                new ConvolutionalLayerView(previous, thisLayerOutput) :
-                new ConvolutionalLayerView((ConvolutionTwoDimensionsKernel) this.kernel, previous, outChannels);
-    }
-
-    public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
+    public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         if (hasNotOutput(layer))
             return new ConvolutionalLayerView(kernel((Convolutional) layer), previousOutput, ((Convolutional) layer).outChannels().z());
         return new ConvolutionalLayerView(previousOutput, thisOutput(layer));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, MaterializationView MaterializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView MaterializationView) {
         return ((Laboratory.Experiment.Materialization.Convolutional) MaterializationView.layer).output() == null ?
                 new ConvolutionalLayerView(
                         kernel(MaterializationView.layer),
@@ -101,5 +89,18 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public OutputView getOutputView() {
+        if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
+        return kernel instanceof UndeterminedKernel ? new UndeterminedOutputView() : ((ConvolutionTwoDimensionsKernel) kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput, this.outChannels);
+    }
+
+    @Override
+    public LayerView from(OutputView previous) {
+        return this.kernel instanceof UndeterminedKernel ?
+                new ConvolutionalLayerView(previous, thisLayerOutput) :
+                new ConvolutionalLayerView((ConvolutionTwoDimensionsKernel) this.kernel, previous, outChannels);
     }
 }

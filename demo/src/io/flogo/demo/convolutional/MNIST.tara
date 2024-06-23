@@ -8,24 +8,27 @@ Laboratory(epochs = 10, name = "DigitsClassifier")
 		Split(train=0.7, test=0.2, validation=0.1)
 
 	Experiment e626
+		Materialization("activation") > GELU
 
 	Experiment e763
 		MSELoss
+		Materialization("activation") > Sigmoid
 
-	Experiment e626
+	Experiment e628
 		Adagrad
 		MSELoss
+		Materialization("activation") > LogSigmoid
 
 Architecture convolutional
 	ConvolutionalSection
 		Input(28, 28, 1)
 		Block
 			Convolutional > Output(26, 26, 10)
-			ReLU
+			VLayer("activation")
 			MaxPool > Output(14, 14)
 		Block
 			Convolutional > Output(10, 10, 16)
-			ReLU
+			VLayer("activation")
 			MaxPool > Output(5, 5)
 
 	FlattenSection
@@ -33,7 +36,10 @@ Architecture convolutional
 	LinearSection
 		Block
 			Linear > Output(120)
-			ReLU
+			VLayer("activation")
+		Block
 			Linear > Output(84)
-			ReLU
+			VLayer("activation")
+		Block
 			Linear > Output(10)
+			Softmax

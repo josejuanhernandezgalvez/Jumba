@@ -16,12 +16,11 @@ Architecture CatsAndDogsNeuralNetwork
     ConvolutionalSection
         Input(100, 100, 3)
         Block
-            Convolutional
+            Convolutional > OutChannels(33)
                 Kernel
                     Size(x = 3, y = 3)
                     Stride(x = 2, y = 2)
                     Padding(x = 0, y = 0)
-                OutChannels(33)
             ReLU
             MaxPool
                 Kernel
@@ -29,12 +28,11 @@ Architecture CatsAndDogsNeuralNetwork
                     Stride(x = 4, y = 4)
                     Padding(x = 0, y = 0)
         Block
-            Convolutional
+            Convolutional > OutChannels(16)
                 Kernel
                     Size(x = 3, y = 3)
                     Stride(x = 3, y = 3)
                     Padding(x = 0, y = 0)
-                OutChannels(16)
             ReLU
             BatchNormalization
             MaxPool

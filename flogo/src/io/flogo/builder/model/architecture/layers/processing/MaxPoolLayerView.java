@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
@@ -26,36 +27,13 @@ public class MaxPoolLayerView extends PoolLayerView {
         super(kernel, previousLayerOutput);
     }
 
-    @Override
-    public OutputView getOutputView() {
-        if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
-        return thisLayerOutput.getClass().equals(ThreeDimensionsOutputView.class) ? ((PoolTwoDimensionsKernel) this.kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput) : new UndeterminedOutputView();
-    }
-
-    @Override
-    public LayerView from(OutputView previous) {
-        return thisLayerOutput instanceof UndeterminedOutputView ?
-                new MaxPoolLayerView(this.kernel, previous) :
-                kernel instanceof UndeterminedKernel ?
-                        new MaxPoolLayerView(
-                                new ThreeDimensionsOutputView(
-                                        getValue(previous, "x"),
-                                        getValue(previous, "y"),
-                                        getValue(previous, "z")),
-                                new ThreeDimensionsOutputView(
-                                        getValue(thisLayerOutput, "x"),
-                                        getValue(thisLayerOutput, "y"),
-                                        getValue(previous, "z"))) :
-                        new MaxPoolLayerView(this.kernel, previous);
-    }
-
-    public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
+    public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         if (hasNotOutput(layer))
             return new MaxPoolLayerView(kernel((MaxPool) layer), previousOutput);
         return new MaxPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         return ((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer).output() == null ?
                 new MaxPoolLayerView(kernel((Laboratory.Experiment.Materialization.MaxPool) materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView()) :
                 new MaxPoolLayerView(
@@ -82,5 +60,28 @@ public class MaxPoolLayerView extends PoolLayerView {
                 new TwoDimensionsSize(layer.kernel().size().x(), layer.kernel().size().y()),
                 new TwoDimensionsStride(layer.kernel().stride().x(), layer.kernel().stride().y()),
                 new TwoDimensionsPadding(layer.kernel().padding().x(), layer.kernel().padding().y()));
+    }
+
+    @Override
+    public OutputView getOutputView() {
+        if (thisLayerOutput instanceof UndeterminedOutputView) return thisLayerOutput;
+        return thisLayerOutput.getClass().equals(ThreeDimensionsOutputView.class) ? ((PoolTwoDimensionsKernel) this.kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput) : new UndeterminedOutputView();
+    }
+
+    @Override
+    public LayerView from(OutputView previous) {
+        return thisLayerOutput instanceof UndeterminedOutputView ?
+                new MaxPoolLayerView(this.kernel, previous) :
+                kernel instanceof UndeterminedKernel ?
+                        new MaxPoolLayerView(
+                                new ThreeDimensionsOutputView(
+                                        getValue(previous, "x"),
+                                        getValue(previous, "y"),
+                                        getValue(previous, "z")),
+                                new ThreeDimensionsOutputView(
+                                        getValue(thisLayerOutput, "x"),
+                                        getValue(thisLayerOutput, "y"),
+                                        getValue(previous, "z"))) :
+                        new MaxPoolLayerView(this.kernel, previous);
     }
 }

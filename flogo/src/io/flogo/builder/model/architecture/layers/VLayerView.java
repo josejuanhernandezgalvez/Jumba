@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.output.UndeterminedOutputView;
@@ -22,6 +23,10 @@ public class VLayerView implements LayerView {
         this.thisLayerOutput = vLayerView.thisLayerOutput;
     }
 
+    public static VLayerView from(Layer layer, OutputView outputView, CompilationContext context) {
+        return new VLayerView(id(layer), outputView, new UndeterminedOutputView());
+    }
+
     @Override
     public OutputView getOutputView() {
         return thisLayerOutput;
@@ -30,10 +35,6 @@ public class VLayerView implements LayerView {
     @Override
     public LayerView from(OutputView previous) {
         return null;
-    }
-
-    public static VLayerView from(Layer layer, OutputView outputView) {
-        return new VLayerView(id(layer), outputView, new UndeterminedOutputView());
     }
 
     private static String id(Layer layer) {

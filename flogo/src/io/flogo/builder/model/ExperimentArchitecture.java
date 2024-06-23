@@ -1,5 +1,6 @@
 package io.flogo.builder.model;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.*;
 import io.flogo.builder.model.architecture.blocks.ResidualBlockView;
 import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
@@ -10,20 +11,21 @@ import io.intino.magritte.framework.Layer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.flogo.builder.model.renderers.architecture.SectionRenderer.LayerRenderer.ActivationLayersViewPackage;
-import static io.flogo.builder.model.renderers.architecture.SectionRenderer.LayerRenderer.ProcessingLayersViewPackage;
+import static io.flogo.builder.model.renderers.architecture.LayerRenderer.ActivationLayersViewPackage;
+import static io.flogo.builder.model.renderers.architecture.LayerRenderer.ProcessingLayersViewPackage;
+
 
 public class ExperimentArchitecture extends ArchitectureView {
     static OutputView sectionInput;
 
-    public ExperimentArchitecture(ArchitectureView architectureView, List<MaterializationView> substitutes, String name) {
-        super(collapesedSectionList(architectureView.sections().iterator(), substitutes, new ArrayList<>()), name);
+    public ExperimentArchitecture(ArchitectureView architectureView, List<MaterializationView> substitutes, String name, CompilationContext context) {
+        super(collapesedSectionList(architectureView.sections().iterator(), substitutes, new ArrayList<>(), context), name);
     }
 
-    private static List<SectionView> collapesedSectionList(Iterator<SectionView> iterator, List<MaterializationView> substitutes, ArrayList<SectionView> result) {
+    private static List<SectionView> collapesedSectionList(Iterator<SectionView> iterator, List<MaterializationView> substitutes, ArrayList<SectionView> result, CompilationContext context) {
         if (!iterator.hasNext()) return result;
         result.add(collapseSectionView(iterator.next(), map(substitutes), result.isEmpty() ? null : result.getLast().blocks().getLast().layerViews().getLast()));
-        return collapesedSectionList(iterator, substitutes, result);
+        return collapesedSectionList(iterator, substitutes, result, context);
 
     }
 
@@ -70,7 +72,7 @@ public class ExperimentArchitecture extends ArchitectureView {
         try {
             if (layerView instanceof VLayerView vLayerView) {
                 return (LayerView) Class.forName(viewClassName(substitutes.get(vLayerView.id).getFirst()))
-                        .getMethod("createFromSubstitute", LayerView.class, MaterializationView.class)
+                        .getMethod("createFromMaterialization", LayerView.class, MaterializationView.class)
                         .invoke(null, previous == null ? vLayerView : previous, substitutes.get(vLayerView.id).getFirst());
             }
             return layerView.from(previous != null ? previous.getOutputView() : sectionInput);
@@ -116,8 +118,8 @@ public class ExperimentArchitecture extends ArchitectureView {
             return this;
         }
 
-        public ArchitectureView collapse() {
-            return new ExperimentArchitecture(this.architectureView, this.substitutes, this.name);
+        public ArchitectureView collapse(CompilationContext context) {
+            return new ExperimentArchitecture(this.architectureView, this.substitutes, this.name, context);
         }
     }
 }

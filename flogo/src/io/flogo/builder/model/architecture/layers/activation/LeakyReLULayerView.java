@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.activation;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
@@ -18,12 +19,11 @@ public final class LeakyReLULayerView implements ActivationLayerView {
         this.outputView = outputView;
     }
 
-    @Override
-    public LayerView from(OutputView previous) {
-        return new LeakyReLULayerView(this.alpha, previous == null ? this.outputView : previous);
+    public static ActivationLayerView from(Layer layer, OutputView outputView, CompilationContext context) {
+        return new LeakyReLULayerView(getAlphaFrom(layer), outputView);
     }
 
-    public static ActivationLayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         return new LeakyReLULayerView(getAlphaFrom(materializationView.layer), previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 
@@ -38,11 +38,12 @@ public final class LeakyReLULayerView implements ActivationLayerView {
     }
 
     @Override
-    public OutputView getOutputView() {
-        return outputView;
+    public LayerView from(OutputView previous) {
+        return new LeakyReLULayerView(this.alpha, previous == null ? this.outputView : previous);
     }
 
-    public static ActivationLayerView from(Layer layer, OutputView outputView) {
-        return new LeakyReLULayerView(getAlphaFrom(layer), outputView);
+    @Override
+    public OutputView getOutputView() {
+        return outputView;
     }
 }

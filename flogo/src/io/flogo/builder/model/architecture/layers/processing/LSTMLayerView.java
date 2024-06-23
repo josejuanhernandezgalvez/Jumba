@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.VLayerView;
@@ -16,7 +17,7 @@ public class LSTMLayerView extends RecurrentLayerView {
         super(previousLayerOutput, thisLayerOutput, hiddenSize, numLayers, outputType, bidirectional, dropout, reduce);
     }
 
-    public static LSTMLayerView from(Layer layer, OutputView previousOutputView) {
+    public static LSTMLayerView from(Layer layer, OutputView previousOutputView, CompilationContext context) {
         RecurrentSection.Block.LSTM lstm = (RecurrentSection.Block.LSTM) layer;
         try {
             return new LSTMLayerView(previousOutputView,
@@ -32,7 +33,7 @@ public class LSTMLayerView extends RecurrentLayerView {
         }
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         try {
             return new LSTMLayerView(previousOutputView(previous),
                     operations(materializationView.layer, previousOutputView(previous)).getLast().getOutputView(),

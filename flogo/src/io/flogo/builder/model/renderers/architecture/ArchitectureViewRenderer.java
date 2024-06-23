@@ -1,5 +1,6 @@
 package io.flogo.builder.model.renderers.architecture;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.Renderer;
 import io.flogo.builder.model.architecture.ArchitectureView;
 import io.flogo.builder.model.architecture.OutputView;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class ArchitectureViewRenderer implements Renderer<Architecture, ArchitectureView> {
     private final InputRenderer inputRenderer;
     private final SectionRenderer<SectionView> sectionRenderer;
+    private final CompilationContext context;
 
-    public ArchitectureViewRenderer() {
+    public ArchitectureViewRenderer(CompilationContext context) {
         this.inputRenderer = new InputRenderer();
         this.sectionRenderer = new SectionRenderer.SectionOrchestratorRenderer();
+        this.context = context;
     }
 
     public ArchitectureView render(Architecture architecture) {
@@ -29,7 +32,7 @@ public class ArchitectureViewRenderer implements Renderer<Architecture, Architec
 
     private List<SectionView> render(Iterator<Section> iterator, OutputView input, List<SectionView> sectionViews) {
         if (!iterator.hasNext()) return sectionViews;
-        sectionViews.add(sectionRenderer.render(iterator.next(), input));
+        sectionViews.add(sectionRenderer.render(iterator.next(), input, context));
         return render(iterator, sectionViews.getLast().output(), sectionViews);
     }
 

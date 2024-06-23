@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.activation;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ActivationLayerView;
@@ -14,11 +15,11 @@ public class TanhLayerView implements ActivationLayerView {
         this.outputView = outputView;
     }
 
-    public static ActivationLayerView from(Layer layer, OutputView outputView) {
+    public static ActivationLayerView from(Layer layer, OutputView outputView, CompilationContext context) {
         return new TanhLayerView(outputView);
     }
 
-    public static ActivationLayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static ActivationLayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         return new TanhLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView());
     }
 

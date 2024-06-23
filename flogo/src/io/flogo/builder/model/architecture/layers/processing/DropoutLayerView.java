@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
@@ -16,17 +17,12 @@ public final class DropoutLayerView implements ProcessingLayerView {
         this.output = output;
     }
 
-    public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
+    public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         return new DropoutLayerView(previousOutput, probability(layer));
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         return new DropoutLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), probability(materializationView.layer));
-    }
-
-    @Override
-    public LayerView from(OutputView previous) {
-        return new DropoutLayerView(previous == null ? this.output: previous, this.probability);
     }
 
     private static double probability(Layer layer) {
@@ -40,5 +36,10 @@ public final class DropoutLayerView implements ProcessingLayerView {
     @Override
     public OutputView getOutputView() {
         return output;
+    }
+
+    @Override
+    public LayerView from(OutputView previous) {
+        return new DropoutLayerView(previous == null ? this.output: previous, this.probability);
     }
 }

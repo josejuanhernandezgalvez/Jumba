@@ -1,5 +1,6 @@
 package io.flogo.builder.model.architecture.layers.processing;
 
+import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
 import io.flogo.builder.model.architecture.layers.ProcessingLayerView;
@@ -18,7 +19,7 @@ public final class LinearLayerView implements ProcessingLayerView {
         this.thisLayerOutput = thisLayerOutput;
     }
 
-    public static ProcessingLayerView from(Layer layer, OutputView previousOutput) {
+    public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         return new LinearLayerView(previousOutput, new OneDimensionOutputView(getX(layer)));
     }
 
@@ -31,7 +32,7 @@ public final class LinearLayerView implements ProcessingLayerView {
         }
     }
 
-    public static LayerView createFromSubstitute(LayerView previous, MaterializationView materializationView) {
+    public static LayerView createFromMaterialization(LayerView previous, MaterializationView materializationView) {
         return new LinearLayerView(previous instanceof VLayerView vLayerView ? vLayerView.previousLayerOutput : previous.getOutputView(), new OneDimensionOutputView(((Laboratory.Experiment.Materialization.Linear) materializationView.layer).output().x()));
     }
 

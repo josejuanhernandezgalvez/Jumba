@@ -77,7 +77,7 @@ public class FlogoCompiler {
     }
 
     private void render(FlogoGraph graph, CompilationContext context) {
-        ArchitectureView architectureView = new ArchitectureViewRenderer().render(graph.architecture());
+        ArchitectureView architectureView = new ArchitectureViewRenderer(context).render(graph.architecture());
         LaboratoryView laboratoryView = new LaboratoryViewRenderer().render(graph.laboratory());
         List<ArchitectureView> collapsedArchitectureViews = new ArrayList<>();
         for (ExperimentView experimentView : laboratoryView.experimentViews()) {
@@ -85,7 +85,7 @@ public class FlogoCompiler {
                             .from(architectureView)
                             .substitutes(experimentView.substitutes)
                             .name(experimentView.name)
-                            .collapse());
+                            .collapse(context));
             new FlogoRenderer(configuration.outDirectory().getAbsolutePath(), context)
                     .render(new FlogoDTO(architectureView, collapsedArchitectureViews, laboratoryView));
             context.getCompiledFiles().add(new OutputItem(sourceFileOf(graph.architecture(), context), ""));
