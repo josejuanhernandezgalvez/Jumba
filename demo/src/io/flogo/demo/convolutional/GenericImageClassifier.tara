@@ -14,12 +14,6 @@ Architecture VGG16
 	ConvolutionalSection
 		Input(x=224,y=224,z=3)
 		Block
-			Convolutional > Output(x=222, y=222, z=3)
-			ReLU
-			Convolutional > Output(x=220, y=220, z=64)
-            ReLU
-        	MaxPool > Output(x=120, y=120)
-		Block
 			Convolutional > Output(x=110, y=110, z=96)
 			ReLU
 			Convolutional > Output(x=108, y=108, z=128)

@@ -174,7 +174,7 @@ public class ArchitectureRenderer {
             case BatchNormalizationLayerView batchNormalization ->
                     builder.add("package", "regularizations")
                             .add("dimensionality", batchNormalization.getOutputView().dimensions() - 1)
-                            .add("num_features", batchNormalization.output.asArray()[batchNormalization.output.asArray().length - 1])
+                            .add("num_features", batchNormalization.output.asArray()[batchNormalization.output.asArray().length - 1] == 0 ? 1: batchNormalization.output.asArray()[batchNormalization.output.asArray().length - 1])
                             .add("eps", batchNormalization.eps)
                             .add("momentum", batchNormalization.momentum);
             case FlattenLayerView flatten ->

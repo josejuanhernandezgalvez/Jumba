@@ -372,285 +372,289 @@ Concept Section is component
 				var integer x
 				var integer y
 				var integer z
-			!! <b>Block</b><br>Blocks are modular units that group common layer patterns in neural networks. They can be configured as residual, allowing sequential processing and residual connections via <code>Shortcut</code>. Shortcuts can be <code>Default</code> (simple convolutional layer) or <code>Custom</code> (detailed layer customization with dimension adjustment). The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>Convolutional</code></li><li><code>AvgPool</code></li><li><code>MaxPool</code></li><li><code>BatchNormalization</code></li><li><code>LayerNormalization</code></li></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul><li><code>VLayer</code></li></ul>
-			Concept:{1..*} Block
-				Facet:CheckCustomDownSampling Residual
-                	var word:{Default Custom} shortcut = Default
-            		Concept:{0..1} CustomShortcut
-            			Concept:{1..*} Layer
-							sub ActivationLayer
-								!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
-								sub Tanh
-								!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
-								sub Sigmoid
-								!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
-								sub LogSigmoid
-								!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
-								sub ReLU
-								!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
-								sub SELU
-								!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
-								sub GELU
-								!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
-								sub SiLU
-								!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
-								sub GLU
-								!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
-								sub ELU > var integer alpha=1
-            					!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
-								sub LeakyReLU > var integer alpha=1
-								!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
-								sub Mish
-								!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
-								sub Softmax
-							sub ProcessingLayer
-								!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
-								sub Dropout
-									var double probability = 0.8
-								!! <b>Convolutional</b><br> This layer applies convolution operations to the input data, which is a key operation in many deep learning models, especially in image processing tasks. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code> and <code>OutChannels</code>.
-                    		    sub Convolutional
-                    		    	Concept:{0..1} Output
-                    		    		var integer x
-                    		    		var integer y
-                    		    		var integer z
-                    		    	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
-                    		    	Concept:{0..1} Kernel
-                    		    		Concept:{1..1} Size
-                    		    			var integer x
-                    		    			var integer y
-                    		    		Concept:{1..1} Stride
-                    		    			var integer x
-                    		    			var integer y
-                    		    		Concept:{1..1} Padding
-                    		    			var integer x
-                    		    			var integer y
-									Concept:{0..1} OutChannels
-										var integer z
-                    		    sub Pool
-                    		    	!! <b>MaxPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and taking the maximum value of each region. This helps in reducing the spatial dimensions of the input while retaining the most significant features. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
-                    		    	sub MaxPool
-                    		    		Concept:{0..1} Output
-                    		    			var integer x
-                    		    			var integer y
-                    		    		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
-                    		    		Concept:{0..1} Kernel
-                    		    			Concept:{1..1} Size
-                    		    				var integer x
-                    		    				var integer y
-                    		    			Concept:{1..1} Stride
-                    		    				var integer x
-                    		    				var integer y
-                    		    			Concept:{1..1} Padding
-                    		    				var integer x
-                    		    				var integer y
-                    		    	!! <b>AvgPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and computing the average of each region. This helps in reducing the spatial dimensions of the input and the computational load. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
-                    		    	sub AvgPool
-                    		        	Concept:{0..1} Output
-                    		            	var integer x
-                    		    			var integer y
-                    		    		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
-                    		    		Concept:{0..1} Kernel
-                    		    			Concept:{1..1} Size
-                    		    				var integer x
-                    		    				var integer y
-                    		    			Concept:{1..1} Stride
-                    		    				var integer x
-                    		    				var integer y
-                    		    			Concept:{1..1} Padding
-                    		    				var integer x
-                    		    				var integer y
-								!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
-								sub BatchNormalization
-									var double eps = 0.00001
-									var double momentum = 0.1
-								!! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
-								sub LayerNormalization
-									var double eps=0.00001
-				Concept:{1..*} Layer
-					!! <b>VLayer</b> (Virtual Layer)<br> Used to parametrize the architectures, they are later replaced by the materializations defined in the experiments.
-					sub VLayer
-                    	var string id
-					sub ActivationLayer
-						!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
-						sub Tanh
-						!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
-						sub Sigmoid
-						!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
-						sub LogSigmoid
-						!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
-						sub ReLU
-						!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
-						sub SELU
-						!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
-						sub GELU
-						!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
-						sub SiLU
-						!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
-						sub GLU
-						!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
-						sub ELU > var integer alpha=1
-						!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
-						sub LeakyReLU > var integer alpha=1
-						!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
-						sub Mish
-						!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
-						sub Softmax
-					sub ProcessingLayer
-						!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
-						sub Dropout
-							var double probability = 0.8
-						!! <b>Convolutional</b><br> This layer applies convolution operations to the input data, which is a key operation in many deep learning models, especially in image processing tasks. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code> and <code>OutChannels</code>.
-                        sub Convolutional
-                        	Concept:{0..1} Output
-                        		var integer x
-                        		var integer y
-                        		var integer z
-                        	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
-                        	Concept:{0..1} Kernel
-                        		Concept:{1..1} Size
-                        			var integer x
-                        			var integer y
-                        		Concept:{1..1} Stride
-                        			var integer x
-                        			var integer y
-                        		Concept:{1..1} Padding
-                        			var integer x
-                        			var integer y
-							Concept:{0..1} OutChannels
-								var integer z
-                        sub Pool
-                        	!! <b>MaxPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and taking the maximum value of each region. This helps in reducing the spatial dimensions of the input while retaining the most significant features. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
-                        	sub MaxPool
-                        		Concept:{0..1} Output
-                        			var integer x
-                        			var integer y
-                        		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
-                        		Concept:{0..1} Kernel
-                        			Concept:{1..1} Size
-                        				var integer x
-                        				var integer y
-                        			Concept:{1..1} Stride
-                        				var integer x
-                        				var integer y
-                        			Concept:{1..1} Padding
-                        				var integer x
-                        				var integer y
-							!! <b>AvgPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and computing the average of each region. This helps in reducing the spatial dimensions of the input and the computational load. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
-                        	sub AvgPool
-                            	Concept:{0..1} Output
-                                	var integer x
-                        			var integer y
-                        		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
-                        		Concept:{0..1} Kernel
-                        			Concept:{1..1} Size
-                        				var integer x
-                        				var integer y
-                        			Concept:{1..1} Stride
-                        				var integer x
-                        				var integer y
-                        			Concept:{1..1} Padding
-                        				var integer x
-                        				var integer y
-                        !! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
-						sub BatchNormalization
-							var double eps = 0.00001
-							var double momentum = 0.1
-						!! !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
-						sub LayerNormalization
-							var double eps=0.00001
+			Concept:{1..*} SectionBlock
+				sub ResidualBlock
+				!! <b>Block</b><br>Blocks are modular units that group common layer patterns in neural networks. They can be configured as residual, allowing sequential processing and residual connections via <code>Shortcut</code>. Shortcuts can be <code>Default</code> (simple convolutional layer) or <code>Custom</code> (detailed layer customization with dimension adjustment). The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>Convolutional</code></li><li><code>AvgPool</code></li><li><code>MaxPool</code></li><li><code>BatchNormalization</code></li><li><code>LayerNormalization</code></li></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul><li><code>VLayer</code></li></ul>
+				sub Block
+					Facet:CheckCustomDownSampling Residual
+                		var word:{Default Custom} shortcut = Default
+            			Concept:{0..1} CustomShortcut
+            				Concept:{1..*} Layer
+								sub ActivationLayer
+									!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
+									sub Tanh
+									!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
+									sub Sigmoid
+									!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
+									sub LogSigmoid
+									!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
+									sub ReLU
+									!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
+									sub SELU
+									!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
+									sub GELU
+									!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
+									sub SiLU
+									!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
+									sub GLU
+									!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
+									sub ELU > var integer alpha=1
+            						!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
+									sub LeakyReLU > var integer alpha=1
+									!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
+									sub Mish
+									!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
+									sub Softmax
+								sub ProcessingLayer
+									!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
+									sub Dropout
+										var double probability = 0.8
+									!! <b>Convolutional</b><br> This layer applies convolution operations to the input data, which is a key operation in many deep learning models, especially in image processing tasks. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code> and <code>OutChannels</code>.
+                	    		    sub Convolutional
+                	    		    	Concept:{0..1} Output
+                	    		    		var integer x
+                	    		    		var integer y
+                	    		    		var integer z
+                	    		    	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
+                	    		    	Concept:{0..1} Kernel
+                	    		    		Concept:{1..1} Size
+                	    		    			var integer x
+                	    		    			var integer y
+                	    		    		Concept:{1..1} Stride
+                	    		    			var integer x
+                	    		    			var integer y
+                	    		    		Concept:{1..1} Padding
+                	    		    			var integer x
+                	    		    			var integer y
+										Concept:{0..1} OutChannels
+											var integer z
+                	    		    sub Pool
+                	    		    	!! <b>MaxPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and taking the maximum value of each region. This helps in reducing the spatial dimensions of the input while retaining the most significant features. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
+                	    		    	sub MaxPool
+                	    		    		Concept:{0..1} Output
+                	    		    			var integer x
+                	    		    			var integer y
+                	    		    		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
+                	    		    		Concept:{0..1} Kernel
+                	    		    			Concept:{1..1} Size
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Stride
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Padding
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    	!! <b>AvgPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and computing the average of each region. This helps in reducing the spatial dimensions of the input and the computational load. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
+                	    		    	sub AvgPool
+                	    		        	Concept:{0..1} Output
+                	    		            	var integer x
+                	    		    			var integer y
+                	    		    		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
+                	    		    		Concept:{0..1} Kernel
+                	    		    			Concept:{1..1} Size
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Stride
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Padding
+                	    		    				var integer x
+                	    		    				var integer y
+									!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
+									sub BatchNormalization
+										var double eps = 0.00001
+										var double momentum = 0.1
+									!! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
+									sub LayerNormalization
+										var double eps=0.00001
+					Concept:{1..*} Layer
+						!! <b>VLayer</b> (Virtual Layer)<br> Used to parametrize the architectures, they are later replaced by the materializations defined in the experiments.
+						sub VLayer
+                	    	var string id
+						sub ActivationLayer
+							!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
+							sub Tanh
+							!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
+							sub Sigmoid
+							!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
+							sub LogSigmoid
+							!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
+							sub ReLU
+							!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
+							sub SELU
+							!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
+							sub GELU
+							!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
+							sub SiLU
+							!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
+							sub GLU
+							!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
+							sub ELU > var integer alpha=1
+							!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
+							sub LeakyReLU > var integer alpha=1
+							!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
+							sub Mish
+							!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
+							sub Softmax
+						sub ProcessingLayer
+							!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
+							sub Dropout
+								var double probability = 0.8
+							!! <b>Convolutional</b><br> This layer applies convolution operations to the input data, which is a key operation in many deep learning models, especially in image processing tasks. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code> and <code>OutChannels</code>.
+                	        sub Convolutional
+                	        	Concept:{0..1} Output
+                	        		var integer x
+                	        		var integer y
+                	        		var integer z
+                	        	!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
+                	        	Concept:{0..1} Kernel
+                	        		Concept:{1..1} Size
+                	        			var integer x
+                	        			var integer y
+                	        		Concept:{1..1} Stride
+                	        			var integer x
+                	        			var integer y
+                	        		Concept:{1..1} Padding
+                	        			var integer x
+                	        			var integer y
+								Concept:{0..1} OutChannels
+									var integer z
+                	        sub Pool
+                	        	!! <b>MaxPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and taking the maximum value of each region. This helps in reducing the spatial dimensions of the input while retaining the most significant features. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
+                	        	sub MaxPool
+                	        		Concept:{0..1} Output
+                	        			var integer x
+                	        			var integer y
+                	        		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
+                	        		Concept:{0..1} Kernel
+                	        			Concept:{1..1} Size
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Stride
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Padding
+                	        				var integer x
+                	        				var integer y
+								!! <b>AvgPool</b><br> This layer performs down-sampling by dividing the input into rectangular pooling regions and computing the average of each region. This helps in reducing the spatial dimensions of the input and the computational load. You can define this layer either by specifying directly the <code>Output</code> of the layer or by setting the <code>Kernel</code>.
+                	        	sub AvgPool
+                	            	Concept:{0..1} Output
+                	                	var integer x
+                	        			var integer y
+                	        		!! <b>Kernel</b><br> Defines the size, stride, and padding of the convolutional kernel.
+                	        		Concept:{0..1} Kernel
+                	        			Concept:{1..1} Size
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Stride
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Padding
+                	        				var integer x
+                	        				var integer y
+                	        !! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
+							sub BatchNormalization
+								var double eps = 0.00001
+								var double momentum = 0.1
+							!! !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
+							sub LayerNormalization
+								var double eps=0.00001
 		!! <b>LinearSection</b><br>Used for sequences of layers suitable for standard classification or regression tasks, working with one-dimensional tensors.
 		sub LinearSection
 			!! <b>Input</b><ul><li><code>x</code>: size of the one dimensional tensor</li></ul>
 			Concept:{0..1} Input
             	var integer x
             !! <b>Block</b><br> Blocks are modular units that group common layer patterns in neural networks. They can be configured as residual, allowing sequential processing and residual connections via <code>Shortcut</code>. Shortcuts can be <code>Default</code> (simple linear layer) or <code>Custom</code> (detailed layer customization with dimension adjustment). The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>Linear</code></li><li><code>Dropout</code></li><li><code>LayerNormalization</code></li><li><code>BatchNormalization</code></li></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul><li><code>VLayer</code></li></ul>
-			Concept:{1..*} Block
-				Facet:CheckCustomDownSampling Residual
-            		var word:{Default Custom} shortcut = Default
-					Concept:{0..1} CustomShortcut
-						Concept:{1..*} Layer
-            				sub ActivationLayer
-								!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
-								sub Tanh
-								!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
-            					sub Sigmoid
-            					!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
-            					sub LogSigmoid
-            					!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
-            					sub ReLU
-            					!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
-            					sub SELU
-            					!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
-            					sub GELU
-            					!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
-            					sub SiLU
-            					!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
-            					sub GLU
-            					!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
-            					sub ELU > var integer alpha=1
-            					!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
-            					sub LeakyReLU > var integer alpha=1
-            					!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
-            					sub Mish
-            					!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
-            					sub Softmax
-                    		sub ProcessingLayer
-                    			!! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
-                    			sub Linear
-                    				Concept:{1..1} Output > var integer x
-                    			!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
-                    			sub Dropout
-                    				var double probability=0.8
-                    			!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
-                    			sub BatchNormalization
-                    	        	var double eps = 0.00001
-                    	        	var double momentum = 0.1
-                    	        !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
-                    			sub LayerNormalization
-                    				var double eps=0.00001
-            	Concept:{1..*} Layer
-            		!! <b>VLayer</b> (Virtual Layer)<br> Used to parametrize the architectures, they are later replaced by the materializations defined in the experiments.
-					sub VLayer
-                    	var string id
-            		sub ActivationLayer
-						!! <b>Tanh</b><br>Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
-						sub Tanh
-						!! <b>Sigmoid</b><br>Squashes input values to a range between 0 and 1 using the sigmoid function.
-            			sub Sigmoid
-            			!! <b>LogSigmoid</b><br>Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
-            			sub LogSigmoid
-            			!! <b>ReLU</b><br>Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
-            			sub ReLU
-            			!! <b>SELU</b><br>Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
-            			sub SELU
-            			!! <b>GELU</b><br>Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
-            			sub GELU
-            			!! <b>SiLU</b><br>Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
-            			sub SiLU
-            			!! <b>GLU</b><br>Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
-            			sub GLU
-            			!! <b>ELU</b><br>Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
-            			sub ELU > var integer alpha=1
-            			!! <b>LeakyReLU</b><br>Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
-            			sub LeakyReLU > var integer alpha=1
-            			!! <b>Mish</b><br>Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
-            			sub Mish
-            			!! <b>Softmax</b><br>Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
-            			sub Softmax
-            		sub ProcessingLayer
-            			!! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
-            			sub Linear
-            				Concept:{1..1} Output > var integer x
-            			!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
-            			sub Dropout
-            				var double probability=0.8
-            			!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
-						sub BatchNormalization
-                        	var double eps = 0.00001
-                        	var double momentum = 0.1
-                        !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
-						sub LayerNormalization
-							var double eps=0.00001
+			Concept:{1..*} SectionBlock
+				sub ClassicBlock
+				sub Block
+					Facet:CheckCustomDownSampling Residual
+            			var word:{Default Custom} shortcut = Default
+						Concept:{0..1} CustomShortcut
+							Concept:{1..*} Layer
+            					sub ActivationLayer
+									!! <b>Tanh</b><br> Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
+									sub Tanh
+									!! <b>Sigmoid</b><br> Squashes input values to a range between 0 and 1 using the sigmoid function.
+            						sub Sigmoid
+            						!! <b>LogSigmoid</b><br> Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
+            						sub LogSigmoid
+            						!! <b>ReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
+            						sub ReLU
+            						!! <b>SELU</b><br> Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
+            						sub SELU
+            						!! <b>GELU</b><br> Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
+            						sub GELU
+            						!! <b>SiLU</b><br> Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
+            						sub SiLU
+            						!! <b>GLU</b><br> Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
+            						sub GLU
+            						!! <b>ELU</b><br> Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
+            						sub ELU > var integer alpha=1
+            						!! <b>LeakyReLU</b><br> Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
+            						sub LeakyReLU > var integer alpha=1
+            						!! <b>Mish</b><br> Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
+            						sub Mish
+            						!! <b>Softmax</b><br> Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
+            						sub Softmax
+                	    		sub ProcessingLayer
+                	    			!! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
+                	    			sub Linear
+                	    				Concept:{1..1} Output > var integer x
+                	    			!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
+                	    			sub Dropout
+                	    				var double probability=0.8
+                	    			!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
+                	    			sub BatchNormalization
+                	    	        	var double eps = 0.00001
+                	    	        	var double momentum = 0.1
+                	    	        !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
+                	    			sub LayerNormalization
+                	    				var double eps=0.00001
+            		Concept:{1..*} Layer
+            			!! <b>VLayer</b> (Virtual Layer)<br> Used to parametrize the architectures, they are later replaced by the materializations defined in the experiments.
+						sub VLayer
+                	    	var string id
+            			sub ActivationLayer
+							!! <b>Tanh</b><br>Squashes input values to a range between -1 and 1 using the hyperbolic tangent function.
+							sub Tanh
+							!! <b>Sigmoid</b><br>Squashes input values to a range between 0 and 1 using the sigmoid function.
+            				sub Sigmoid
+            				!! <b>LogSigmoid</b><br>Computes the logarithm of the sigmoid function for input values, helping with numerical stability.
+            				sub LogSigmoid
+            				!! <b>ReLU</b><br>Outputs the input directly if it is positive; otherwise, it outputs zero, using the Rectified Linear Unit function.
+            				sub ReLU
+            				!! <b>SELU</b><br>Applies the Scaled Exponential Linear Unit function, scaling inputs to keep the mean and variance close to zero and one, respectively.
+            				sub SELU
+            				!! <b>GELU</b><br>Uses the Gaussian Error Linear Unit function, which approximates normal distribution for smoother activation.
+            				sub GELU
+            				!! <b>SiLU</b><br>Applies the Sigmoid Linear Unit function, also known as Swish, combining properties of both sigmoid and linear activations.
+            				sub SiLU
+            				!! <b>GLU</b><br>Uses the Gated Linear Unit function, applying a gating mechanism, often used in natural language processing.
+            				sub GLU
+            				!! <b>ELU</b><br>Outputs the input if it is positive; otherwise, it outputs <code>alpha</code> times the exponential of the input minus one.
+            				sub ELU > var integer alpha=1
+            				!! <b>LeakyReLU</b><br>Outputs the input directly if it is positive; otherwise, it outputs a small gradient <code>alpha</code> times the input.
+            				sub LeakyReLU > var integer alpha=1
+            				!! <b>Mish</b><br>Applies a smooth, non-monotonic activation function, providing smoother and non-linear activations.
+            				sub Mish
+            				!! <b>Softmax</b><br>Converts logits into probabilities, squashing the input values to a range between 0 and 1, typically used in the output layer of classification problems.
+            				sub Softmax
+            			sub ProcessingLayer
+            				!! <b>Linear</b><br> This layer applies a linear transformation to the incoming data, which is a fundamental operation in neural networks. It maps the input features to output features through a learned weight matrix and bias vector.
+            				sub Linear
+            					Concept:{1..1} Output > var integer x
+            				!! <b>Dropout</b><br> It is a regularization technique used to prevent overfitting in neural networks. It works by randomly "dropping out" (i.e., setting to zero) a fraction of the neurons during the training process, which forces the network to learn more robust features. The parameter <code>probability</code> specifies the fraction of neurons to be dropped out.
+            				sub Dropout
+            					var double probability=0.8
+            				!! <b>BatchNormalization</b><br> It is a technique used to improve the training of deep neural networks. It normalizes the output of a previous activation layer by subtracting the batch mean and dividing by the batch standard deviation, then scaling and shifting using learnable parameters. The <code>eps</code> parameter is a small constant to avoid division by zero, and <code>momentum</code> is used for running mean and variance.
+							sub BatchNormalization
+                	        	var double eps = 0.00001
+                	        	var double momentum = 0.1
+                	        !! <b>LayerNormalization</b><br> It is a technique similar to BatchNormalization, but it normalizes the inputs across the features instead of the batch dimension. It is used to stabilize and accelerate the training of neural networks. The <code>eps</code> parameter is a small constant added to avoid division by zero.
+							sub LayerNormalization
+								var double eps=0.00001
 		!! <b>RecurrentSection</b><br>Suitable for tasks with temporal or sequential dependencies, working with both two-dimensional and one-dimensional tensors. The first layer of the first block must be a recurrent layer (LSTM, GRU or RNN).
         sub:CheckFirstLayerIsARecurrentLayerAndIsFirstSection RecurrentSection
         	!! <b>Input</b><ul><li><code>seqLength</code>: number of elements in the two dimensional tensor.</li><li><code>x</code>: size of each element.</li></ul>
