@@ -13,26 +13,10 @@ Laboratory(epochs = 10, name = "vgg")
 Architecture VGG16
 	ConvolutionalSection
 		Input(x=224,y=224,z=3)
-		Block
-			Convolutional > Output(x=110, y=110, z=96)
-			ReLU
-			Convolutional > Output(x=108, y=108, z=128)
-            ReLU
-            Convolutional > Output(x=108, y=108, z=128)
-			ReLU
-        	MaxPool > Output(x=56, y=56)
-        Block
-            Convolutional > Output(x=54, y=54, z=192)
-            ReLU
-            Convolutional > Output(x=52, y=52, z=256)
-            ReLU
-            Convolutional > Output(x=48, y=48, z=256)
-            ReLU
-        	MaxPool > Output(x=14, y=14)
-        Block
-        	Convolutional > Output(x=14, y=14, z=512)
-			ReLU
-			MaxPool > Output(x=7, y=7)
+		VBlock(id="01")
+		VGGBlock
+		ResnetBlock(reps = 3)
+		BlattBlock > Output(10, 10, 3)
 
 	FlattenSection
 

@@ -373,7 +373,17 @@ Concept Section is component
 				var integer y
 				var integer z
 			Concept:{1..*} SectionBlock
-				sub ResidualBlock
+				sub VBlock
+					var string id
+				sub BlattBlock
+					var word:{Tanh Sigmoid LogSigmoid ReLU SELU GELU SiLU GLU ELU LeakyReLU Mish Softmax} activation = ReLU
+					Concept:{1..1} Output
+                		var integer x
+                		var integer y
+                		var integer z
+				sub VGGBlock
+				sub ResnetBlock
+					var integer reps
 				!! <b>Block</b><br>Blocks are modular units that group common layer patterns in neural networks. They can be configured as residual, allowing sequential processing and residual connections via <code>Shortcut</code>. Shortcuts can be <code>Default</code> (simple convolutional layer) or <code>Custom</code> (detailed layer customization with dimension adjustment). The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>Convolutional</code></li><li><code>AvgPool</code></li><li><code>MaxPool</code></li><li><code>BatchNormalization</code></li><li><code>LayerNormalization</code></li></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul><li><code>VLayer</code></li></ul>
 				sub Block
 					Facet:CheckCustomDownSampling Residual
@@ -567,7 +577,12 @@ Concept Section is component
             	var integer x
             !! <b>Block</b><br> Blocks are modular units that group common layer patterns in neural networks. They can be configured as residual, allowing sequential processing and residual connections via <code>Shortcut</code>. Shortcuts can be <code>Default</code> (simple linear layer) or <code>Custom</code> (detailed layer customization with dimension adjustment). The layers you can define are: <ul><li><b>Processing Layers</b>: <ul><li><code>Linear</code></li><li><code>Dropout</code></li><li><code>LayerNormalization</code></li><li><code>BatchNormalization</code></li></li><li><b>Activation Layers</b>: <ul><li><code>Tanh</code></li><li><code>Sigmoid</code></li><li><code>LogSigmoid</code></li><li><code>ReLU</code></li><li><code>SELU</code></li><li><code>GELU</code></li><li><code>SiLU</code></li><li><code>GLU</code></li><li><code>ELU</code></li><li><code>LeakyReLU</code></li><li><code>Mish</code></li><li><code>Softmax</code></li></ul><li><code>VLayer</code></li></ul>
 			Concept:{1..*} SectionBlock
-				sub ClassicBlock
+				sub VBlock
+					var string id
+                sub BlattBlock
+					var word:{Tanh Sigmoid LogSigmoid ReLU SELU GELU SiLU GLU ELU LeakyReLU Mish Softmax} activation = ReLU
+					Concept:{1..1} Output
+                		var integer x
 				sub Block
 					Facet:CheckCustomDownSampling Residual
             			var word:{Default Custom} shortcut = Default

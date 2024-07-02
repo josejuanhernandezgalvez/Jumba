@@ -4,7 +4,7 @@ import io.flogo.builder.CompilationContext;
 import io.flogo.builder.model.architecture.BlockView;
 import io.flogo.builder.model.architecture.LayerView;
 import io.flogo.builder.model.architecture.OutputView;
-import io.flogo.builder.model.architecture.blocks.SimpleBlockView;
+import io.flogo.builder.model.architecture.blocks.*;
 import io.flogo.builder.model.architecture.sections.processing.ConvolutionalSectionView;
 import io.flogo.builder.model.renderers.architecture.SectionRenderer;
 import io.flogo.builder.model.renderers.architecture.blockrenderers.ResidualBlockRenderer;
@@ -35,7 +35,13 @@ public class ConvolutionalSectionRenderer extends SectionRenderer<ConvolutionalS
     private class BlockRenderer {
         public BlockView render(ConvolutionalSection.SectionBlock block, OutputView input, CompilationContext context) {
             if (block instanceof ConvolutionalSection.Block customBlock) return blockViewFor(blockLayerList(customBlock.layerList().iterator(), input, new ArrayList<>(), context), customBlock, input, context);
-            return null;
+            return switch (block) {
+                case ConvolutionalSection.VGGBlock vggBlock -> new VGGBlockView(input);
+                case ConvolutionalSection.ResnetBlock resnetBlock -> new ResnetBlockView(input, resnetBlock.reps());
+                case ConvolutionalSection.BlattBlock blattBlock -> new BlattBlockView(input, blattBlock);
+                case ConvolutionalSection.VBlock vBlock -> new VBlockView(input, vBlock.id());
+                default -> throw new IllegalStateException("Unexpected value: " + block);
+            };
         }
 
         private List<LayerView> blockLayerList(Iterator<ConvolutionalSection.Block.Layer> layersIterator, OutputView input, List<LayerView> layerViews, CompilationContext context) {
