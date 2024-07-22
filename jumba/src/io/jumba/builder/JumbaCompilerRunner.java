@@ -34,7 +34,7 @@ class JumbaCompilerRunner {
         config.out(System.out);
         this.out = config.out();
         if (sources.isEmpty()) return;
-        if (verbose) out.println(PRESENTABLE_MESSAGE + "FLogo: loading sources...");
+        if (verbose) out.println(PRESENTABLE_MESSAGE + "Jumba: loading sources...");
         final List<CompilerMessage> messages = new ArrayList<>();
         List<OutputItem> compiled = compile(config, sources, messages);
         if (verbose) report(sources, compiled);

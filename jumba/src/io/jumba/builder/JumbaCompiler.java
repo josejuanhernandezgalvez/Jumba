@@ -33,12 +33,12 @@ public class JumbaCompiler {
     public List<OutputItem> compile(List<File> sources) {
         List<OutputItem> compiledFiles = Collections.synchronizedList(new ArrayList<>());
         if (configuration.isVerbose())
-            configuration.out().println(PRESENTABLE_MESSAGE + "Flogo: Compiling model...");
+            configuration.out().println(PRESENTABLE_MESSAGE + "Jumba: Compiling model...");
         GraphLoader graphLoader = new GraphLoader();
         JumbaGraph graph = graphLoader.loadGraph(configuration, sources);
         if (graph == null) return compiledFiles;
         if (configuration.isVerbose())
-            configuration.out().println(PRESENTABLE_MESSAGE + "Flogo: Rendering classes...");
+            configuration.out().println(PRESENTABLE_MESSAGE + "Jumba: Rendering classes...");
         CompilationContext context = new CompilationContext(configuration, sources, compiledFiles);
         try {
             render(graph, context);

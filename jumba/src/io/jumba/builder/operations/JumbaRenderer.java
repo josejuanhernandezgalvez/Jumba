@@ -2,7 +2,7 @@ package io.jumba.builder.operations;
 
 import io.jumba.builder.CompilationContext;
 import io.jumba.builder.OutputItem;
-import io.jumba.builder.model.FlogoDTO;
+import io.jumba.builder.model.JumbaDTO;
 import io.jumba.builder.model.architecture.ArchitectureView;
 
 import java.io.File;
@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class FlogoRenderer {
+public class JumbaRenderer {
     private final ArchitectureRenderer architectureRenderer;
     private final LaboratoryRenderer laboratoryRenderer;
     private final String path;
     private final CompilationContext context;
 
-    public FlogoRenderer(String path, CompilationContext context) {
+    public JumbaRenderer(String path, CompilationContext context) {
         this.architectureRenderer = new ArchitectureRenderer();
         this.laboratoryRenderer = new LaboratoryRenderer();
         this.context = context;
@@ -24,13 +24,13 @@ public class FlogoRenderer {
         new File(path).mkdirs();
     }
 
-    public void render(FlogoDTO flogoDTO) {
-        if (!Files.exists(Path.of(path, flogoDTO.architectureView().name))) mkdir(flogoDTO.architectureView().name);
-        write(Path.of(path, "laboratory.py"), laboratoryRenderer.render(flogoDTO.laboratoryView(), flogoDTO.architectureView().name));
+    public void render(JumbaDTO jumbaDTO) {
+        if (!Files.exists(Path.of(path, jumbaDTO.architectureView().name))) mkdir(jumbaDTO.architectureView().name);
+        write(Path.of(path, "laboratory.py"), laboratoryRenderer.render(jumbaDTO.laboratoryView(), jumbaDTO.architectureView().name));
         context.getSources().forEach(s -> context.getCompiledFiles().add(new OutputItem(s.getAbsolutePath(), path + "laboratory.py")));
-        for (ArchitectureView collapsedArchitectureView : flogoDTO.collapsedArchitectureViews()) {
-            write(Path.of(path, flogoDTO.architectureView().name, collapsedArchitectureView.name + ".py"), architectureRenderer.render(collapsedArchitectureView, "pytorch"));
-            context.getSources().forEach(s -> context.getCompiledFiles().add(new OutputItem(s.getAbsolutePath(), path + flogoDTO.architectureView().name + "/" + collapsedArchitectureView.name + ".py")));
+        for (ArchitectureView collapsedArchitectureView : jumbaDTO.collapsedArchitectureViews()) {
+            write(Path.of(path, jumbaDTO.architectureView().name, collapsedArchitectureView.name + ".py"), architectureRenderer.render(collapsedArchitectureView, "pytorch"));
+            context.getSources().forEach(s -> context.getCompiledFiles().add(new OutputItem(s.getAbsolutePath(), path + jumbaDTO.architectureView().name + "/" + collapsedArchitectureView.name + ".py")));
         }
     }
 

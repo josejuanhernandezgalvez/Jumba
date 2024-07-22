@@ -12,7 +12,7 @@ import static io.jumba.builder.JumbacRunner.main;
 
 
 @Ignore
-public class FlogoRunnerTest {
+public class JumbaRunnerTest {
 	private String home;
 
 	@Before
