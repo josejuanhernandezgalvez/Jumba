@@ -1,0 +1,467 @@
+dsl Proteo
+Concept:{1..1} Laboratory
+	var integer eras=1
+	var integer epochs
+	var string name
+	var word:{CPU GPU MPS Default} device=Default
+	has:{1..1} Optimizer
+	has:{1..1} LossFunction
+	has:{0..1} EarlyStopper
+	has:{1..1} Strategy
+	has:{0..1} CheckPointSaver
+	Concept:{1..1} Dataset
+		var string name
+		var integer batchSize = 10
+		Concept:{1..1} Split
+			var double train
+			var double test
+			var double validation
+	Concept:{1..*} Experiment
+		has:{0..1} Optimizer
+		has:{0..1} LossFunction
+
+Concept Strategy is component
+	sub RegressionStrategy
+	sub ClassificationStrategy
+
+Concept Optimizer is component
+    sub Adagrad
+    	var double lr=0.001
+		var double lrDecay=0
+		var double eps=1e-6
+		var double weightDecay=0.00000000001
+		var double initialAccumulator=0
+	sub Adadelta
+		var double lr=1.0
+		var double rho=0.9
+		var double eps=0.000001
+		var double weightDecay=0
+	sub Adamax
+		var double lr=0.002
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
+		var double weightDecay=0
+	sub AdamW
+		var double lr=0.001
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double weightDecay=0.01
+		var boolean amsgrad=false
+	sub LBFGS
+		var double lr=1
+		var integer maxIter=20
+		var double toleranceGrad=0.0000001
+		var double toleranceChange=0.000000001
+		var integer historySize=100
+	sub NAdam
+		var double lr=0.002
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
+		var double weightDecay=0
+		var double momentumDecay=0.004
+		var boolean decoupledWeightDecay=false
+	sub RAdam
+		var double lr=0.001
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
+		var double weightDecay=0
+		var boolean decoupledWeightDecay=false
+	sub RProp
+		var double lr=0.01
+		Concept:{0..1} Etas
+			var double eta0=0.5
+			var double eta1=1.2
+		Concept:{0..1} StepSizes
+			var double step0=0.000001
+			var double step1=50
+	sub SparseAdam
+		var double lr=0.001
+		Concept:{0..1} Betas
+			var double beta0=0.9
+			var double beta1=0.999
+		var double eps=0.00000001
+    sub Adam
+    	var double lr=0.0001
+    	var double beta0=0.9
+    	var double beta1=0.999
+    	var double weightDecay=0
+    	var double eps=0.00000001
+    sub AMSGrad
+    	var double lr=0.0001
+    	var double beta0=0.9
+    	var double beta1=0.999
+    	var double weightDecay=0
+    	var double eps=0.00000001
+    sub ASGD
+    	var double lr=0.001
+		var double lrDecay=0.00001
+    	var double alpha=0.75
+    	var double pointToStartAverage=0.0000001
+		var double weightDecay=0.0000001
+    sub RMSProp
+         var double lr=0.001
+         var double momentum=0
+         var double alpha=0.99
+         var double eps=0.000000001
+         var double weightDecay=0
+    sub CenteredRMSProp
+         var double lr=0.001
+         var double momentum=0
+         var double alpha=0.99
+         var double eps=0.000000001
+         var double weightDecay=0
+    sub SGD
+    	var double lr=0.001
+    	var double momentum=0
+    	var double momentumDecay=0
+		var double weightDecay=0
+   	sub SGDWithNesterovMomentum
+    	var double lr=0.001
+    	var double momentum=0
+    	var double momentumDecay=0
+		var double weightDecay=0
+
+Concept EarlyStopper
+    sub LossDrivenEarlyStopper
+    	var integer patience=5
+        var double threshold=0.5
+
+Concept CheckPointSaver
+	sub MaxCheckPointSaver
+
+Concept LossFunction is component
+    sub HingeEmbeddingLoss
+    	var double margin = 1
+	sub BinaryCrossEntropyLoss
+    sub CrossEntropyLoss
+    sub MAELoss
+    sub MSELoss
+    sub HuberLoss
+    sub CTCLoss
+    sub MarginRankingLoss
+    sub KullbackLeiblerDivergenceLoss
+    sub TripletMarginLossWithSwap
+    	var double margin = 1
+    	var double normDegree = 2
+    	var double eps = 0.0000001
+    sub TripletMarginLoss
+    	var double margin = 1
+    	var double normDegree = 2
+		var double eps = 0.0000001
+
+Concept:{1..1} Architecture
+	has:CheckFirstSectionWithInput:CheckSectionsWithNoInput Section
+Concept Section is component
+	sub LinkSection
+		sub FlattenSection
+	sub ProcessingSection
+		sub ConvolutionalSection
+			Concept:{0..1} Input
+				var integer x
+				var integer y
+				var integer z
+			Concept:{1..*} SectionBlock
+				sub BlattBlock
+					var word:{Tanh Sigmoid LogSigmoid ReLU SELU GELU SiLU GLU ELU LeakyReLU Mish Softmax} activation = ReLU
+					Concept:{1..1} Output
+                		var integer x
+                		var integer y
+                		var integer z
+				sub VGGBlock
+				sub ResnetBlock
+					var integer reps
+				sub Block
+					Facet:CheckCustomDownSampling Residual
+                		var word:{Default Custom} shortcut = Default
+            			Concept:{0..1} CustomShortcut
+            				Concept:{1..*} Layer
+								sub ActivationLayer
+									sub Tanh
+									sub Sigmoid
+									sub LogSigmoid
+									sub ReLU
+									sub SELU
+									sub GELU
+									sub SiLU
+									sub GLU
+									sub ELU > var integer alpha=1
+									sub LeakyReLU > var integer alpha=1
+									sub Mish
+									sub Softmax
+								sub ProcessingLayer
+									sub Dropout
+										var double probability = 0.8
+                	    		    sub Convolutional
+                	    		    	Concept:{0..1} Output
+                	    		    		var integer x
+                	    		    		var integer y
+                	    		    		var integer z
+                	    		    	Concept:{0..1} Kernel
+                	    		    		Concept:{1..1} Size
+                	    		    			var integer x
+                	    		    			var integer y
+                	    		    		Concept:{1..1} Stride
+                	    		    			var integer x
+                	    		    			var integer y
+                	    		    		Concept:{1..1} Padding
+                	    		    			var integer x
+                	    		    			var integer y
+										Concept:{0..1} OutChannels
+											var integer z
+                	    		    sub Pool
+                	    		    	sub MaxPool
+                	    		    		Concept:{0..1} Output
+                	    		    			var integer x
+                	    		    			var integer y
+                	    		    		Concept:{0..1} Kernel
+                	    		    			Concept:{1..1} Size
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Stride
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Padding
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    	sub AvgPool
+                	    		        	Concept:{0..1} Output
+                	    		            	var integer x
+                	    		    			var integer y
+                	    		    		Concept:{0..1} Kernel
+                	    		    			Concept:{1..1} Size
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Stride
+                	    		    				var integer x
+                	    		    				var integer y
+                	    		    			Concept:{1..1} Padding
+                	    		    				var integer x
+                	    		    				var integer y
+									sub BatchNormalization
+										var double eps = 0.00001
+										var double momentum = 0.1
+									sub LayerNormalization
+										var double eps=0.00001
+					Concept:{1..*} Layer
+						sub ActivationLayer
+							sub Tanh
+							sub Sigmoid
+							sub LogSigmoid
+							sub ReLU
+							sub SELU
+							sub GELU
+							sub SiLU
+							sub GLU
+							sub ELU > var integer alpha=1
+							sub LeakyReLU > var integer alpha=1
+							sub Mish
+							sub Softmax
+						sub ProcessingLayer
+							sub Dropout
+								var double probability = 0.8
+                	        sub Convolutional
+                	        	Concept:{0..1} Output
+                	        		var integer x
+                	        		var integer y
+                	        		var integer z
+                	        	Concept:{0..1} Kernel
+                	        		Concept:{1..1} Size
+                	        			var integer x
+                	        			var integer y
+                	        		Concept:{1..1} Stride
+                	        			var integer x
+                	        			var integer y
+                	        		Concept:{1..1} Padding
+                	        			var integer x
+                	        			var integer y
+								Concept:{0..1} OutChannels
+									var integer z
+                	        sub Pool
+                	        	sub MaxPool
+                	        		Concept:{0..1} Output
+                	        			var integer x
+                	        			var integer y
+                	        		Concept:{0..1} Kernel
+                	        			Concept:{1..1} Size
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Stride
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Padding
+                	        				var integer x
+                	        				var integer y
+                	        	sub AvgPool
+                	            	Concept:{0..1} Output
+                	                	var integer x
+                	        			var integer y
+                	        		Concept:{0..1} Kernel
+                	        			Concept:{1..1} Size
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Stride
+                	        				var integer x
+                	        				var integer y
+                	        			Concept:{1..1} Padding
+                	        				var integer x
+                	        				var integer y
+							sub BatchNormalization
+								var double eps = 0.00001
+								var double momentum = 0.1
+							sub LayerNormalization
+								var double eps=0.00001
+		sub LinearSection
+			Concept:{0..1} Input
+            	var integer x
+			Concept:{1..*} SectionBlock
+                sub BlattBlock
+					var word:{Tanh Sigmoid LogSigmoid ReLU SELU GELU SiLU GLU ELU LeakyReLU Mish Softmax} activation = ReLU
+					Concept:{1..1} Output
+                		var integer x
+				sub Block
+					Facet:CheckCustomDownSampling Residual
+            			var word:{Default Custom} shortcut = Default
+						Concept:{0..1} CustomShortcut
+							Concept:{1..*} Layer
+            					sub ActivationLayer
+									sub Tanh
+            						sub Sigmoid
+            						sub LogSigmoid
+            						sub ReLU
+            						sub SELU
+            						sub GELU
+            						sub SiLU
+            						sub GLU
+            						sub ELU > var integer alpha=1
+            						sub LeakyReLU > var integer alpha=1
+            						sub Mish
+            						sub Softmax
+                	    		sub ProcessingLayer
+                	    			sub Linear
+                	    				Concept:{1..1} Output > var integer x
+                	    			sub Dropout
+                	    				var double probability=0.8
+                	    			sub BatchNormalization
+                	    	        	var double eps = 0.00001
+                	    	        	var double momentum = 0.1
+                	    			sub LayerNormalization
+                	    				var double eps=0.00001
+            		Concept:{1..*} Layer
+            			sub ActivationLayer
+							sub Tanh
+            				sub Sigmoid
+            				sub LogSigmoid
+            				sub ReLU
+            				sub SELU
+            				sub GELU
+            				sub SiLU
+            				sub GLU
+            				sub ELU > var integer alpha=1
+            				sub LeakyReLU > var integer alpha=1
+            				sub Mish
+            				sub Softmax
+            			sub ProcessingLayer
+            				sub Linear
+            					Concept:{1..1} Output > var integer x
+            				sub Dropout
+            					var double probability=0.8
+							sub BatchNormalization
+                	        	var double eps = 0.00001
+                	        	var double momentum = 0.1
+							sub LayerNormalization
+								var double eps=0.00001
+        sub:CheckFirstLayerIsARecurrentLayerAndIsFirstSection RecurrentSection
+			Concept:{0..1} Input
+            	var integer seqLength
+            	var integer x
+			Concept:{1..*} Block
+        		Concept:{1..*} Layer
+					sub ProcessingLayer
+        				sub Recurrent
+							var integer numLayers = 1
+							var boolean bidirectional = false
+							var double dropout = 0
+        					sub LSTM
+        						Concept:{1..1} OutputType
+        							sub EndSequence
+        								var integer from=0
+        								var integer to=0
+        								var word:{flatten linear} reduce=flatten
+        								Concept:{1..1} Output > var integer x
+        							sub HiddenStates
+        								var integer from=0
+										var integer to=0
+        								var word:{flatten linear} reduce=flatten
+        							    Concept:{1..1} Output > var integer x
+									sub CellStates
+										var integer from=0
+										var integer to=0
+										var word:{flatten linear} reduce=flatten
+        							    Concept:{1..1} Output > var integer x
+        							sub LastHiddenState
+        								var word:{flatten linear} reduce=flatten
+        								Concept:{1..1} Output > var integer x
+        							sub LastCellState
+        								var word:{flatten linear} reduce=flatten
+        								Concept:{1..1} Output > var integer x
+        					sub GRU
+        						Concept:{1..1} OutputType
+        							sub EndSequence
+										var integer from=0
+										var integer to=0
+										var word:{flatten linear} reduce=flatten
+        								Concept:{1..1} Output > var integer x
+        							sub HiddenStates
+        								var integer from=0
+                                        var integer to=0
+										var word:{flatten linear} reduce=flatten
+        							    Concept:{1..1} Output > var integer x
+        							sub LastHiddenState
+        								var integer from=0
+                                    	var integer to=0
+        								var word:{flatten linear} reduce=flatten
+        								Concept:{1..1} Output > var integer x
+        					sub RNN
+        						Concept:{1..1} OutputType
+        							sub EndSequence
+        								var integer from=0
+                                        var integer to=0
+        								var word:{flatten linear} reduce=flatten
+        								Concept:{1..1} Output > var integer x
+        							sub HiddenStates
+        								var integer from=0
+                                        var integer to=0
+        								var word:{flatten linear} reduce=flatten
+        							    Concept:{1..1} Output > var integer x
+        							sub LastHiddenState
+        								var word:{flatten linear} reduce=flatten
+        								Concept:{1..1} Output > var integer x
+            	        sub Dropout
+            	        	var double probability = 0.8
+            	        sub BatchNormalization
+            	            var double eps = 0.00001
+            	            var double momentum = 0.1
+            	        sub LayerNormalization
+                        	var double eps=0.00001
+                        sub Linear
+            				Concept:{1..1} Output > var integer x
+            	    sub ActivationLayer
+						sub Tanh
+            			sub Sigmoid
+            			sub LogSigmoid
+            			sub ReLU
+            			sub SELU
+            			sub GELU
+            			sub SiLU
+            			sub GLU
+            			sub ELU > var integer alpha=1
+            			sub LeakyReLU > var integer alpha=1
+            			sub Mish
+            			sub Softmax

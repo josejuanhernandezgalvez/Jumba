@@ -1,0 +1,31 @@
+dsl Jumba
+
+
+Laboratory
+	name = "DigitsClassifier"
+	epochs = 10
+	ClassificationStrategy
+	Dataset(name = "mnist", batchSize = 10)
+		Split(train=0.7, test=0.2, validation=0.1)
+	Adam
+	MSELoss
+
+	Experiment
+
+
+Architecture lineal
+	LinearSection
+		Input(x=784)
+		Block
+			Linear > Output(x=500)
+		Block
+			Linear > Output(x=250)
+			BatchNormalization
+		Block
+			Linear > Output(x=100)
+			BatchNormalization
+		Block
+        	Linear > Output(x=50)
+        Block
+        	Linear > Output(x=10)
+        	Softmax
