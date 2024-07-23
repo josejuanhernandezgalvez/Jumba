@@ -3,7 +3,6 @@ package io.jumba.builder.operations;
 import io.jumba.builder.CompilationContext;
 import io.jumba.builder.OutputItem;
 import io.jumba.builder.model.JumbaDTO;
-import io.jumba.builder.model.architecture.ArchitectureView;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,10 +27,8 @@ public class JumbaRenderer {
         if (!Files.exists(Path.of(path, jumbaDTO.architectureView().name))) mkdir(jumbaDTO.architectureView().name);
         write(Path.of(path, "laboratory.py"), laboratoryRenderer.render(jumbaDTO.laboratoryView(), jumbaDTO.architectureView().name));
         context.getSources().forEach(s -> context.getCompiledFiles().add(new OutputItem(s.getAbsolutePath(), path + "laboratory.py")));
-        for (ArchitectureView collapsedArchitectureView : jumbaDTO.collapsedArchitectureViews()) {
-            write(Path.of(path, jumbaDTO.architectureView().name, collapsedArchitectureView.name + ".py"), architectureRenderer.render(collapsedArchitectureView, "pytorch"));
-            context.getSources().forEach(s -> context.getCompiledFiles().add(new OutputItem(s.getAbsolutePath(), path + jumbaDTO.architectureView().name + "/" + collapsedArchitectureView.name + ".py")));
-        }
+        write(Path.of(path, jumbaDTO.architectureView().name, jumbaDTO.architectureView().name + ".py"), architectureRenderer.render(jumbaDTO.architectureView(), "pytorch"));
+        context.getSources().forEach(s -> context.getCompiledFiles().add(new OutputItem(s.getAbsolutePath(), path + jumbaDTO.architectureView().name + "/" + jumbaDTO.architectureView().name + ".py")));
     }
 
     private void mkdir(String name) {
