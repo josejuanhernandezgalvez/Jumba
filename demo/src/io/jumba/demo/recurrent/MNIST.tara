@@ -10,12 +10,14 @@ Laboratory(epochs = 10, name = "DigitsClassifier")
 	Experiment e626
 
 Architecture
-	RecurrentSection
+	RecurrentSection as MapReduce
 		Input(seqLength = 28, x = 28)
-		Block
+		Unit
 			LSTM(bidirectional = false, numLayers = 4)
-				EndSequence(reduce = flatten) > Output(x=512)
-			ReLU
+            	EndSequence(reduce = flatten) > Output(x=512)
+		Block
+			Linear as Mutable > Output(x=500)
+			ReLU as Mutable
 		Block
 			Linear > Output(x=300)
 			ReLU

@@ -11,11 +11,18 @@ public abstract class PoolLayerView extends ThreeDimensionLayerView {
     public final Kernel kernel;
     protected final OutputView previousLayerOutput;
     protected final OutputView thisLayerOutput;
+    public boolean mutable;
 
     public PoolLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = thisLayerOutput;
         this.kernel = kernelFor((ThreeDimensionsOutputView) previousLayerOutput, (ThreeDimensionsOutputView) thisLayerOutput);
+        this.mutable = false;
+    }
+
+    protected PoolLayerView setMutable(boolean mutable) {
+        this.mutable = mutable;
+        return this;
     }
 
     public PoolLayerView(Kernel kernel, OutputView previousLayerOutput) {

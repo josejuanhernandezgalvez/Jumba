@@ -38,7 +38,7 @@ public class ConvolutionalSectionRenderer extends SectionRenderer<ConvolutionalS
             return switch (block) {
                 case ConvolutionalSection.VGGBlock vggBlock -> new VGGBlockView(input);
                 case ConvolutionalSection.ResnetBlock resnetBlock -> new ResnetBlockView(input, resnetBlock.reps());
-                case ConvolutionalSection.BlattBlock blattBlock -> new BlattBlockView(input, blattBlock);
+                case ConvolutionalSection.BlattBlock blattBlock -> new ConvolutionalBlattBlockView(input, blattBlock);
                 default -> throw new IllegalStateException("Unexpected value: " + block);
             };
         }

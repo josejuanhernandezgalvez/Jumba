@@ -44,7 +44,7 @@ public abstract class SectionRenderer<U extends SectionView> {
         }
 
         private static String typeOf(Section section) {
-            return section.core$().conceptList().getFirst().toString().split("\\{")[0];
+            return section.core$().conceptList().getFirst().toString().split("\\{")[0].split("\\$")[0];
         }
     }
 }

@@ -1,25 +1,24 @@
 package io.jumba.builder.model.architecture.layers.processing;
 
+import io.intino.magritte.framework.Layer;
 import io.jumba.builder.CompilationContext;
 import io.jumba.builder.model.architecture.LayerView;
 import io.jumba.builder.model.architecture.OutputView;
 import io.jumba.builder.model.architecture.layers.ProcessingLayerView;
 import io.jumba.builder.model.architecture.layers.output.OneDimensionOutputView;
-import io.intino.magritte.framework.Layer;
 
-public final class LinearLayerView implements ProcessingLayerView {
+public final class KANLayerView implements ProcessingLayerView {
     public final OutputView previousLayerOutput;
     public final OutputView thisLayerOutput;
-    public boolean mutable;
+    private boolean mutable;
 
-    public LinearLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
+    public KANLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = thisLayerOutput;
-        this.mutable = false;
     }
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
-        return new LinearLayerView(previousOutput, new OneDimensionOutputView(getX(layer))).setMutable(LayerView.getMutable(layer));
+        return new KANLayerView(previousOutput, new OneDimensionOutputView(getX(layer))).setMutable(LayerView.getMutable(layer));
     }
 
     private ProcessingLayerView setMutable(boolean mutable) {

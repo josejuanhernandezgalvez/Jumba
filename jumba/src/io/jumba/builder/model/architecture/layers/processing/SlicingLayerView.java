@@ -8,4 +8,9 @@ public class SlicingLayerView implements LayerView {
     public OutputView getOutputView() {
         return null;
     }
+
+    @Override
+    public boolean isMutable() {
+        return false;
+    }
 }

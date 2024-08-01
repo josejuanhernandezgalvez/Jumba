@@ -1,6 +1,7 @@
 package io.jumba.builder.model.architecture.layers.processing;
 
 import io.jumba.builder.CompilationContext;
+import io.jumba.builder.model.architecture.LayerView;
 import io.jumba.builder.model.architecture.OutputView;
 import io.jumba.builder.model.architecture.layers.ProcessingLayerView;
 import io.jumba.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
@@ -17,7 +18,8 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     public final Kernel kernel;
     public final OutputView previousLayerOutput;
     public final OutputView thisLayerOutput;
-    private final int outChannels;
+    public final int outChannels;
+    public boolean mutable;
 
     public ConvolutionalLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
         this.previousLayerOutput = previousLayerOutput;
@@ -35,11 +37,16 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
 
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         if (hasNotOutput(layer))
-            return new ConvolutionalLayerView(kernel((Convolutional) layer), previousOutput, ((Convolutional) layer).outChannels().z());
+            return new ConvolutionalLayerView(kernel((Convolutional) layer), previousOutput, ((Convolutional) layer).outChannels().z()).setMutable(LayerView.getMutable(layer));
         ConvolutionalLayerView convolutionalLayerView = new ConvolutionalLayerView(previousOutput, thisOutput(layer));
         if (!thisOutput(layer).equals(convolutionalLayerView.getOutputView()))
             System.out.println(layer.getClass().getSimpleName() + " output has been modified from " + thisOutput(layer) + " to " + convolutionalLayerView.getOutputView()); // TODO log it don't sout it
         return convolutionalLayerView;
+    }
+
+    private ProcessingLayerView setMutable(boolean mutable) {
+        this.mutable = mutable;
+        return this;
     }
 
     private static ConvolutionTwoDimensionsKernel kernel(Convolutional layer) {
@@ -61,5 +68,10 @@ public class ConvolutionalLayerView extends ThreeDimensionLayerView {
     @Override
     public OutputView getOutputView() {
         return ((ConvolutionTwoDimensionsKernel) kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput, this.outChannels);
+    }
+
+    @Override
+    public boolean isMutable() {
+        return mutable;
     }
 }

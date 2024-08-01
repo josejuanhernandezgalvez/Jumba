@@ -1,4 +1,4 @@
-package io.jumba.builder.operations;
+package io.jumba.builder.renderers;
 
 import io.jumba.builder.CompilationContext;
 import io.jumba.builder.OutputItem;

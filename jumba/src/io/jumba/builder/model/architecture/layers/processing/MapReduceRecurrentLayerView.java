@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class RecurrentLayerView implements LayerView {
+public abstract class MapReduceRecurrentLayerView implements LayerView {
     public final OutputView previousLayerOutput;
     public final OutputView thisLayerOutput;
     public final int numLayers;
@@ -21,7 +21,7 @@ public abstract class RecurrentLayerView implements LayerView {
     public final List<Reduce> reduce;
     public final int hiddenSize;
 
-    public RecurrentLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int hiddenSize, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
+    public MapReduceRecurrentLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, int hiddenSize, int numLayers, OutputType outputType, boolean bidirectional, double dropout, List<Reduce> reduce) {
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = thisLayerOutput;
         this.numLayers = numLayers;

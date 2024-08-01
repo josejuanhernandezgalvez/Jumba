@@ -5,6 +5,10 @@ import io.jumba.builder.model.architecture.BlockView;
 import io.jumba.builder.model.architecture.LayerView;
 import io.jumba.builder.model.architecture.OutputView;
 import io.jumba.builder.model.architecture.blocks.SimpleBlockView;
+import io.jumba.builder.model.architecture.layers.processing.MapReduceGRULayerView;
+import io.jumba.builder.model.architecture.layers.processing.MapReduceLSTMLayerView;
+import io.jumba.builder.model.architecture.layers.processing.MapReduceRNNLayerView;
+import io.jumba.builder.model.architecture.layers.processing.MapReduceRecurrentLayerView;
 import io.jumba.builder.model.architecture.sections.processing.RecurrentSectionView;
 import io.jumba.builder.model.renderers.architecture.SectionRenderer;
 import io.jumba.model.RecurrentSection;
@@ -23,7 +27,23 @@ public class RecurrentSectionRenderer extends SectionRenderer<RecurrentSectionVi
     }
 
     public RecurrentSectionView renderSection(RecurrentSection section, OutputView input, CompilationContext context) {
-        return new RecurrentSectionView(blockViews(section.blockList().iterator(), input, new ArrayList<>(), context), input);
+        if (section.isMapReduce()){
+            SimpleBlockView firstBlock = new SimpleBlockView(List.of(renderMapReduceUnit(input, section.asMapReduce().unit(), context)));
+            ArrayList<BlockView> blocks = new ArrayList<>();
+            blocks.add(firstBlock);
+            return new RecurrentSectionView(blockViews(section.blockList().iterator(), firstBlock.output(), blocks, context), input);
+        }
+        return null; // TODO
+    }
+
+    private MapReduceRecurrentLayerView renderMapReduceUnit(OutputView input, RecurrentSection.MapReduce.Unit unit, CompilationContext context) {
+        if (unit.recurrent() instanceof RecurrentSection.MapReduce.Unit.LSTM lstm)
+            return MapReduceLSTMLayerView.from(lstm, input, context);
+        if (unit.recurrent() instanceof RecurrentSection.MapReduce.Unit.RNN rnn)
+            return MapReduceRNNLayerView.from(rnn, input, context);
+        if (unit.recurrent() instanceof RecurrentSection.MapReduce.Unit.GRU gru)
+            return MapReduceGRULayerView.from(gru, input, context);
+        throw new RuntimeException();
     }
 
     private List<BlockView> blockViews(Iterator<Block> blockIterator, OutputView input, ArrayList<BlockView> simpleBlockViews, CompilationContext context) {

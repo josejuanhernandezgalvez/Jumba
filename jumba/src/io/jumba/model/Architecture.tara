@@ -171,6 +171,7 @@ Concept Section is component
 				sub BlattBlock
 					var word:{Tanh Sigmoid LogSigmoid ReLU SELU GELU SiLU GLU ELU LeakyReLU Mish Softmax} activation = ReLU
 					Concept:{1..1} Output
+						Facet Mutable
                 		var integer x
                 		var integer y
                 		var integer z
@@ -182,6 +183,7 @@ Concept Section is component
                 		var word:{Default Custom} shortcut = Default
             			Concept:{0..1} CustomShortcut
             				Concept:{1..*} Layer
+            					Facet Mutable
 								sub ActivationLayer
 									sub Tanh
 									sub Sigmoid
@@ -200,6 +202,7 @@ Concept Section is component
 										var double probability = 0.8
                 	    		    sub Convolutional
                 	    		    	Concept:{0..1} Output
+                	    		    		Facet Mutable
                 	    		    		var integer x
                 	    		    		var integer y
                 	    		    		var integer z
@@ -218,6 +221,7 @@ Concept Section is component
                 	    		    sub Pool
                 	    		    	sub MaxPool
                 	    		    		Concept:{0..1} Output
+                	    		    			Facet Mutable
                 	    		    			var integer x
                 	    		    			var integer y
                 	    		    		Concept:{0..1} Kernel
@@ -232,6 +236,7 @@ Concept Section is component
                 	    		    				var integer y
                 	    		    	sub AvgPool
                 	    		        	Concept:{0..1} Output
+                	    		        		Facet Mutable
                 	    		            	var integer x
                 	    		    			var integer y
                 	    		    		Concept:{0..1} Kernel
@@ -250,6 +255,7 @@ Concept Section is component
 									sub LayerNormalization
 										var double eps=0.00001
 					Concept:{1..*} Layer
+						Facet Mutable
 						sub ActivationLayer
 							sub Tanh
 							sub Sigmoid
@@ -268,6 +274,7 @@ Concept Section is component
 								var double probability = 0.8
                 	        sub Convolutional
                 	        	Concept:{0..1} Output
+                	        		Facet Mutable
                 	        		var integer x
                 	        		var integer y
                 	        		var integer z
@@ -286,6 +293,7 @@ Concept Section is component
                 	        sub Pool
                 	        	sub MaxPool
                 	        		Concept:{0..1} Output
+                	        			Facet Mutable
                 	        			var integer x
                 	        			var integer y
                 	        		Concept:{0..1} Kernel
@@ -300,6 +308,7 @@ Concept Section is component
                 	        				var integer y
                 	        	sub AvgPool
                 	            	Concept:{0..1} Output
+                	            		Facet Mutable
                 	                	var integer x
                 	        			var integer y
                 	        		Concept:{0..1} Kernel
@@ -324,11 +333,13 @@ Concept Section is component
                 sub BlattBlock
 					var word:{Tanh Sigmoid LogSigmoid ReLU SELU GELU SiLU GLU ELU LeakyReLU Mish Softmax} activation = ReLU
 					Concept:{1..1} Output
+						Facet Mutable
                 		var integer x
 				sub Block
 					Facet:CheckCustomDownSampling Residual
             			var word:{Default Custom} shortcut = Default
 						Concept:{0..1} CustomShortcut
+							Facet Mutable
 							Concept:{1..*} Layer
             					sub ActivationLayer
 									sub Tanh
@@ -345,7 +356,9 @@ Concept Section is component
             						sub Softmax
                 	    		sub ProcessingLayer
                 	    			sub Linear
-                	    				Concept:{1..1} Output > var integer x
+                	    				Concept:{1..1} Output
+                	    					Facet Mutable
+											var integer x
                 	    			sub Dropout
                 	    				var double probability=0.8
                 	    			sub BatchNormalization
@@ -354,6 +367,7 @@ Concept Section is component
                 	    			sub LayerNormalization
                 	    				var double eps=0.00001
             		Concept:{1..*} Layer
+            			Facet Mutable
             			sub ActivationLayer
 							sub Tanh
             				sub Sigmoid
@@ -369,7 +383,9 @@ Concept Section is component
             				sub Softmax
             			sub ProcessingLayer
             				sub Linear
-            					Concept:{1..1} Output > var integer x
+            					Concept:{1..1} Output
+            						Facet Mutable
+									var integer x
             				sub Dropout
             					var double probability=0.8
 							sub BatchNormalization
@@ -377,12 +393,101 @@ Concept Section is component
                 	        	var double momentum = 0.1
 							sub LayerNormalization
 								var double eps=0.00001
+							sub KANLayer
+                                Concept:{1..1} Output
+                                	Facet Mutable
+									var integer x
         sub:CheckFirstLayerIsARecurrentLayerAndIsFirstSection RecurrentSection
 			Concept:{0..1} Input
             	var integer seqLength
             	var integer x
+            Facet MapReduce
+            	Concept:{1..1} Unit
+            		 Concept:{1..1} Recurrent
+						Facet Mutable
+            	     	var integer numLayers = 1
+            	     	var boolean bidirectional = false
+            	     	var double dropout = 0
+            	     	sub LSTM
+            	     		Concept:{1..1} OutputType
+            	     			sub EndSequence
+            	     				var integer from=0
+            	     				var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     				Concept:{1..1} Output
+            	     					Facet Mutable
+										var integer x
+            	     			sub HiddenStates
+            	     				var integer from=0
+            	     				var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     			    Concept:{1..1} Output
+            	     			    	Facet Mutable
+										var integer x
+            	     			sub CellStates
+            	     				var integer from=0
+            	     				var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     			    Concept:{1..1} Output
+            	     			    	Facet Mutable
+										var integer x
+            	     			sub LastHiddenState
+            	     				var word:{flatten linear} reduce=flatten
+            	     				Concept:{1..1} Output
+            	     					Facet Mutable
+										var integer x
+            	     			sub LastCellState
+            	     				var word:{flatten linear} reduce=flatten
+            	     				Concept:{1..1} Output
+            	     					Facet Mutable
+										var integer x
+            	     	sub GRU
+            	     		Concept:{1..1} OutputType
+            	     			sub EndSequence
+            	     				var integer from=0
+            	     				var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     				Concept:{1..1} Output
+            	     					Facet Mutable
+										var integer x
+            	     			sub HiddenStates
+            	     				var integer from=0
+            	                     var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     			    Concept:{1..1} Output
+            	     			    	Facet Mutable
+										var integer x
+            	     			sub LastHiddenState
+            	     				var integer from=0
+            	                 	var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     				Concept:{1..1} Output
+            	     					Facet Mutable
+										var integer x
+            	     	sub RNN
+            	     		Concept:{1..1} OutputType
+            	     			sub EndSequence
+            	     				var integer from=0
+            	                     var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     				Concept:{1..1} Output
+            	     					Facet Mutable
+										var integer x
+            	     			sub HiddenStates
+            	     				var integer from=0
+            	                     var integer to=0
+            	     				var word:{flatten linear} reduce=flatten
+            	     			    Concept:{1..1} Output
+            	     			    	Facet Mutable
+										var integer x
+            	     			sub LastHiddenState
+            	     				var word:{flatten linear} reduce=flatten
+            	     				Concept:{1..1} Output
+            	     					Facet Mutable
+										var integer x
 			Concept:{1..*} Block
         		Concept:{1..*} Layer
+        			Facet Mutable
 					sub ProcessingLayer
         				sub Recurrent
 							var integer numLayers = 1
@@ -394,55 +499,77 @@ Concept Section is component
         								var integer from=0
         								var integer to=0
         								var word:{flatten linear} reduce=flatten
-        								Concept:{1..1} Output > var integer x
+        								Concept:{1..1} Output
+        									Facet Mutable
+											var integer x
         							sub HiddenStates
         								var integer from=0
 										var integer to=0
         								var word:{flatten linear} reduce=flatten
-        							    Concept:{1..1} Output > var integer x
+        							    Concept:{1..1} Output
+        							    	Facet Mutable
+											var integer x
 									sub CellStates
 										var integer from=0
 										var integer to=0
 										var word:{flatten linear} reduce=flatten
-        							    Concept:{1..1} Output > var integer x
+        							    Concept:{1..1} Output
+        							    	Facet Mutable
+											var integer x
         							sub LastHiddenState
         								var word:{flatten linear} reduce=flatten
-        								Concept:{1..1} Output > var integer x
+        								Concept:{1..1} Output
+        									Facet Mutable
+											var integer x
         							sub LastCellState
         								var word:{flatten linear} reduce=flatten
-        								Concept:{1..1} Output > var integer x
+        								Concept:{1..1} Output
+        									Facet Mutable
+											var integer x
         					sub GRU
         						Concept:{1..1} OutputType
         							sub EndSequence
 										var integer from=0
 										var integer to=0
 										var word:{flatten linear} reduce=flatten
-        								Concept:{1..1} Output > var integer x
+        								Concept:{1..1} Output
+        									Facet Mutable
+											var integer x
         							sub HiddenStates
         								var integer from=0
                                         var integer to=0
 										var word:{flatten linear} reduce=flatten
-        							    Concept:{1..1} Output > var integer x
+        							    Concept:{1..1} Output
+        							    	Facet Mutable
+											var integer x
         							sub LastHiddenState
         								var integer from=0
                                     	var integer to=0
         								var word:{flatten linear} reduce=flatten
-        								Concept:{1..1} Output > var integer x
+        								Concept:{1..1} Output
+        									Facet Mutable
+											var integer x
         					sub RNN
         						Concept:{1..1} OutputType
         							sub EndSequence
         								var integer from=0
                                         var integer to=0
         								var word:{flatten linear} reduce=flatten
-        								Concept:{1..1} Output > var integer x
+        								Concept:{1..1} Output
+        									Facet Mutable
+											var integer x
         							sub HiddenStates
         								var integer from=0
                                         var integer to=0
         								var word:{flatten linear} reduce=flatten
-        							    Concept:{1..1} Output > var integer x
+        							    Concept:{1..1} Output
+        							    	Facet Mutable
+											var integer x
         							sub LastHiddenState
         								var word:{flatten linear} reduce=flatten
-        								Concept:{1..1} Output > var integer x
+        								Concept:{1..1} Output
+        									Facet Mutable
+											var integer x
             	        sub Dropout
             	        	var double probability = 0.8
             	        sub BatchNormalization
@@ -451,7 +578,13 @@ Concept Section is component
             	        sub LayerNormalization
                         	var double eps=0.00001
                         sub Linear
-            				Concept:{1..1} Output > var integer x
+            				Concept:{1..1} Output
+            					Facet Mutable
+								var integer x
+            			sub KANLayer
+            				Concept:{1..1} Output
+            					Facet Mutable
+								var integer x
             	    sub ActivationLayer
 						sub Tanh
             			sub Sigmoid

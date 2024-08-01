@@ -93,7 +93,7 @@ public class ArchitectureViewRenderer implements Renderer<Architecture, Architec
         }
 
         private String extractFrom(Section section) {
-            return section.core$().conceptList().getFirst().toString().split("\\{")[0];
+            return section.core$().conceptList().getFirst().toString().split("\\{")[0].split("\\$")[0];
         }
 
         private Object getValue(Object input, Field field) {

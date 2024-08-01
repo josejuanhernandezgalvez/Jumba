@@ -1,4 +1,4 @@
-package io.jumba.builder.operations;
+package io.jumba.builder.renderers;
 
 import io.jumba.builder.model.architecture.ArchitectureView;
 import io.jumba.builder.model.architecture.BlockView;
@@ -11,7 +11,7 @@ import io.jumba.builder.model.architecture.layers.activation.SoftmaxLayerView;
 import io.jumba.builder.model.architecture.layers.link.FlattenLayerView;
 import io.jumba.builder.model.architecture.layers.output.OneDimensionOutputView;
 import io.jumba.builder.model.architecture.layers.processing.*;
-import io.jumba.builder.model.architecture.layers.processing.RecurrentLayerView.Reduce.SliceReduce;
+import io.jumba.builder.model.architecture.layers.processing.MapReduceRecurrentLayerView.Reduce.SliceReduce;
 import io.jumba.builder.model.architecture.sections.link.FlattenSectionView;
 import io.intino.itrules.FrameBuilder;
 
@@ -78,18 +78,18 @@ public class ArchitectureRenderer {
                 .flatMap(List::stream)
                 .map(BlockView::layerViews)
                 .flatMap(List::stream)
-                .map(layerView -> layerView instanceof RecurrentLayerView ? layersOf((RecurrentLayerView) layerView) : List.of(layerView))
+                .map(layerView -> layerView instanceof MapReduceRecurrentLayerView ? layersOf((MapReduceRecurrentLayerView) layerView) : List.of(layerView))
                 .flatMap(List::stream)
                 .filter(distinctBy(LayerView::getClass))
                 .map(layer -> buildLayerFrame(library, layer))
                 .toArray(FrameBuilder[]::new);
     }
 
-    private List<LayerView> layersOf(RecurrentLayerView recurrent) {
+    private List<LayerView> layersOf(MapReduceRecurrentLayerView recurrent) {
         ArrayList<LayerView> layers = new ArrayList<>();
-        for (RecurrentLayerView.Reduce reduce : recurrent.reduce) {
-            if (reduce instanceof RecurrentLayerView.Reduce.LinearReduce) layers.add(new LinearLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1)));
-            if (reduce instanceof RecurrentLayerView.Reduce.FlattenReduce) layers.add(new FlattenLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1)));
+        for (MapReduceRecurrentLayerView.Reduce reduce : recurrent.reduce) {
+            if (reduce instanceof MapReduceRecurrentLayerView.Reduce.LinearReduce) layers.add(new LinearLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1)));
+            if (reduce instanceof MapReduceRecurrentLayerView.Reduce.FlattenReduce) layers.add(new FlattenLayerView(new OneDimensionOutputView(1), new OneDimensionOutputView(1), false));
             if (reduce instanceof SliceReduce) layers.add(new SlicingLayerView());
         }
         layers.add(recurrent);
@@ -138,7 +138,7 @@ public class ArchitectureRenderer {
                             .add("kernel", new FrameBuilder("kernel").add("dimension", convolutional.kernel.size().asArray()))
                             .add("stride", new FrameBuilder("stride").add("dimension", convolutional.kernel.stride().asArray()))
                             .add("padding", new FrameBuilder("padding").add("dimension", convolutional.kernel.padding().asArray()));
-            case RecurrentLayerView recurrent ->
+            case MapReduceRecurrentLayerView recurrent ->
                     builder.add("package", "recurrents")
                             .add("input", recurrent.previousLayerOutput.asArray()[1])
                             .add("hidden", recurrent.hiddenSize)
@@ -185,7 +185,7 @@ public class ArchitectureRenderer {
         return builder;
     }
 
-    private FrameBuilder[] reductionsOf(RecurrentLayerView recurrent, String library) {
+    private FrameBuilder[] reductionsOf(MapReduceRecurrentLayerView recurrent, String library) {
         return recurrent.reduce.stream()
                 .map(reduce -> buildReduceFrame(reduce, recurrent.outputType, library))
                 .toArray(FrameBuilder[]::new);
@@ -196,20 +196,20 @@ public class ArchitectureRenderer {
             "LastCellState", "CellStates",
             "HiddenStates", "HiddenStates",
             "CellStates", "CellStates");
-    private FrameBuilder buildReduceFrame(RecurrentLayerView.Reduce reduce, RecurrentLayerView.OutputType output, String library) {
+    private FrameBuilder buildReduceFrame(MapReduceRecurrentLayerView.Reduce reduce, MapReduceRecurrentLayerView.OutputType output, String library) {
         FrameBuilder fb = new FrameBuilder("reduce").add("library", library);
         switch (reduce) {
             case SliceReduce slicing ->
                     fb.add("slicing", true)
                             .add("from", slicing.from)
                             .add("to", slicing.to + 1);
-            case RecurrentLayerView.Reduce.LinearReduce linear ->
+            case MapReduceRecurrentLayerView.Reduce.LinearReduce linear ->
                     fb.add("linear", true)
                             .add("in_features", linear.previousOutputView.asArray()[linear.dimensionToActOn - 1])
                             .add("out_features", linear.outputView.asArray()[linear.dimensionToActOn - 1])
                             .add("dimension", linear.dimensionToActOn)
                             .add("bias", "True");
-            case RecurrentLayerView.Reduce.FlattenReduce flatten ->
+            case MapReduceRecurrentLayerView.Reduce.FlattenReduce flatten ->
                     fb.add("flatten", true)
                             .add("from", flatten.startDimension)
                             .add("to", flatten.endDimension);

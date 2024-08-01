@@ -12,12 +12,14 @@ public class FlattenLayerView implements LinkLayerView {
     public final int toDimension;
     public final OutputView previousLayerOutput;
     public final OutputView thisLayerOutput;
+    public final boolean mutable;
 
-    public FlattenLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput) {
+    public FlattenLayerView(OutputView previousLayerOutput, OutputView thisLayerOutput, Boolean mutable) {
         this.fromDimension = previousLayerOutput.dimensions();
         this.toDimension = thisLayerOutput.dimensions();
         this.previousLayerOutput = previousLayerOutput;
         this.thisLayerOutput = thisLayerOutput;
+        this.mutable = mutable;
     }
 
     public static OneDimensionOutputView toOneDimension(OutputView previousLayerOutput) {
@@ -39,5 +41,10 @@ public class FlattenLayerView implements LinkLayerView {
     @Override
     public OutputView getOutputView() {
         return thisLayerOutput;
+    }
+
+    @Override
+    public boolean isMutable() {
+        return false;
     }
 }

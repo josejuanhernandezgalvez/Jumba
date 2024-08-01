@@ -4,7 +4,7 @@ import io.jumba.builder.CompilationContext;
 import io.jumba.builder.model.architecture.BlockView;
 import io.jumba.builder.model.architecture.LayerView;
 import io.jumba.builder.model.architecture.OutputView;
-import io.jumba.builder.model.architecture.blocks.SimpleBlockView;
+import io.jumba.builder.model.architecture.blocks.*;
 import io.jumba.builder.model.architecture.sections.processing.LinearSectionView;
 import io.jumba.builder.model.renderers.architecture.SectionRenderer;
 import io.jumba.builder.model.renderers.architecture.blockrenderers.ResidualBlockRenderer;
@@ -36,7 +36,10 @@ public class LinearSectionRenderer extends SectionRenderer<LinearSectionView> {
     private class BlockRenderer {
         public BlockView render(LinearSection.SectionBlock block, OutputView input, CompilationContext context) {
             if (block instanceof Block customBlock) return blockViewFor(blockLayerList(customBlock.layerList().iterator(), input, new ArrayList<>(), context), customBlock, input, context);
-            return null;
+            return switch (block) {
+                case LinearSection.BlattBlock blattBlock -> new LinearBlattBlockView(input, blattBlock);
+                default -> throw new IllegalStateException("Unexpected value: " + block);
+            };
         }
 
         private BlockView blockViewFor(List<LayerView> layerViewList, Block block, OutputView input, CompilationContext context) {

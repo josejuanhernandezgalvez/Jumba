@@ -1,6 +1,7 @@
 package io.jumba.builder.model.architecture.layers.processing;
 
 import io.jumba.builder.CompilationContext;
+import io.jumba.builder.model.architecture.LayerView;
 import io.jumba.builder.model.architecture.OutputView;
 import io.jumba.builder.model.architecture.layers.ProcessingLayerView;
 import io.jumba.builder.model.architecture.layers.output.ThreeDimensionsOutputView;
@@ -24,7 +25,7 @@ public class MaxPoolLayerView extends PoolLayerView {
     public static ProcessingLayerView from(Layer layer, OutputView previousOutput, CompilationContext context) {
         if (hasNotOutput(layer))
             return new MaxPoolLayerView(kernel((MaxPool) layer), previousOutput);
-        MaxPoolLayerView maxPoolLayerView = new MaxPoolLayerView(previousOutput, thisOutput(layer, previousOutput));
+        PoolLayerView maxPoolLayerView = new MaxPoolLayerView(previousOutput, thisOutput(layer, previousOutput)).setMutable(LayerView.getMutable(layer));
         if (!thisOutput(layer, previousOutput).equals(maxPoolLayerView.getOutputView()))
             System.out.println(layer.getClass().getSimpleName() + " output has been modified from " + thisOutput(layer, previousOutput) + " to " + maxPoolLayerView.getOutputView()); // TODO log it don't sout it
         return maxPoolLayerView;
@@ -40,5 +41,10 @@ public class MaxPoolLayerView extends PoolLayerView {
     @Override
     public OutputView getOutputView() {
         return ((PoolTwoDimensionsKernel) this.kernel).outputFor((ThreeDimensionsOutputView) previousLayerOutput);
+    }
+
+    @Override
+    public boolean isMutable() {
+        return mutable;
     }
 }

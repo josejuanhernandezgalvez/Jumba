@@ -11,7 +11,7 @@ import io.jumba.builder.model.architecture.sections.link.FlattenSectionView;
 import io.jumba.builder.model.architecture.sections.processing.ConvolutionalSectionView;
 import io.jumba.builder.model.architecture.sections.processing.LinearSectionView;
 import io.jumba.builder.model.architecture.sections.processing.RecurrentSectionView;
-import io.jumba.builder.operations.ArchitectureRenderer;
+import io.jumba.builder.renderers.ArchitectureRenderer;
 import org.junit.Test;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class ArchitectureTest {
                                         new ReLULayerView(new ThreeDimensionsOutputView(25, 25, 80)),
                                         new MaxPoolLayerView(new ThreeDimensionsOutputView(25, 25, 80), new ThreeDimensionsOutputView(10, 10, 80))))
                         ), new ThreeDimensionsOutputView(8, 8,8)), //TODO JC
-                        new FlattenSectionView(List.of(new SimpleBlockView(List.of(new FlattenLayerView(new ThreeDimensionsOutputView(10, 10, 80), new OneDimensionOutputView(8000))))), new OneDimensionOutputView(9)),
+                        new FlattenSectionView(List.of(new SimpleBlockView(List.of(new FlattenLayerView(new ThreeDimensionsOutputView(10, 10, 80), new OneDimensionOutputView(8000), false)))), new OneDimensionOutputView(9)),
                         new LinearSectionView(
                                 List.of(new SimpleBlockView(List.of(
                                         new LinearLayerView(new OneDimensionOutputView(8000), new OneDimensionOutputView(150)),
@@ -73,9 +73,9 @@ public class ArchitectureTest {
         ArchitectureView architecture = new ArchitectureView(
                 List.of(new RecurrentSectionView(
                         List.of(new SimpleBlockView(List.of(
-                                new LSTMLayerView(new TwoDimensionsOutputView(6, 300), new TwoDimensionsOutputView(1, 20), 20, 4, RecurrentLayerView.OutputType.EndSequence, true, 0.5, List.of(new RecurrentLayerView.Reduce.SliceReduce(4, 6, new TwoDimensionsOutputView(6, 40)), new RecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(3, 40), 1, 40), new RecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(1, 40), 2, 20)))
+                                new MapReduceLSTMLayerView(new TwoDimensionsOutputView(6, 300), new TwoDimensionsOutputView(1, 20), 20, 4, MapReduceRecurrentLayerView.OutputType.EndSequence, true, 0.5, List.of(new MapReduceRecurrentLayerView.Reduce.SliceReduce(4, 6, new TwoDimensionsOutputView(6, 40)), new MapReduceRecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(3, 40), 1, 40), new MapReduceRecurrentLayerView.Reduce.LinearReduce(new TwoDimensionsOutputView(1, 40), 2, 20)))
                         ))), new OneDimensionOutputView(8)), //TODO JC
-                        new FlattenSectionView(List.of(new SimpleBlockView(List.of(new FlattenLayerView(new OneDimensionOutputView(20), new OneDimensionOutputView(20))))), new OneDimensionOutputView(8)), //TODO JC
+                        new FlattenSectionView(List.of(new SimpleBlockView(List.of(new FlattenLayerView(new OneDimensionOutputView(20), new OneDimensionOutputView(20), false)))), new OneDimensionOutputView(8)), //TODO JC
                         new LinearSectionView(
                                 List.of(new SimpleBlockView(List.of(
                                                 new LinearLayerView(new OneDimensionOutputView(20), new OneDimensionOutputView(150)),

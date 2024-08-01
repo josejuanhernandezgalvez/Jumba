@@ -1,4 +1,4 @@
-package io.jumba.builder.operations;
+package io.jumba.builder.renderers;
 
 import io.jumba.builder.model.laboratory.*;
 import io.jumba.builder.model.laboratory.earlystoppers.LossDrivenEarlyStopperView;
@@ -7,7 +7,6 @@ import io.jumba.builder.model.laboratory.strategies.RegressionStrategyView;
 import io.jumba.model.RAdam;
 import io.intino.itrules.FrameBuilder;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
